@@ -1,0 +1,1940 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>洛克王國 · 異色孵蛋</title>
+    <style>
+        /* ===== 全域樣式 ===== */
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+        }
+        body {
+            background: #f0f4f8;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .container {
+            background: white;
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+        }
+        h1 {
+            color: #2d3748;
+            border-left: 6px solid #6c5ce7;
+            padding-left: 16px;
+            margin-top: 0;
+        }
+        h2 {
+            color: #4a5568;
+            font-size: 1.3rem;
+            margin: 30px 0 16px 0;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 8px;
+        }
+        .flex-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            align-items: flex-end;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex: 1 1 150px;
+        }
+        .form-group label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #4a5568;
+        }
+        .form-group input,
+        .form-group select {
+            padding: 10px 14px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            background: white;
+            transition: 0.2s;
+        }
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #6c5ce7;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.15);
+        }
+        .btn {
+            padding: 10px 28px;
+            border: none;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+            background: #e2e8f0;
+            color: #2d3748;
+        }
+        .btn-primary {
+            background: #6c5ce7;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #5a4bd1;
+            transform: scale(1.02);
+        }
+        .btn-danger {
+            background: #fc8181;
+            color: white;
+            padding: 4px 14px;
+            font-size: 0.85rem;
+        }
+        .btn-danger:hover {
+            background: #f56565;
+        }
+        .btn-sm {
+            padding: 6px 18px;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+
+        /* ===== 自訂確認對話框 ===== */
+        .custom-confirm-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+        .custom-confirm-box {
+            background: white;
+            border-radius: 20px;
+            padding: 24px;
+            max-width: 340px;
+            width: 85%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+        .custom-confirm-box p {
+            font-size: 1rem;
+            color: #2d3748;
+            margin: 0 0 20px 0;
+            line-height: 1.6;
+            white-space: pre-line;
+        }
+        .custom-confirm-box .btn-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        .custom-confirm-box .btn-group .btn {
+            flex: 1;
+            padding: 10px 20px;
+            border-radius: 40px;
+            border: none;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+        }
+        .custom-confirm-box .btn-cancel {
+            background: #e2e8f0;
+            color: #2d3748;
+        }
+        .custom-confirm-box .btn-confirm {
+            background: #fc8181;
+            color: white;
+        }
+        .custom-confirm-box .btn-confirm:hover {
+            background: #f56565;
+        }
+
+        /* ===== 系別圖示 ===== */
+        .type-icon {
+            width: 22px;
+            height: 22px;
+            display: inline-block;
+            margin: 0 1px;
+            vertical-align: middle;
+            border-radius: 4px;
+        }
+
+        /* 備用標籤樣式 */
+        .type-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: white;
+            margin: 0 2px;
+            min-width: 20px;
+            text-align: center;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+
+        /* ===== 表格 ===== */
+        .table-wrap {
+            overflow-x: auto;
+            margin-top: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+        th {
+            background: #edf2f7;
+            color: #2d3748;
+            padding: 12px 12px;
+            text-align: left;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #edf2f7;
+        }
+        .empty-row td {
+            text-align: center;
+            color: #a0aec0;
+            padding: 30px 0;
+            font-style: italic;
+        }
+
+        /* ===== 表格容器（可滾動） ===== */
+        .table-scroll {
+            max-height: 400px;
+            overflow-x: auto;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+        .table-scroll table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        .table-scroll thead {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .table-scroll thead th {
+            background: #edf2f7;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        /* ===== 推薦卡片 ===== */
+        .rec-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 16px;
+            margin-top: 12px;
+        }
+        .rec-card {
+            background: #f7fafc;
+            border-radius: 16px;
+            padding: 16px 20px;
+            border: 2px solid #e2e8f0;
+            transition: 0.2s;
+        }
+        .rec-card:hover {
+            border-color: #6c5ce7;
+            background: #faf9ff;
+        }
+        .rec-card .title {
+            font-weight: 700;
+            color: #2d3748;
+            font-size: 1.1rem;
+        }
+        .rec-card .detail {
+            font-size: 0.9rem;
+            color: #4a5568;
+            margin-top: 6px;
+        }
+        .rec-card .badge {
+            display: inline-block;
+            background: #6c5ce7;
+            color: white;
+            padding: 0 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-right: 8px;
+        }
+
+        /* ===== 窩位擺放 ===== */
+        .slot-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+            margin-top: 8px;
+        }
+        .slot-pair {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            background: #f7fafc;
+            border-radius: 12px;
+            padding: 10px 12px;
+            border: 2px solid #e2e8f0;
+            min-height: 100px;
+            transition: 0.2s;
+        }
+        .slot-pair.has-recommendation {
+            border-color: #6c5ce7;
+            background: #faf9ff;
+        }
+        .slot-pair .slot-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #a0aec0;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+        .slot-pair .slot-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-size: 0.85rem;
+            gap: 2px;
+        }
+        .slot-pair .slot-content .dad {
+            color: #6c5ce7;
+            font-weight: 700;
+        }
+        .slot-pair .slot-content .mom {
+            color: #38a169;
+            font-weight: 700;
+        }
+        .slot-pair .slot-content .arrow {
+            color: #a0aec0;
+            font-size: 1.2rem;
+        }
+        .slot-pair .slot-content .empty-text {
+            color: #a0aec0;
+            font-size: 0.8rem;
+        }
+
+        @media (max-width: 768px) {
+            .slot-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        @media (max-width: 480px) {
+            .slot-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* ===== RWD 響應式 ===== */
+        @media (max-width: 640px) {
+            body {
+                padding: 4px;
+            }
+            .container { 
+                padding: 16px 12px; 
+                border-radius: 16px;
+            }
+            .flex-row { 
+                flex-direction: column; 
+                gap: 8px;
+            }
+            .form-group { 
+                flex: 1 1 100%; 
+                width: 100%;
+            }
+            .form-group input,
+            .form-group select {
+                width: 100%;
+            }
+            .form-group select#seasonFilter {
+                width: 100%;
+            }
+            .btn { width: 100%; }
+            /* 排除清單中的管理按鈕不撐滿 */
+            #btnManageExclude {
+                width: auto;
+                flex-shrink: 0;
+            }
+            /* 願望清單中的管理按鈕不撐滿 */
+            #btnManageWishlist {
+                width: auto;
+                flex-shrink: 0;
+            }
+            /* 彈窗中的清空按鈕不撐滿 */
+            #btnExcludeClear,
+            #btnWishlistClear {
+                width: auto;
+                flex-shrink: 0;
+                padding: 6px 16px;
+                font-size: 0.75rem;
+            }
+            /* 彈窗中的關閉和儲存按鈕也不撐滿 */
+            #btnExcludeClose,
+            #btnExcludeSave,
+            #btnWishlistClose,
+            #btnWishlistSave {
+                width: auto;
+                flex-shrink: 0;
+                padding: 6px 16px;
+                font-size: 0.75rem;
+            }
+            .rec-grid { grid-template-columns: 1fr; }
+    
+            /* 表格標題不換行 */
+            .table-scroll th {
+                white-space: nowrap;
+                font-size: 0.8rem;
+                padding: 8px 6px;
+            }
+            .table-scroll td {
+                font-size: 0.8rem;
+                padding: 6px 4px;
+            }
+            .table-scroll .btn-sm {
+                padding: 4px 10px;
+                font-size: 0.75rem;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>異色孵蛋智能配種</h1>
+
+    <!-- ===== 輸入區域 ===== -->
+    <div class="flex-row">
+        <div class="form-group">
+            <label>精靈名稱</label>
+            <input type="text" id="inputName" placeholder="例如：雪影娃娃" list="nameSuggest">
+            <datalist id="nameSuggest"></datalist>
+        </div>
+        <!-- ===== 賽季篩選 ===== -->
+        <div class="form-group" style="flex: 0 0 auto; min-width: 120px;">
+            <label>賽季篩選</label>
+            <select id="seasonFilter">
+                <option value="all">全部</option>
+                <option value="S1常駐">S1常駐</option>
+                <option value="S1賽季">S1賽季</option>
+                <option value="S2常駐">S2常駐</option>
+                <option value="S2賽季">S2賽季</option>
+                <option value="S3常駐">S3常駐</option>
+                <option value="S3賽季">S3賽季</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>性別</label>
+            <div style="display: flex; gap: 8px;">
+                <button type="button" class="btn gender-btn active" data-gender="公" style="flex:1; padding: 10px; border-radius: 12px; background: #6c5ce7; color: white; border: 2px solid #6c5ce7;">♂ 公</button>
+                <button type="button" class="btn gender-btn" data-gender="母" style="flex:1; padding: 10px; border-radius: 12px; background: white; color: #4a5568; border: 2px solid #e2e8f0;">♀ 母</button>
+            </div>
+            <input type="hidden" id="inputGender" value="公">
+        </div>
+
+        <div class="form-group" style="flex: 0 0 auto;">
+            <button class="btn btn-primary" id="btnAdd">新增記錄</button>
+        </div>
+    </div>
+
+    <!-- ===== 已記錄清單 ===== -->
+    <h2>我的異色圖鑑（<span id="countDisplay">0</span>）</h2>
+    <div class="table-scroll">
+        <table id="recordTable">
+            <thead>
+                <tr>
+                    <th>精靈</th>
+                    <th>性別</th>
+                    <th>系別</th>
+                    <th>蛋組</th>
+                    <th>賽季</th>
+                    <th style="width:80px;">操作</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <tr class="empty-row"><td colspan="5">還沒有記錄，快新增第一隻異色精靈吧！</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ===== 智能推薦 ===== -->
+    <h2>智能配種推薦</h2>
+
+    <!-- ===== 排除清單（可選） ===== -->
+    <div style="margin-top: -6px; margin-bottom: 8px; padding: 4px 0; background: transparent;">
+        <div style="display: flex; flex-wrap: wrap; gap: 6px; align-items: center;">
+            <span style="font-weight: 600; color: #4a5568; font-size: 0.85rem;">排除清單：</span>
+            <div id="excludeTags" style="display: flex; flex-wrap: wrap; gap: 4px;"></div>
+            <button class="btn btn-sm" id="btnManageExclude" style="padding: 2px 12px; font-size: 0.75rem;">管理</button>
+        </div>
+    </div>
+
+    <!-- ===== 管理排除清單彈窗 ===== -->
+    <div id="excludeModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); z-index: 1000; justify-content: center; align-items: center;">
+        <div style="background: white; border-radius: 20px; padding: 24px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3); display: flex; flex-direction: column;">
+            <h3 style="margin-top: 0;">管理排除清單</h3>
+            <p style="font-size: 0.85rem; color: #718096; flex-shrink: 0;">勾選你暫時不想孵化的精靈</p>
+            <div id="excludeChecklist" style="display: flex; flex-direction: column; gap: 4px; margin: 12px 0; flex: 1; overflow-y: auto;"></div>
+            <div style="display: flex; gap: 8px; justify-content: space-between; flex-shrink: 0; padding-top: 12px; border-top: 1px solid #e2e8f0; background: white;">
+                <button class="btn btn-sm" id="btnExcludeClear" style="background: #fc8181; color: white;">清空</button>
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn btn-sm" id="btnExcludeClose" style="background: #e2e8f0;">關閉</button>
+                    <button class="btn btn-primary btn-sm" id="btnExcludeSave">儲存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 願望清單（可選） ===== -->
+    <div style="margin-top: 4px; margin-bottom: 8px; padding: 4px 0; background: transparent;">
+        <div style="display: flex; flex-wrap: wrap; gap: 6px; align-items: center;">
+            <span style="font-weight: 600; color: #4a5568; font-size: 0.85rem;">願望清單：</span>
+            <div id="wishlistTags" style="display: flex; flex-wrap: wrap; gap: 4px;"></div>
+            <button class="btn btn-sm" id="btnManageWishlist" style="padding: 2px 12px; font-size: 0.75rem;">管理</button>
+        </div>
+    </div>
+
+    <!-- ===== 管理願望清單彈窗 ===== -->
+    <div id="wishlistModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); z-index: 1000; justify-content: center; align-items: center;">
+        <div style="background: white; border-radius: 20px; padding: 24px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3); display: flex; flex-direction: column;">
+            <h3 style="margin-top: 0;">管理願望清單</h3>
+            <p style="font-size: 0.85rem; color: #718096; flex-shrink: 0;">
+                勾選你優先想孵化的精靈（將優先顯示在推薦中）
+                <br><span style="color:#e53e3e; font-weight:600;">排除清單優先於願望清單！！！</span>（已排除的精靈無法加入願望清單）
+            </p>
+            <div id="wishlistChecklist" style="display: flex; flex-direction: column; gap: 4px; margin: 12px 0; flex: 1; overflow-y: auto;"></div>
+            <div style="display: flex; gap: 8px; justify-content: space-between; flex-shrink: 0; padding-top: 12px; border-top: 1px solid #e2e8f0; background: white;">
+                <button class="btn btn-sm" id="btnWishlistClear" style="background: #fc8181; color: white;">清空</button>
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn btn-sm" id="btnWishlistClose" style="background: #e2e8f0;">關閉</button>
+                    <button class="btn btn-primary btn-sm" id="btnWishlistSave">儲存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="recommendationArea">
+        <div class="rec-card" style="border-color:#d69e2e; background:#fffff0;">
+            <div class="title">點擊下方按鈕重新整理推薦</div>
+            <div class="detail">根據你已有的異色精靈，推薦可用的配種方案</div>
+        </div>
+    </div>
+    <button class="btn btn-primary btn-sm" id="btnRefresh" style="margin-top:12px;">重新整理推薦</button>
+
+    <div id="targetSelectionArea" style="margin-top: 20px; display: none;">
+        <h2>選擇目標精靈</h2>
+        <div id="targetGrid" class="rec-grid"></div>
+        <button class="btn btn-primary btn-sm" id="btnCheckBreed" style="margin-top:12px;">🔍 檢查能否孵化</button>
+        <div id="breedResult" style="margin-top:12px;"></div>
+    </div>
+
+    <!-- ===== 資料管理 ===== -->
+    <div style="margin-top: 30px; border-top: 2px dashed #e2e8f0; padding-top: 20px; display: flex; gap: 12px; flex-wrap: wrap;">
+        <button class="btn btn-sm" id="btnExport">📤 匯出資料</button>
+        <button class="btn btn-sm" id="btnImport">📥 匯入資料</button>
+        <input type="file" id="fileInput" accept=".json" style="display:none;">
+        <button class="btn btn-sm btn-danger" id="btnClear">🗑️ 清空所有</button>
+    </div>
+</div>
+
+    <!-- ===== 自訂確認對話框 ===== -->
+    <div class="custom-confirm-overlay" id="customConfirm">
+        <div class="custom-confirm-box">
+            <p id="confirmMessage">確定要執行此操作嗎？</p>
+            <div class="btn-group">
+                <button class="btn btn-cancel" id="confirmCancel">取消</button>
+                <button class="btn btn-confirm" id="confirmOk">確定</button>
+            </div>
+        </div>
+    </div>
+
+<script>
+
+
+    // ---------- 通知父框架調整高度（用於 Google Sites 嵌入） ----------
+    function notifyParent() {
+        try {
+            const height = document.documentElement.scrollHeight;
+            // 嘗試發送訊息給父框架
+            if (window.parent && window.parent !== window) {
+                window.parent.postMessage({
+                    type: 'resize',
+                    height: height
+                }, '*');
+            }
+        } catch(e) {}
+    }
+
+    // 頁面載入時和內容變更時通知
+    window.addEventListener('load', function() {
+        setTimeout(notifyParent, 300);
+        // 監聽內容變更
+        const observer = new MutationObserver(notifyParent);
+        observer.observe(document.body, { childList: true, subtree: true, attributes: true });
+    });
+
+    // 視窗大小變更時也通知
+    window.addEventListener('resize', notifyParent);
+
+    // ================================================================
+    // 1. 資料層
+    // ================================================================
+
+    // ---------- 精靈資料庫（名稱 -> 蛋組+賽季） ----------
+    const ROCO_DB = {
+        // ===== S1 賽季 =====
+        "呼呼豬": { eggGroups: ["動物"], season: "S1常駐", types: ["冰", "地"] },
+        "獠牙豬": { eggGroups: ["動物"], season: "S1常駐", evolvesFrom: "呼呼豬" },
+        "治愈兔": { eggGroups: ["妖精", "動物"], season: "S1常駐", types: ["火", "萌"]  },
+        "紅絲絨": { eggGroups: ["妖精", "動物"], season: "S1常駐", evolvesFrom: "治愈兔" },
+        "紅絨十字": { eggGroups: ["妖精", "動物"], season: "S1常駐", evolvesFrom: "紅絲絨" },
+        "大耳帽兜": { eggGroups: ["妖精", "擬人"], season: "S1常駐", genderLock: "母", types: ["冰", "萌"] },
+        "帽兜娃娃": { eggGroups: ["妖精", "擬人"], season: "S1常駐", genderLock: "母", evolvesFrom: "大耳帽兜" },
+        "雪影娃娃": { eggGroups: ["妖精", "擬人"], season: "S1常駐", genderLock: "母", evolvesFrom: "帽兜娃娃" },
+        "機械方方": { eggGroups: ["擬人", "機械"], season: "S1常駐", types: ["機械"] },
+        "多彩方方": { eggGroups: ["擬人", "機械"], season: "S1常駐", evolvesFrom: "機械方方" },
+        "立方人": { eggGroups: ["擬人", "機械"], season: "S1常駐", evolvesFrom: "多彩方方" },
+        "惡魔狼": { eggGroups: ["動物"], season: "S1常駐", types: ["惡"] },
+        "拉特": { eggGroups: ["妖精"], season: "S1常駐", types: ["電"] },
+        "酷拉": { eggGroups: ["妖精"], season: "S1常駐", evolvesFrom: "拉特" },
+        "奇麗草": { eggGroups: ["植物"], season: "S1常駐", types: ["草"] },
+        "奇麗葉": { eggGroups: ["植物"], season: "S1常駐", evolvesFrom: "奇麗草" },
+        "奇麗花": { eggGroups: ["植物"], season: "S1常駐", evolvesFrom: "奇麗葉" },
+        "格蘭種子": { eggGroups: ["妖精", "植物"], season: "S1常駐", types: ["草"] },
+        "格蘭花": { eggGroups: ["妖精", "植物"], season: "S1常駐", evolvesFrom: "格蘭種子" },
+        "格蘭球": { eggGroups: ["妖精", "植物"], season: "S1常駐", evolvesFrom: "格蘭花" },
+        "柴渣蟲": { eggGroups: ["植物", "昆蟲"], season: "S1賽季", types: ["火", "草"] },
+        "燃薪蟲": { eggGroups: ["植物", "昆蟲"], season: "S1賽季", evolvesFrom: "柴渣蟲" },
+        "雙燈魚": { eggGroups: ["海洋"], season: "S1賽季", types: ["水", "電"] },
+        "利燈魚": { eggGroups: ["海洋"], season: "S1賽季", evolvesFrom: "雙燈魚" },
+        "月牙雪熊": { eggGroups: ["巨靈", "動物"], season: "S1賽季", types: ["冰", "幻"] },
+        "粉粉星": { eggGroups: ["妖精", "軟體"], season: "S1賽季", types: ["電", "幻"] },
+        "小皮球": { eggGroups: ["妖精", "軟體"], season: "S1賽季", evolvesFrom: "粉粉星" },
+        "空空顱": { eggGroups: ["巨靈", "魔力"], season: "S1賽季", types: ["幽"] },
+        "夜宿顱": { eggGroups: ["巨靈", "魔力"], season: "S1賽季", evolvesFrom: "空空顱" },
+        "夜梟": { eggGroups: ["巨靈", "魔力"], season: "S1賽季", evolvesFrom: "夜宿顱" },
+        "嗜光嗡嗡": { eggGroups: ["昆蟲"], season: "S1賽季", types: ["惡", "光"] },
+        "竊光蚊": { eggGroups: ["昆蟲"], season: "S1賽季", evolvesFrom: "嗜光嗡嗡" },
+        "貝瑟": { eggGroups: ["機械"], season: "S1賽季", types: ["機械", "火"] },
+        "貝加爾": { eggGroups: ["機械"], season: "S1賽季", evolvesFrom: "貝瑟" },
+        "貝古斯": { eggGroups: ["機械"], season: "S1賽季", evolvesFrom: "貝加爾" },
+        "粉星仔": { eggGroups: ["妖精", "天空"], season: "S1賽季", types: ["幻"] },
+        "粉耳星兔": { eggGroups: ["妖精", "天空"], season: "S1賽季", evolvesFrom: "粉星仔" },
+        "落隕星兔": { eggGroups: ["妖精", "天空"], season: "S1賽季", evolvesFrom: "粉星仔" },
+        "火紅尾": { eggGroups: ["動物"], season: "S1常駐", types: ["火"] },
+        "雅丹鬃": { eggGroups: ["動物"], season: "S1常駐", evolvesFrom: "火紅尾" },
+        "惡魔叮": { eggGroups: ["妖精"], season: "S2常駐" },
+        "幽影樹": { eggGroups: ["妖精", "植物"], season: "S2常駐" },
+        "公平鴿": { eggGroups: ["天空"], season: "S2常駐" },
+        "小夜": { eggGroups: ["妖精", "擬人"], season: "S2常駐" },
+        "小獨角獸": { eggGroups: ["巨靈", "動物"], season: "S2常駐" },
+        "菊花梨": { eggGroups: ["植物"], season: "S2常駐" },
+        "靈狐": { eggGroups: ["動物"], season: "S2常駐" },
+        "嘟嘟煲": { eggGroups: ["妖精", "大地"], season: "S2賽季" },
+        "猴麥仔": { eggGroups: ["機械", "動物"], season: "S2賽季" },
+        "煙花團": { eggGroups: ["魔力", "機械"], season: "S2賽季" },
+        "加油海葵": { eggGroups: ["妖精", "兩棲"], season: "S2賽季" },
+        "炫光迪迪": { eggGroups: ["大地", "動物"], season: "S2賽季" },
+        "咕咕帽": { eggGroups: ["妖精"], season: "S2賽季" },
+        "小丑豆豆": { eggGroups: ["妖精", "擬人"], season: "S2賽季" },
+        "小鼓象": { eggGroups: ["機械", "動物"], season: "S2賽季" },
+        "牽線木偶": { eggGroups: ["妖精", "擬人"], season: "S2賽季" },
+        "海盔蟲": { eggGroups: ["海洋", "巨靈"], season: "S3常駐" },
+        "小鷸": { eggGroups: ["天空"], season: "S3常駐" },
+        "伊貝兒": { eggGroups: ["軟體", "植物"], season: "S3常駐" },
+        "可立雞": { eggGroups: ["擬人", "天空"], season: "S3常駐" },
+        "斑斑": { eggGroups: ["天空"], season: "S3常駐" },
+        "小草蟲": { eggGroups: ["擬人", "昆蟲"], season: "S3常駐" },
+        "地鼠": { eggGroups: ["動物"], season: "S3常駐" },
+        "豆丁魚": { eggGroups: ["海洋"], season: "S3常駐" },
+        "苞米仔": { eggGroups: ["擬人", "植物"], season: "S3賽季" },
+        "守夜燭": { eggGroups: ["妖精"], season: "S3賽季" },
+        "十字蝌蚪": { eggGroups: ["擬人", "兩棲"], season: "S3賽季" },
+        "栗鼠": { eggGroups: ["動物"], season: "S3賽季" },
+        "蝴蝶陶陶": { eggGroups: ["擬人", "動物"], season: "S3賽季" },
+        "稻草人": { eggGroups: ["妖精"], season: "S3賽季" },
+        "蜜果骸": { eggGroups: ["妖精", "植物"], season: "S3賽季" },
+        "卡波": { eggGroups: ["妖精"], season: "S3賽季" },
+
+    };
+
+    // 系別圖示（Base64）
+    const TYPE_ICONS = {
+        "普通": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAEaElEQVRYhe2XTUxcVRTHf/cxwDDlm0KhoVApqFQLIcRalICtDdIEEiMmVmOtcWXVxJWZVdOw0lnqyujCaFmQKEkts0DShRAqLMAGTf1AOhg6YkFAPoeBmXnXxbxh3pt5b5gw6or/7p537jm/d9+5954HBzpQahKpTG5xuRXAIcABIMEH+IadHer/BtTqctsksg3oEtAMohwNCPCB9EoYAfoEYnDI2RH8T4BaXW4bcBHoBqqSnOYBrgG9yYIlBdTyQX+JEOJzoD1JkFgNAJeHnB0LKQO1utzVwDeYrEp6msLRfAeVRdlkpCn8seJjdmmDzR3TxfAAzw05O6b3DdTqcpcAo7EwBY4MXjpdxYVTx8i1pyNENIw/EGT890W++G6aqflVM6imRCtlCaTVTD8xn6n98XKunK0lLysj0bsQVFVu3pnlk6Ff8AdD+kcDQKdVTSkJYl6MhXn96RqcF+r2hAGwKQovNB7n/RefINNmSNOuxTaVKVCrq99GeDdFbQ+X8tpTNYbPk4waKop4+9xJg01KurUcyQGBaENXN5k2hXeePYliAeNd3mR+dcsSqqO+gsbKw9HogiotR7JAdOkHnfUVFOdkmTo+WPXx5vUR3uq5zd+b26Y+ihC82lRtLFhpzGEJ1OJyKxKa9bZztUctuOGr8Rk2toMsbW7jnpy19DtVXkBRtj3KI2jWrh6DzL6jQ0D57iDDxkOHcwwOa1s7XL0xwcziOmtbgV37Z7enuDk5S/2xQt49/xg59mjx2xSFsvwsFjf8AGg5HMCGPnYcoXZRRu4mSvOysKenGXz+WvczeX/ZAAOgyvCzWz/N8dv8WtybluU59ENDHkugWKlSxtlOlOTS1Xjccs7ZR8toqCjaK7Sp4oCklD7CbQQAD1a38JlcBVeeqaXwUGac3ZFh4732OtPjYW7Fpx8a8lgCCSF8gDcy9gdCzCxuxLoRVFW2TED9gRCb24F4/5DKn6vR/BK8MhmgIWeHKpEjetvgXW+sGyBIU8LTn6wq5kxVye6TkEl7dmd2iaUN/bEgR8waOdPTUiD6gDci44Efvbx8+gRl+dEatKen8dErZwipkuqSXACm5lfZDqocybUb4oVUyfXR2Ete9JnltihqOSglnshoJ6Ty4a27hFRjgVcV51JzJA8hBEIIHinNp668MK5++iZm+MG7HI0u8QjkYNJAQ87OIOFOb1djngU+/vZn012XSGP3Fvh0+FeDTQiuaTmSA9Im9cpwq7CrL8dn6P76e5a0wy2RdoIhekanuXpjgoCuqLSYvZZ5EwVtcblLhEmDlmNP5/mGSjrrKyjKztwtbikl6/4Ao/cW6Bmb5v7yZmxIj4Sm4f00aBElamEVAUXZdsoLDpGepjC/tsXcis+wInoYUm1hI9JWKqUmX8LlRCsT0Z5XB4AWqFPCJf3u20tS4pGSS0BnMjCwrx/FfhuINonsEohmorc2hE9er0SOhM8yOWi1m/41IL1aXG4lpjvwyRR/pQ90oFT1D94vm2SgZB78AAAAAElFTkSuQmCC",
+        "草": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAEcElEQVRYhe2XX2xURRSHv3O7LXRZShootLZYoJWCQBQCShUFYS0VZQmpCKTWGmOUqDGx6xMvhgdfjPXFhEeNSAwSScwmIpSNklhAQyCASlv+rBQXQUqBlrhSQ+/x4a7b7u7c60IDT/0lN9mZM3Pm25k5M2dgVKMamWQknUPRFgvFj4gfANUEQiIS/Mi+Z0ChaNinUCdoA7AEpALwJ80J0DjQrsgugbZIsPXWXQEKRcM+YAOqWxCZkVMn1Rgi7wE7cgXLCSi0LzwZ4TOgPieQbO0BmiPB1ssjBgpFw9XAXiBtVgRBUfLEorn6OWy12XbmG2zUzVUMWBkJtp65Y6BQNDwZOJQJ858shLdmv8DysoUARH7/gU9OR7xcxoBar5nK84DxATuBRW5tXq9poK78UUQEEWHWhEoGBv+hs++cW5diYF7NS4992bXtkDESLbeewAY89kx9eS315Yuz6puqV7GsdIGHW+pRNrgZjUChaNiH6ha3TlXjK3h15hpEnBX/+dpZLv3dC0CeWGyqaaDcX+LBpFuSK5AbEFDnFtr5lo935mwk3xry9238ID/1/JoqF/rGEJ7TyBirwOzd8V13G0Da4ALKM+W1TB03JVUetAc53X+ek9djae2qiipYN22FmxvXMbKAQtEWS2GJqfHYvALWTQs67lQ5ef03Ovu6uXKzj7M3LhD/6zLHek8NwVfUEvAVmnFgSSjakjV+9gyp+MW5DrK0vGwhRQXjUuWvu/ez+ehWbGx6bl7jzR8/4PCVkyl7IN/PE1MeNgI5Y4g/sz4bSPAzdDel6ZFJc4aaifD2g+uZNaEyVVdbMo/mB55N6/NU8owyyDiOV9hnafjesdUmkO/ntZlrAQj4Cnl3biP54mNQh46Y0sKJWLdxhxtCTxMgCTLoLYSCYZH1RWwvJ66dIeBzmiUGB/i4Yydnb1xgRdki1lYuc7wlP4MSyS9NhhmShEI8s9ZGuZDoSZU3Tq9jqn8KR3o7HLva7L90lMUlc1lz/9JUuz8SPagBSdG48+f/BygSbLWBdtNfOnj5ROp3npXHG7OfZ+V9zmktwPrpT9M4ox5LhpZod/yAyRUC7aZEznhaCuwCXsms3x0/yNLSBVQXTXWgxGLTrAamjS8j4HMiSobBHO3t4sCfx41AOGNkyW1Tt6Eay6y8pYO8f/xTjlzpQNVZBkuEVRWP82Tp/BSMrTbfXzzCh79sN6cjqjGQNtPArts/tK/lRUQ+d7PXFFWytHQB8yfOpKxwEjY2nde76eg7x3cXD6ftN4OaIsHW7SaDcckcVNmB0oiYb/yu/m66+ruxsNj80MtcHehna+dXXhCOlD0IO9zMrudQJNh6C6EZJ6lyVSC/kKrxFcwrrkq7cF0UQ2j2yq89D8ZkZrfSC2rimAkcu9rFqb7zlIwt9oZxUljPvDq3JN9JZe9Jkp/T1ZF0tBqlyRR9rlKNodoErM4FBu7woQjUKTSIk6ZkPBSJK7Qnz7K791A0w7VYyRRi+Mt1RE/pUY1qpPoXECl2Oajr6ZIAAAAASUVORK5CYII=",
+        "火": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAD8klEQVRYhe2XS0xcVRjHf9/MnYGZjmML5WGLpKVeImlTQ4giKbZJVcAqqUon0kVboybE+EilKxMTJcak7UrbxMQl0YVmSlIfC6TdmFBZsPDRRBMvTEyFGGgEEXIhw8wcF3MdgfuYC1hX/JPZnPM9fvOdc+75DmxpS5uTbMbZSOgBpYiKEAVQClMEU08auf8NyEjomkK1gXSJUq2I1EAeCDBRakKJDIMaEGRITxqZOwJkJHQN6FbQJ1Dnx0dBSuBt4FO/YL6AjIReCfQDHX7sHTQInNGTxnQxw4APmPuAkWIwoXv2UPbcWQgEnaY7gBErlqc8K2RVZgSPJQrt2kv5yV62NR1F5XKkzjRC1nV1UkCLV6VcK2TtmX4vmNihp7j3wlVize2IFkJCYQLhUjdzrFj9Vuz1AQHdeCxT7OEnqHrlAoGSSGFMRAjX1nsBAXSofGz/QMYJXQP63JykJEpFz7uIFrLNxR/rpthZEUWflcMfEEIbXkvV3EZwW9xx7q7Dxyk7+YY3lFBn5fAJBF3u0SDW4n7gRISyp3uofPUiEipxtVPKOYcNyEjoAVCtHhkJ1+hevCBC/PBxqs6+DwGXRRDVms9VBAiIgtSsHYwcaKFk30FQKv/zodiDjxJpeMiNeuWVUwzIbrj9yeepPneJ8J4GcosLvoAASvY2uE055nH9Hqwy2rmLaOMRJBCg9uLnvmEAMrO3Ce6oIDt725e9rUJKKRMwV46Fd9chLnvhH6V//5X5G1+RXZgrjC1P3SI9OU7ly+edXGx5HIFExEQxsQrS/SoAYGH0Ord6jzH1QS8zycugFOnJcaY/eovKnvcI73b6gqgJJyDbkulJI2ck9GGg8MldGvuR3OICgUjMHjab4Y+Pzxfur/nhLzBvfosENSpeeofSfQdIT47b/ZDheodGzm0PDQAvFJyXTOauf8aOzhcdgLL/LlMgSPzIM0SbjhK5vwkJ5sObP9yw+Uk+h03OG0MxhCK1cmh24EPSv43ZA4fCRB94BIDtx06z8/SbRPc3F2Cy5jxzX3+yNn4KxZBTasfm5fJPM7nX9pfPCDxbiLGcZmH0Glp5NaGq2kJCESF68BB/fXOVux/vRkojZP/Mn6ilX75j6tI5lifW/BHhdf2K8b1TbtcLx2oRvsThxg+WVVFa34gWLwdNQyuvZvHmCCqbYfHnUchmkGAIlUk7hR4EOt1a2k03aOvUxhs0AMux3Qr0X8C0F+uri/bUetIYA1rIl3qjGiRfGfupWC+QBTUNdCo4tfb0eUqRUnCK/J4p+uKAjTwUT+ia1Vx1Aa3A6ociTADDwACKIf3KHXooOsLl+5mVt7YJm3tKb2lLm9Xf7PBGHN8bNkAAAAAASUVORK5CYII=",
+        "水": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAAACXBIWXMAAA7EAAAOxAGVKw4bAAADg0lEQVRYhe2Xz2tUVxTHP+fNJJJpE4w/JiY1KEN0/JkiQfuDodIiWihiMcIEQYSCSIJu/AeC/gkuxpWUoIsMkk03jiGLFgLTpqVZlCZEZNrqLEwq/oyjSZ13XLynjnnvvnmTqa7y3Qz33XvP+cw598e5sKIV1SepZ3J/1raAmEAMQKEElC6lLfu9AQ1k7SjoQVR6VUgJbMQFAkoKRVHGER0BGc2krRfvBGggW46C9KGcR0iEmqQUEAZBhzPpSCiwUEAD2XIcGAL5OhSIlywHcjKTtuaqjbSqw9hdIPkgmH2bYE3M1Avu3LxjK1iBERrI2nEgD+YUfdsNB5LC3Lxy8Ud4+CzQXwH4LChSxgg5i5ehIJhvdjowItDWLJzdD6ubAoESwJBruzYgoA8wpqmnEw5tB6mI8YYW4XQKGo3uwLXZZ+r0TZm7o2YwRKezFc59CY1R/4z/dlv5/mczkUJB0KTfzjNESA6aYJoa4LtPzTAAPZ3CV1vNQAIJ14dHvkAKvSZjx/ZAvDn4tBCBI92QWGseo+rvwwPUn7UtlJTf4N0d8MmmcGdp1BKO74WoeZWm3KsnGEggJsJGrwM4+vHbi7ia2luEA0n/PseHek4vH36N8eZueq3dHbD+w9rv4v1bjFGKCRIGyF/dH9UWHVWwbaV5lZBYF36eF0ilhFNGvKWuGowCzM0r16ecP+G3uFXx9eMFEkqKFis/NUagNRY+PKpw7XcoPnTaaz/wHVbUMECZtGULjHs4a0jX2IwyPQst7jUyv+gdIzDuV8iZDsaRytZiGR4906ogqpD/S/nhD6e9q935vfPAzwUjPl9NQDqqzs38WlN3g2H+faJczitXfwVbYVsb7NgAz/9Tbs4usQ4F0NHQQJl05AXKYOW33BSUFr1Rml9Qrk0qF3Iw6a68Levh1OcQsYQb096UCQyaKkjjthdhGMi9at97ClcmoLwk6w0WtDbBznanAji5D858AasahF/+VsZmPKZzwLDRr6kD/Au07W2Q7gk+JJ8sKNf/hJ9uebqqFmhV945bdt6ohIpYkIzDrg7YvMYpyh4/h/slmL4LE//AgjchBdBDmXTEi1kLkAsVB62jyCcH/D9FPoBjSA4remLp7guSQkGVE8DhMDCwrIdiOeoUV9oLkmLJQxEogo47Z5mOhn2PLRuoUv1Z23Ke0a/KCClpnU/pFa2oXr0E6+0elGdGRbcAAAAASUVORK5CYII=",
+        "光": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAD2UlEQVRYhe2XT2hcVRTGf3dmmInTFmvSpFEGqUOauGkppVKKKUxR0rposuimWEsEFaFREPdFuu9CXAjipsFou7DoZCFjUJhFsGIVQRSsrZPYDPQPSf8mYzKZecfFec3MvPfum7FjXeWDYWbOvfc73zvn3nPPg3Wsoz2YdhYP550IQtIYkwQQkRKG0mQm4vxvgkbyEgMZEswRIzKIMSkg6Q6XECmKMdMGOQ9mKpsxlUciSIVwVOCUgXQrawQKBt4DzrUqrCVBI3npAcaBQ63MD0AOkdHsgcjNtgWN5KUP+JqQqMRclorUSMU/rQAczGbMlYcW5EbmQpgYgLF+iBr44JKf3COsAOzLZow1UpEQMTE0TaFidj0BL/bCga3wfHfjmOB74jQw7nL/O0HAUZrsGQOMpsEY/byahriHMUDUIZfbyumD+wSXCIjO7k5IROC3u7C/G97Y3jj+7XW4XYYdm+Hzq3BxIcCBUMAwEHTybKEbChID0BWHsQGoOBoVL17o1e+qwNUlC7sh7fr4yjtkS9kRi53v5mGpArGIbmSAuSX4dKZx3uwi3Fi2sdh9+AQN550IyKCNpX9T7ZgDOAIfXYYv51TYA3QlNG12yKD6aiLIYJJgUl57TwLeeRZO7oBEVG0rVTg7C7/ehVWBD/+Ae6s6tjkOp3bCW/2wJREkyKTUl9e/B27tuVFvO/iknqZk3Y77fh4+vgwL5cb1G2Pw8jZ46anaHltchTMF+Oa6T9VWb00KO/Zr6H1MT1Y9Vh2IBqx2BOZXGgvihpjWq1acBZ2yEkiJunCOF+DnW/B6Hzy9QW37e2BvF0zMwmRRbXs64e0BeDxeI7tThokZLQeeql0SpOR17hPtTip67b/cgXd/gjN/6pEGiEfh2Dbo7dAIvrm9JsYRyBbhxA+aqoC7rWgwzQVNZiKOYKb96/XyzF2Dv6s1WyIKr/XBcAq6O2r2lSp8NgOlqp/HxXQ2Y3yNXGBaDZy3sezp1I1brmpxBHiuC449o79F1N4RhZTvDDUg0IetUk+hN7OvWt8uw/u/657auwVO9DeOZ4vwxZzWoGV7I1twffhgbT9G8vIK8ImVEg3v6d2Q3qT/F1Zg7CIs29P0AMezGTNh47ThHJALY3WAs39pmkAj04KYnMsdCKsg9yYeRcNrxY8LcGEertyHqWtNxRSA0bD++j9pYTfGtA+6VbbNWBPTtIVtWjxdgn2EpG+x0lRMDm1dQ8W0JMgVdRM4DBynSQo9KLhrDof10fV4yBdFhtB+ZhBofFHUKj+N1plH96IYhOG8E3FbiDVBgrT1Kr2OdbSLfwDG70SFHdq9IgAAAABJRU5ErkJggg==",
+        "地": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAEOUlEQVRYhe2XTUxcVRSAvzt/wLRUWinWFGiFUkosViBGoO1gSwrEttHYpmljSY0x00SNK11oMhiGtSuNCYMbgrEkykKNFmiTZgiGWhuRaNv0h2kj0ApqTQnhb5g5LuYxMMx786ZgXXFW7517fr537n33ngursiorE7US52aPy6LAiVJOAEQmBSZPN/WE/zcgX0OVDZEa4AhK7QGyAac2PAkMI9ILdKBUt9vrn3skQL6GKhtwHGgE8pJ0CwAfAu3JgiUF1OxxZSmlWoE6vXGbI4252alEITqBU26vf8wsl8XMwNdQtU0p1WcEA7DvlQ8orjyWKEwd0OdrqNq2IiBfQ1UW0EWCKcrKeZotO3ZT4qrHkbo2Ubg8oEuL+fBA2pppTQQDUOI6iVIWUtLS2VF2KJHpPFSrFvvhgIgsYMNpAnj8yQJyCsqj7zvLj2Kx2s2g6rTYyQNpX9BoFnnXnhMotfBfrFmXyfZna83cEJFGoyoZVagGnamyO5zR5w1P5PNUkSvOsbjyGBaLFYCUtHT0fmSlVJ6WI2mgI3GGFisHTjSx/2gDNnsqz1W/gcUa/5EZmbnkF1ezfuNWXnY3U1JVb5AiPgd6+NpxcA2lti/WP7P7OM8fOA1KMTXxD6lrMmKma7GEQ3OEQkHsjjSCs9N89ckpJh6MxhqJ3BAoWnrMxFVIO5uyF+syMrdQtv910ADS1q43hAGwWG3YHWkA2B2plNe9FW+kVLaaPwMTAWkHpXPh1cLel97FZnMYApjJ1qK95BZWLlXH5DEGWiJ5O/exKbd42TAASikqX3wHmz3F1DYeSGSSyKmNslgjU/UfSHrGJgpLDy5WRfMkBlIq0kIARWWHeGzD5uhQOBxCROJcRMIG+lhd6QuvaVsBIDIskY9PDOT2+sNaP0N+cXVUPxec5uuWN/npfEtMounJcb757G0unWuOiTMXnOFs23v8/cdgVJfqXEfBruj206vXyOmvIaU6AO6PBqKqfn8bf929zkDvGUYGL0cr0PvtR4wNX+XXvi8ZG7m2YN/TxsjgZbq/eD/mlw/OTs8/duilNlrU3SISuHS+hXt3BhgdusLAD+3akHCx61NCoSCBKxe4fdUf0YZD9H3/MRIOM/r7bwz0ngFg4sEY59o9BGenGLr5Izf6zyIiAZTq1q2FARA+j+skSrUBWG0phOZmYsZzCsq5e7s/Tl9YepB7d35h/P5IjH7j5iLG748wMzUOUO/2+j/Xy2vYBqBUOyKvolTd0qQAQzcv6rpd//k7Xf2f89Mp0olS7bpGmLSwPo8ri0i3mGwPbSYBRCrcTT2GrWzCjVFzrCXSrK8cBmoTwZgCAbi9/luIVBBp1JcrnYhUuL3+W2aGpkAQrdRhROpFJOlqiUgAkXrgsFll5mV5F0WoQSTxRTGylz26i6KeNHtcFhXbHUyKyIqu0quyKiuVfwFGuH5seZQAIwAAAABJRU5ErkJggg==",
+        "冰": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAD+UlEQVRYhe2XS28bVRTHf2cydpOJ3dA6zasBpDggQmlASAgVsuAhpV1QpMoINUiNPwXLKsoH4PEBkJDLJkjxlrYRsEqpUMtLUZGAjNmENEmTtA3xxPHrsLDjxB57PMWFVf6SJevMuef+5t4z554LhzpUa5JWBsdnbQPUQsQCQNUBcRLvRYv/G1A8aZso4yrEgDGBQcAqP3YUloB5UZIIc4lYNP+fAMWTtglcVJgWGPIzRiElMAXM+AXzBTSZtHsEEsA5P/51dA2IJ2LRtZaB4kl7GLiOz1XxUAo4m4hFF72cjCYwPX5gxoe7mDgdwfB+vSHgejnmowOVcybRDOa1p0JMnD7O2We6uPD8MU+icqxEOfajAQEXaZIzfaEAky91I1JamneefYLR3o5mUOfKsf0DTSZtU2G6WeTYqWO0m/shRISJ0UizYQDTkw1Wqa5RYJyarRof7qK30yRimYgI9maGH5cdXjkZqhr7/VKaVwc7eXmgEwG2swU2nALfph6yk9c9t6HyHF/5AgJitYa3h47SGwoAoAqjvR188t0Ky1tZBo4GAdjJFbm1tM3lN09ypE1Kr4aSKypf2w9rImqsHpBry+KztqHoWK19YdWp/BfZ356//s5W7Kn7Gd5/IUK7aSAiFb/FjV12C1oVT2GsdPQ0AUKwBBmsNd9Z23G59oeDVVt2qsfixX7L5ffz3XSdaWRQBZdzvaS2wO14Z22H5a0sqkpRtc6wauUKSjZfZNPJc2vZDQRYUmeehvWgVtmC8tkP9wgFDfrCAT4Y7fb0v/rHAxY3MmztFtjKFPxOUxfIKf+q6PtCAS6/MVCpOc307nP7RfKjG3dZWHVt+d48Vaq3ZQ6lFqJKT3YFXTDZQrEq2X9ZcVh3cq6AA+Ggy6boEuoDKBGLFhWdr7V3W/uLuZdB39hb3EvvAwQM4cuFzZLPgTzrDwdcQCDz9Rq5upVakGSt7XiHeeB5KWlvL6cZezpcsY+c6CCdLbKWzlWtZsRyZ4agrjmgQVIrzEmpXahU6+Svm9xeTmMagirsFoqMdHcQbDt4dMBbQ2E+vrFCxDJxckUMge2sayFSisz5BroSi+bjSXsK+GLPlskrv61nqvxGTrgP0jYRVrZzrGy7c+mApq406CC9TvsZSp1eQ139/UFVwdxw8nz+07rXEMoxZxo99PyGy83UTTx6ovARgw9f76ervY1Pb67y5/1dr5Ap4IxXK/tYWlhDwDSEbMGzgrfewgKUA5zBY/uKSjOYa5RWxhPGF1AZag04D3qJ0pv6VQq4BJz3c+OAf3FRnEzapsC4ojFBxqi5KAJLis4LklSYa/Q1PTagg4rP2gZS1R04KC1dpQ91qFb1Dyr8bTGcABODAAAAAElFTkSuQmCC",
+        "龍": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAD6ElEQVRYhe2XT2gcVRzHP292s93dprbNJsVKiBqjB6EKGpXSPRT/pLtCojU9hMQQ3JMePKhXaQhUPRQUiyAYWM0tILl4cNPgwUMOIkIjYkLdso0lqNRsTJlkTbKz8/Mwm83uzptk0lVP+cIc3nu/9/t95vfem/cbONCBGpNqZHI+kTJEEVUQBRAoKKEQm07b/xtQPpkKAj0i0o9ScQXtlIGAgsASIrNKqSlgJpZJW/8JUD75WhDUgMCYgk4/cwRyCkZBJmOZz32B+QJaTqZOKGQCVMKPvQZtGtRILJO+3TBQPpnqAq7iMyu7KAeci2XSN3YzMvaAOeEHJnwhQaDr/r2AOoGrZZ/7Bypv3gmgk1CTpwMVjRAZ6CV8vsc7SsBwHgdqoux7f0DAAJAAiAz2cajvOa1R6IUzqGiYULwb1XLUDdwcpfnimwQ67tvuSpR9+wdaTqaCAmPbbXtllcOvDxIZeskNdPoJJ3BTkKbuUy6YI++9Q+ipx7D/XKkeGlv2yJIWSEFP9dEuzs0DEBnqIzzYu2PXcpTgo107cPHuWphLbxN8+AGs7CKyVqgO0alAu8ZeS9Zf3bBv/Y69agIQffXlSqbCfc+jgoEdoO5TGB0nK5kJPvKg80I/Xd8zxrZcacsnUoYgcVX3RSjOzXPo7DOAkyl1/B5CTz/uchgdPo9xbxvBhzoqfdbcgstOkHg+kTLqrxl3hhRRhWqv7y7d+LWmHX7xLEbrcdf00Jkna2AArLq5ThjVLqpy5ewC5NxLLkOdUz8q3c4jd0zdUOVS3gtIKyt7E9nY3DeQ9XMWRHzbu4AECjhPrf7erGzO4rV5ZHPLGyK7iJ1fdWy//9HLTBvHBaQcoyVtoDKQdT2HOXZFmzHrl5uYFz9CtooOkP6EIcgS4gMolknbILM6J6VbvwEQvpDEaGth/eMvasbt/Cprl8eJvjFE4GQbtrmOrNzRAiHM6go5jztFTQGp+t7i3AK2uY5x5DDNb7mGMWLHODb+fqW9NfuD3j2AU8C5feg6BWZwyoVabRUx3/0Q21z3DlRW8do8hc8mvYZzODH8AbVm0hbCqG6slF1k7YNPEavkCVNa+gNz7Ap4b/zRVo/S1vvYKyaBad2QNbfAxlffaKeJVWLt8jiUN7VG04Bn6jyBYpm0JTCCbumAjS+/xv7LvWG3vv2OUnbRy21OYGS3wr+hEjb07GnCr5yroiliXvrE62T5KmH3UeQzQblguwtNC4y0+ijyfV0dZUe9ggzjsYQeyiEMA71+YOAufhSXk6mgU1xJP6g4dT+KwJLzYVVTAjNep+lfA6pWPpEyUDXVQYEGf6UPdKBG9Q+clGomxMTW/gAAAABJRU5ErkJggg==",
+        "電": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAAACXBIWXMAAA7EAAAOxAGVKw4bAAADbklEQVRYhe2XTWgVVxTHf2fevEmcJuYDMXlgS/2oHwFdlCpKHi2loKHgKpS6sS0u6r5gtyKIpdAKrqSUFlxIU0QRW4oRSilMMHTT0oKVUGKhgWliNDUm76WTlzku3kST9+7MuzHiKv/lmXv/5zf348wZWNOaVidZrcH920ec6MFPPoDX9mapc+dA/FyBpu+ccGbD83vQyjugRdDtQEvyeAZkBCRA3EsvdH34+/qtZ1cEaA1099e9TqV863W08gnofkv7YcT9VJx133fvn6w8M6DxX1704/mJc6DHAMcOZpmuA+8XeqOJVQOFN9u2Ec99C/pqto0DLGRZjQKHCr3RX1mDMt82HPI2EpcH02EEEHJNL9HR8x2Qy7LbAgyGQ97GpwIKhzwXuJAYpcCA4xXo2HWNfOs+xGnOyrUIdSHxXhkQcAToS4dRHHcDnT0/4Po7EXIgVserL/G2BwoDz1X0VBaM5Nro6LmK6+9aErfWqTAwr5L5lYSDgqRslYK4tO/4hnzLa0uiC6DWJWcLwkFrIIV+s0/1ELe+/BlN7W/ZJjdK1ZyjDigMPAelaIZR/O7j+N3HDRliFF0JUzEMvLr8dfuogi+wyeTgtR+idfPniOHwirjk/d2o/o+IB1ItAfOzv0FcNoxnE+ADM5lAUh3k18ZzzZtpf+UrRMw3VnI+nbt/TpI9OeD3/niD+YfDpimLebKB0iSOz9y9Kzj5LpA8aERTRx/irHsyRpbftPLdi2kw6XlqA2HgtSCMY1ilWq3f+gV+1wfGZ9H0MFO33kbj2bTpJaCr0BstWyHDYaAEjDWCAYjn/zXGK+URpm73Z8GgyhhKqTZeB1TojWIgsAHSeM4AOcnUn/1oZTJzrghBoRjVFa60Wn/ZBqh2usYR/428x8LciM1kYw4zkHKDaruQqaXXXzVm+s5HRA9+tIEZTXLYARWKUQU42dA2KQGqysw/pymPf2kDA3AyyWEHlGhAq51eQ5UnvmZ27IwVSeI5kPY88xOdNFM3SemJmje8S75lHw///pgG3eKiRoEDWa1s4xZ2yNsGDKZBrUCrb2EBEoMDWG5fiq5TXZlMGCugBGoCOIxyFIvbt0SjwFHgsM0fBzzFj2IYeG7SXPUDRXj81QYeV/kAuIxyI+02PTOgGjgHWdYdlFBKpgq8pjU9Lz0CrgUX7YDERpgAAAAASUVORK5CYII=",
+        "毒": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAD90lEQVRYhe2XTWhcVRTHf3cyyWQ+2kzN1zSkOImlLUqxRRutDSgILwEJCNl0YSidhSsXXdSdIII7oWtxMVV0kU3FIsT4Fq4C9VuUGqnkY4LB1DQfM0kzX5k3x8V7TmYy7715Zqqr/GEYOPeee36ce+6958GhDtWcVDPOeiLlEySkUCEAQbIKldWS8fL/BqQnUn5AQxhHMQz0AyFrOAssI8yguAXoWjJe+k+A9KspP4rLwDvAoEe3BeBthEntpjcwT0B6YrFHhI+UUqMeQWokItNKqStaMr7aNJCeSJ0EvsR7Vpy0AIxoyfjcgYH0RKoHuPMIYKqhLrplyhHIKt7PgbptOvJ4G/0vRTh2up1AtAUjL2zey/PXd1lWf8qCuEJNA2NOxe53cbxcB6PgiVejxEePYuTLZFJFtpeKhPtaiQ2F6b0QYmM2z+yH6+Q3DKd1R621P7EbtM2Qnlj0C9xTqMHqmU9d7ST2fJjUVIbU1BZG0UxFW4ePF2+cqEzNr5f45t0ViltO15EsAKe15EBdlnz2DkqrgQH6LoU5/kKY2ZvrzH+WwSgKx84EODke5dk3YzXe7Z1+nrzS6VIQahCUZjfitGXj+7EHx6Ks/5pn5c4OygdnX++i90LYKSJdTwd57Ew7G7/lHWbIODC131qXIT2R8iEyXG2LHG8l2OVn7eccACdePuIKA6CUIjYUcp4gDOuJVF18my2TEEr1V1uC3WYid7NmTcSG3GH2/FqdB5XqF6SO2AZIhdh7m0yLNcvXYv4Hoi2egBpcu5VHuQFQvYrbZmaip9rxh3z4g57cKG45Hn1H1RX1Py0EVVnaWipSypXpuxSm+1zQM9DReBvd54Os381T3q27LbPWr0Z1K1swy9W2clFY+XoHpRRtkcbbJYbwx1fbFDIG597o4bm3YrRG9oUSWfYEpCXjZYSZ/fa5T9M8/LPYEAZg8YsM87fT+FrMIor0tzHwSse+WWrGrpGzz73ZXNWolC3z441VtpYaQ/n8ivPXeugYDFRsXWeDDWM4AyG6db3XqLBp8MN795m/nSa3VkJkry52s2Xuf7tDbq1EfLSDjoFAje/uTnWBy4IZo14ur/3ia6A+dhoHaI2YJ65cEgppAwSipwI8c723sl0AIsIv76+x+n2lZCa0ZNz2cXU5LmoSZNoNaPdhmdyDEoVNo9JypH8vcPeDNXIPSkhZKGQM5m6lq2BkGph0jOoWsNkGrSWgMAo1x71hg+Z6oViOI9ZC/1o2MCON+uqGN5zVA1/E7PQOKJnGzIxrP+0JyIJaBcYQJuxOnwvIAsgEqDEvXxxwoA/FRT8ojx+Kott1hY8UqBYu5bNgqoGa+pQ+1KGa1d9hhHedO2iBcwAAAABJRU5ErkJggg==",
+        "蟲": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAErElEQVRYhe2X209UVxTGf/vMBWZAsNybos1wmUJTJSFNDKkvNSlqrA0pjcVENKVt0sak/4Ex9rUvfWnTF2h6M1iiTVOjQDQ2LQntQxFMrGG4DKVoVWaQURimzDln92GOA3Muw0Rin/je9jprr+87a6+999qwhS1sDmIzk7tHAgoSvxD4AaQkjiD+bnNY/98E9YwE3EhapaBdwF6gGlKCgDgwJ2FISM4jGOxqDqtPRVDPSMANdEg4I6AmlzkSpgWcBnpzFZaToJ6RQAXwFXAgF38b9AMnuprD9zdyVHIQUwcM24l5dtsr+D2V6XGh9zkqCl42Rhn/egAYNmI9uSAjMwM4LJFHKWBX5Qfp8e7KD5FSM0bS7F4DDBgxHeG4ZEbN/ESWZSrKq6Gt4RIzi/2AzvPb93Phz9dYTt7JxtkPHHaqqWwZ6sguJsDB+rO4FC+1JW9QW9KGW/FxKNhHobc6m6ADRmxb2AoysnMmW9QdRfvwe6zZ93uqqCrck20qSM4YHBbYGoFWHLe2wKMUcivyNW4ln+riVynKCwCSWGKK2dgVphZ+xOsqYlV76BSixuC4lKugdjuj31PFvsDnlPp3MR75jpv3exi791kGU3FeDS07PiZYeoS7S7/z88xHJNSoE4dFkKWou0cCipDcQhBcb3eJfF5/4QIlvoa0TZcqocg5hudOAbB35yfUlrShCFfaZ355jMsTR9FkIpNIEpKCRvM1Y6khAX4ElqpsLO/MEAOgCDfBsg62eXdS5t9FnUkMQHlBEw3lx8zhQFAt1q4cZ0GknEyOghfL37FxBUW48HnKKcqrQZjEPEZ9iX0FWHlyOKkBfO4yCrxVWTwsh2AGivPr8CiFuVBZBUlJnNStncbjP9elxmzsKrOxq6h6wjw1DVVf4a/FAW4//BUpdRThwq34zP9g4QGbXSZEqoWAtaJOqBE0fZUb975g9O6nAJT5m2it/ZI893Y0PYmqp2InklEGpo6zsHILgD3VpwmWHmFFnTdTzUkbQZYMdTWHdZBD6226VJmPXyeWmEzbIvExxqO9SClJ6kvEk6mL/OZ8T1oMQCwxyfzyqJkGKRiya+QcakicN1tC0e95qfJ9XCJ/zQuBLpMk1CjLq3fQZRIp1+rJrfhpKOtkZvGylUFi4QDng3EQybRxogIw8+ASTZUnORTsIxTtxeepoLH8OKtajKQWRxUrrGpLNFWdRFE8JLUlgqVv43UVMbXwQ2b0VOxB21Q4CKLnj8AxBN+st5X5d3Owvhe3spal+eVRLobeBKCtoZ9nfGvnqS5Vrky9x+1Hv5jDd3Y1h7+143Xe9oJeUq1CGpH4Da6FT5LUltK2aPxmxvf1Yob/PmUnph/odaJ1FGT0KyeA6fX2uYfXuBh6i38e/ca/6iITC33pb+ORs6xqSzxYGefyxFFC0XPmsNOkWlnH/nrDntpoOy1do0DBpeSnt/tjuJUCND2BRMOEaWB/V3N40vxhPTY8qY0ALZiWT6JbxACo+rKdmH6gZSMxOQkyRN0HDgOdyMwlzArJNJJOUi3rhi8OeNKHIrSCbAdh+1BMHaziPDzFh6IdukcCisi8teOSzT2lt7CFzeI/kRu8TL1Lp+EAAAAASUVORK5CYII=",
+        "武": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAAACXBIWXMAAA7EAAAOxAGVKw4bAAADz0lEQVRYhe2X0WvbVRTHPydJkzVtp7WsHaVDWzdkSgcD90MxoHupBSmKReiDszBEtHvSJwVB6r8gCcOHjeKQIRQfBOmCDoRqZ8bEIQ4mNp22VDdcN8uMbZf8jg83Jcnv3qQ/GupTvxB+v3zPPed+f/eee++5sItdNAdpxtlPexFEk4IkARQtoFKInMr5/5sgzXgxhSFBRxVJCfQBybK5oLAk6Kwi0wJZmcgVd0SQZrwYMAZMAgMh3fLAB8D5sMJCCfLTx7pFZAoYDikkiBlgXCZyt5oWpBnvIHAB16js7YPeo1DagDsLsLoMG/fqhcoDz8tE7tdtC9KM1w3MWWLa9sGz78GBpyASrfDFdViZh8VL8MsFuHvDJerpRiNVV1A5Z74gOE3ROIyega5Djb4F/CJc/hh+mApaZoCRejkVaRByzBID8MTLW4sBiMTAewuOjAUtw+XYbjcXqWkvhjLp9Og/7o60sgC/fVvLicCTr0O8Ldh6UtNeLLQghCGkztJ+8IDNFdcg+y5c/BDWVmttiQ7oORL0GEAYCi8IHXXS8Y7aDtdXYeEb+HoS7tyAtbvw1ftw5Qzcnq+063w4dB/WsPlpL6KQsrL98ZfAe9MIeKjfcJcycO3z2naL35tfSxt0PWq4PQ/YcpCUn/YiwWPGGiERTZaPg1ocGobWTmjfX+GeeRt6Bu3P7D8Og69U/q/be5NAn4gmg7xrypJUzqYK2nvMszqHYgk49oYdYeA5kKrQfy86uiFJ+VDeSpAbpQ3z7Oit5TdXUOcAPPYCRBPw70rF7hfh1rXQ3Vg5pEhBVAtIQP3SZeh8xCzlanQdhBdPw/5Bs/ek3gGpCru6DIXbVscKBYFCkLdzCAqILFkRfjxXGaWaT0qY8yxSFhFvh5Y9Ffvv35nubSyphhE0kfNRnbXc7/0JP33mClwfqnD9S6dJ0FlXIefcLRGZBk5a/NxHZviPvgax1s22oCVQH/ySeZeoeV+cg7+u11Er0y7WLUjJIuRxlRxXPzWiOnrh/j9mFPxieTrFnP7RuHnOX6wjhjxK1imznodmvFeBTyzDvsMwetZObhdyp+HKWZflhEzkzrkMjZb9edAZi21pDScGzLRZ0BkT2426gky9IuOYoqqC1WVTiG0FVbj5c5DNg4w3qq+3V8Lu7YPuwyaRS/cBNTtzNGFyyS+aUvaPq1Qt+eZL2CpR3aBTIDte5Ic6OkwgGQFOEJzCxsiXfUbCiIHtXBTTXgxhCNVRRFIELorAEqqziEyjZOXUDl0UXfDTXkSEJGyWEVJQpamr9C520Sz+A6S6Q8h/5cP8AAAAAElFTkSuQmCC",
+        "翼": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAEVUlEQVRYhe2XTUxcVRiGn+9yZ/irQxmmQ4GxQKXUEk0saUkmtsTE/thEYi3RsJAuNMadNXHnBqmpbt1WNzaN2k2t6UKx0ZhQzOhY7cbUH2BCWkqBWjrTlgGcmfu5mMt0YO7AdLCueJO7OPeec97nfufvO7Cuda1NspbGnaGwAVTYD0AciA8GO6z/DagzFDZBDyh0A3sECWQDKToODAmcBbkwGOxIPhSgNAg9qvSLsLXAZhED+rwu15kvdu0sCKwgoL2hsF/gFPBcgSBLZMC31S5X77ldOyfXDNQZCrcA30DBUckHNeYxzUPnd7f/sUq9FWH8xcJ4TJMTrS087/cBYEHTnWTy68OXLm8uCsieM6eKgWnbUMnJJ9rY463moM+XeW9BUzSROH340mXzgYGAHoqYMy/W+vmw7XHqy0oB2Oha6m3Bvmgi0fNAQHZ0+h8EpKGslPdbW3iruZFS436381bulmRBv+2Ro3yhO0CBQ+U2hFfq63ipbjMVJSU533+N3XVqtlXTHl8VBKRot6yyAN0iPOur4WhDfWZ4liuWSPLZxA0MoMwwiGdFS1S7nYByXDtDYQPV3xFpdTIRYJ+vhlcDDdSVuhFxBrdU6RseZXQ2zrHmRqpMkzd+u3K/gupfiOxYfsw4REgrEAk4mZQZBm9vbWJ/jTcvSNpLOTc1jcc0OflkG4+YJj9HY8v+TAIoFcC9VYCWHJYZuUX4YPs22qs8eUEWlVJld5WHI7X+DPjY3FyujxQG5KjehvqCYABMw2BLeXmmnLQszk/fLKhtzrJXO4XIfldlmrxcV7u0nip3EkmSlq5q8uXUNFfn5pc75fiAQ4QEiQPjQGZSd/k3UWYvaVXlu1sznL4+wdjcPF6Xi0ObfBxtqMvUydZP0SgfXbueS6mMI7lAOREaDHZYqjqU/a4xK/zhWIwTIxHG7D+eSST4dOIG7w6PYun9aCUsi4+vjvPOnyMsOGyOKgw5JXKOO7WInM0um1kL6vtbt7GA7ZUVnGt/iuPbHsMU4cdojOF4+octVY6PRIinUrzZtMXJgnQCl6t8Z9kFlMhiYWJhIfOh2Y6W2zDwul10eqtpLi9HgUm7niHCe60tHGtuZGrhn9zelQjIhYKBBoMdSYW+xfLZySlmUykAjmz281qggf2+GrtvWLAsXCLsqNywpJ+LM7f5fOJGroHQly+1zXvai3AGdABgJpGkf3iUmUQCl2FwNFDPC7V+AH64HeXa/DyvPxpgk9sFwN1kkk/Gr9M/PIrD7BkAzuT1zfcBMglaCPugrSwp4enqjbR7PJSWGPwSu8PAzb9JqvKMt5qUKrOpFFfuzTqe8kAECA4GO6aLAgLYGwq3yH+QwtowBweDHSMrVVoxhQW4mO4guDh8xUkHSEdmRZiCgADSIZYuoDd79a3OQUSVXpCulYYpW0VeFDmgqt0isgdYclEExlV1yN7LHt5FMQ+cfZVWG0jWfJVe17rWqn8BbnCNvyqEb4YAAAAASUVORK5CYII=",
+        "萌": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAAACXBIWXMAAA7EAAAOxAGVKw4bAAADx0lEQVRYhe2Xz2tcVRTHP+dlXjPGqkmlKTXRkjBFsNQfqIVoFi7KGIWuMkgWhq78C3SXARHmr7CroIuAUxGl0kYwWaRUUIkSjTGaEclYS7ApxnQSnen7upjXvLx5703GTusq392779zz/d5z7z3nXNjHPtqDtTO5mi86QJdBF4CgAlTcQs773wTV8sWUUBbZqKFhzPrxBQEVpLKwOUznDZtOFXK1eyKoli+mgDHEOxiDLU0SJYy3galWhbUkqDpR7DVjEhhpSUgUF4GzqUJurW1BtXwxA1yCFqOSjBLwcqqQ+/mOBdXyxV7gyl0Qs1vUULNIOU3EpIDJuygG39ek7zsWiT+AMRrPzKOHsCf6oNOFPzbQQhn+2g7PSrvYM8fgkW7YqqKFVVhd320xghgD3o8jjd0yfwU/sis6NpTBRk5iThBUVWtodgldXgYP7NQgdvoElnYDG89DFxfQleDoCJUMezzu5iVFKLtbDEe7I2IAzE1hp0+ggcNocxt76jHMwms0x4GRJ9HaBqys+VGwQUQW+LSROP4MidGQ0xePR8QEPw3LHMF5+lhETCDKcF443jCo0TjbCEs1X3RkGg7NPdodL+a/oK8HOnZtNwz7pae5IKDLsP6drw4HHkg35dLqdVReBynZyO0ICTKs34KSkyzINwoMJbiVXCu1sYV3bhbv3Rm0+XcT1QJCgsM8SYIi8ATX/owl0Oo6Wlmr8wi0fA2tJkTqxk2o3tqTLnLLJCpmqoDtqNfS71jmSNju+ibeuZnQovXR18jAeetV7MH7wvbf/9YQoHqr0sgf3TKjAlYOOZv/FW1GEyCdLhF0dcKBjrCYzW30xUp4DJXViqBUIedJzIUG/6nhfTyPvGCJdn8nzpuvYLnng7HXTtXH0gcCYk94n8zDdjVMJJuLa+Riz5AZ5yODP1xFc8shI0u7WF9PPd8bWN8hzG2IzswiLF6NIVGUg+RMPe2n91Bh1Wff4bkdOEOZwO/DB3HeeAkwrCd8abzLP6HZpYhz3/d0HHFi+1Gd+OB1M3svboZlT9azd0JmllSvcZ8vJrkfTxVyscU18dqb2ZTqnV4DG+jSArrwLYrJT6p56MI3iWJ8n1OJvEk/AKr5Yq81a9AGDuOMPoc9VN8qbWzhffjVThGNQUkw5DZp0PZuYSeKGaxJC3uwE3t2AAz05S9wMzFbt9/C3oYfqbaafMHZZpG5jb1LB+A7OiMYFyq1qkKoJGkcONOKGLjDhyKQlRg1YxgIPxShLDHn57J791CMQzVfdBq6g4rafErvYx/t4l8DjHkhUHbo5gAAAABJRU5ErkJggg==",
+        "幽": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAD6ElEQVRYhe2XUWhbZRTHf+cmTdrbLLY1LXbWDmrUB30SOiirWgXT4hDEvUzH9Mknw5wvPinSV4c+xRcFRUUo6kRQpAsqMqvrFFT2oI516cAya5J2rk3TLs29x4dkTdt8t7lrp0/9Qx7u+c75zi/fd777nQu72tXOJDsJTiVyFogN2FVTEbSYTHe6/xtQKpEPKpoQ5JDCoEDPeiCFGYEJRU8Kkk6mY+X/BCiVyAVBDgOjQJ/PsAzwKuhYMt3pC8wXUOrRfBfCe8CIT5DNGgeeTaZj2R0DpRL5OHAK/6vipQwwnEzHprYNlErku4AzJpimFug7ECb+UIiOfQHUgXymzNTpEtNnSjglT6iBrVbKEyiVyAeBzzFs077+JoaOtxKJBYyxC7MOX79e4PI5Y9mMA497FbvlBQQcNsHE+gKMvLLHEwYgeluAg6NR2nqM049U5zbKGFFZHR01je1/xiYYbnwWQrbQf8Q2D6qOVnfAHxCQAKmrm5Z2obe/ae15ZdHFWdW1Z2dVWVmsvRP7DoQItRrgRfoqOfwDHTIZO3oDBIKVBK6jfHLsKpPvFtfGv3+7yKcvLuA6FchgWGi73SOFqjFHnXcqkbMUHTQ5hyM19+K8y9W/XGb/qNVm9nyZf2Ycildqq9a8xwykwmDl6mkABGIL0mOkX7froYhFqEWI3FqboqVNaLJlwzZZTRhVzVFXZKbCsk2OAM3RWqJQizD0QivtvbXTtv+ozZU/HUItsi7G8yDb1Yu50AjIqCdOROm+d6P7XUPhDc+d8SCd8Y0+Dx9vJf5giC9eXvSVpw5foUjlt0FfnSgwl3F8TbpeuSmHb94omIaMeeqApOI0s9leyLqcfb8uvqEm31miOK91dkVnQBsDJdMxF5gwTW55v5w9JZb5JSrIhKmR86q4kybjLXtvnCja7ZVCjTm8vNOoZjYbNxexH8UfMMSoZkDSJn/jX/7y4mvuY3e+NI/Ik9dtYoHdbvH3+TKn31xiZcGl+74gbhl+/miZ2d/LdN0TRAR+/GCZH95a4tqSMnepzOxvmy52kWPJdOxXU27vYy8yBhyheuOrCz99uLw2PDe9TO6Cw2LWIXehcvouflfC7hAunV0FhdyU8RCMA2OeaT2B2LpB26YaNmhb9UNUA4erE90EGB1u1FdvCVSFmgIGEIxF6FPjwEAy3bllP+0LqAqVbb/DOtgcleeCYWb9c2gG1aNUWtaGXxywjQ/F6clrkXOfrTy9NO8+tbLg3l8qaLS8WhmzApTF4rK6fKsuH6M6/vwpf99j2wa6LlW1nLJGZ35Z3VvIuZFSUUso2bsfCWcjscANQexqVzdT/wKyq1xD+TYVhwAAAABJRU5ErkJggg==",
+        "惡": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAEIUlEQVRYhe2XT0wcVRzHP2/2HyxbwRYWSHDb0hK1VJNtTzSojYkLF2J0Y1IOxGj8c2iqiXqBi8EDHGy8aPx3MRxMaiJaYzR02ksN4EHdbTT1TwubpmKoULalW4Yuu7PPw8xSdmd2mWVTT3xPM7/33u/3mXlv5n0fbGtb1UlUMzgeGVQkwi/ADyBBE0gtrI7m/jegeGTIDTIiEVGgW0AbJhCgSZgDJgVyHIQaVkey9wTIAOGYhGEB7U7GSEgIeBs45RTMEVDsqcGgEIyB6HXS3wZtAsTzYXVkoWqgeGRoP3AGaMelgF7Z8hBuFzKrAySAnrA6MlOuv7IJTDAPIzxuOt59Cff9AecwHhcPfnQC145aMKb5jJmzciBzzYyZiWjuf4K6zt0oXo9jIBD42nbR+mJPPtAOjJm5KwMCjgG9AJ5gA8HnHgegrjPkGKe2vQWhKOzqOYyvrTEf7jVzOweKRQbdwHD+vmXgSRSv8VDN/UfzU1BWwuOi9YWIce1SaO4/erdRMmzWsMg2KBAR8p+2Igg8sne9rSYUZP/Jl1n8chLhdVMTakLxeUBCLp1h9cq/5LQ7ND7dReDgnvVx/oce2Fig3azxvSMgIJq/UDxu3PV1BY21e5oJvRW1DCond6CWgq9UErUDskxZPDKoAN35+1w6w9rCzYqK2ymTTBX+MgTdZq3yQCD8GNvBuhZPTyOlrAooeS5eHGqTRq3NgPBzd28ykk38zM3zv20Z5tYvl1n8etpSRxTVKQVklYTk2diWgRZOnYecsz+8DZDUAK04qq+ktwQjpSSbsqTDrGFpsFtDGoaFKFBm6RZSzyGldLSe8v1kViezuGzXZc58+PJAYXUkB0wWx7M3UuhamuTZGFfe+ZzMUqokjK6lmXv/G66NnUNfuYO+umYFhkk7I1dqDY1bEmR0tD//xhtsYHn6D/46/gGp+Kzlba0m5rl04kOWvvsJb3MDKxev2joEw8BZZQskkSqSRHF88aspAgf34H84RPbGbWaHPmN56uJ6u3b5Hy69/jHpuet4muqp7+7k+mnL1wWShATVrrbLLvjJ7GTu1X2PJYXg2Y3xtfkkdZ27aXqmC/QcOw530HDkAC6/z3i6Wh+uQA3elp20He9jdXaehS9+sBYQvHZIHb1gV7ukQTMtwreYO35enmADHe+9grepvtRQANLXksy88andWpsA+kpZ2rKO0TRTP1LkoT2N9xF6M0ogvA8hClNIKUnFZrh6cpxs0gKTALrKWdnKLOxGuRQCj+6l/sgBfK07AUjPJ1me+p3bvyYgZ/k1OLKwjky++abGKJq+CjQBODL5jrYOM1EfyAG7r6+kJAkpGcBYM5vCwBYOirHIoNs0V1EMm1JwUMQ8KALjEqkeUkfvzUHRToafERvdgUaVR+ltbata/Qd3En0q+cj2pgAAAABJRU5ErkJggg==",
+        "機械": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAEKUlEQVRYhe2XX2hbVRzHP+fem2T9k3WtWdpu2WjrurLhUMEMOnQLCtscDGQVU2FFEPRB9FUfNx/EyUD25qtFwUaoD4JSh4Ngq86lexCcXbVLuy527Tr6v2mbJjk+5Brvzb03SQ3zqd+387u/3/l9zp97zu/AtrZVmUQlwaFYREFSjaAaAEkSQTIaDGf/N6BQLKIBJ0F2gXgWCIAOBEkgAXIIRD9wNRoMpx8JkA7SDfJ9EG3lRck4iAtAX7lgZQGFbkT8CHqB0+WBWDQAvBYNhh9UDBSKRQ4A3wGWWalVXbzkP0BGSryam+V0iq9n77Ca2bTrKg6cigbDY/8ZKBSL+IGf7WAAntnZyOWDJ0y2t0a+Z2R1zqnLONBZbKaUIjAa0OsEAxDweC22JneNkzt6X71631sDArop2DPH6vZQo7oAeKFhPy83HrQEvRE4wou+VgTgVd2ceqwF1bwQp5F0OyW1XTJ9BKMYZie4s4lL7c+xnEkxsbbEk97dRcYCE2uLNHtq8Sgqn07donfqlvFzHOiw+/OcZuikEaZOc/NuSxBFCOo0T0kYgJaqOjyKCsCrTR343VXGz216DovsgSRdxuYrjR34zB3m3KRkcD7BB/HrXLzzE4PzCaSUFj+PonHG11YY3GVxxGbJcteBHEGI/AapVV1caj/O4ZoGhPg35NvZOJfvDpviX9/zBOebD5n8hpdmuDD2I8msYYWk/AMhDhVeM3YzVI0QAaNhJbPJlcmbJqdUNkPv/d8twZGZUXNi4KuZPy02hAgg81dOCSCsjh6hmkY9t7nOg1TSErya2WRqY8Vkq3d5bNIYLuUSQLZazqRM+2OX5qFOc1v8NKHQoO0w2cQW7nAbIJkkd2ub1Fa1y9T2KCrn/O2W6OP1e2lwFQLZyT6PzYkp9BKC/KZ+vmEf77UcNS2ZEIKe5sP43NVcX5hiU2Z5yrubc/52kx/AO/ufZimd4oeFhIGHBKIMoGgwnA3FIkNGIJ+rGrd+ppjQheCMr5UzvlbruAxyKyr7qrywYAxmyK6Qc9pD/cbGlzOjxBan8+2szVlTTLHFab64f7vAKvrtfJ2ArpI73vP6aOIG99aX+W3lIW/fvsbAw3HbQxBgfG2Rj+8OM72xyl/rK3w4/gtZTL5xPYdFjts/FOs7D+Izo00TgoyU+a5P1Ae4+PgxU9w3s3GuTN4kLSWaUKhRNRbTqcLue6LB8Od2eYv89qKPXKWXV9oAAzA4n2AjmzFFXZubJK3PXFpm7WAGgD7HrM5A+dLVsUADeHPvEQI7vGSRrGXSfHLvV5YyFoh/FEfSGT3qXKBVVMJuUWWVsCVP6mgwPIakk4Ll26IGkHSWgikLCECf4rNIeij4+0ooDrIHOFtsmYyq4KFIF+DwUGSI3Fn26B6KDnAK5uogCZU9pbe1rUr1N3/lc0IJRvoCAAAAAElFTkSuQmCC",
+        "幻": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAEsklEQVRYhe2X228UdRTHP2dmdru77ZYW6FKgtFC5GtGIYkAaLw+WvqAPvLBRYvqXGP8RN0ZjefFJo9jEmJAqlptgRC6thZCW3gRKC7PT3Zk5PszS2cssbajw1POyk9/O75zP7/s7v985A2u2ZqszWc3k3IBjoKQQUgAoNoLdn034LwwoN+BYQC/ocZQeRDqgBAQ2quMIQyDfAoP92YT7XIBKICdU9XMR6V7JHFUdE5HPgFMrBVsRUO6bfAaRL4G+lbwfYaeBT/uziZlVA+UGnJ3AT0BdVeIxMAxwPXDr6zAGHO3PJkafGSg34GSAs1EwW9qF7i6T9oxBMgGGIbie8mBOmZn1ufmPz/wjjYI6/DSl6gKVcuY7qrYp3QQHX7fo3Go+bS24rnLlqsdf1z20kus0cKxeThlP8XmiGiazUTh2NL4sDIBlCQdetXjnsIVULrsP9ES9eZEKldS5QdlWpZLwYV+cREMwRVWZX1AmphTHUeJxWNcsbM4YWFal22s3PYYvhYIojAnsiVLJqgPaS1Xe7N9nLcH4vnLuD5cboz6qAawIPLYh3QgHXrPY0RmquHeXwZ0JYXJan6jQDdoL/LAiIEWPS5l4lgU7u42SMnDhssf1EZ+2jcKhAxbrWwURYX5BOX/Z5cxZF9eFXd0BlIiwf5/F5HSxLIgcjwKqyaHcgGOA9JSPtbcZxErbYOeVG6MeqSR88G6MDesNpJQkzWnh/SMWW9oNhi+52Pkwmze1CYmGch56gljLAAEpgY7ygWQyfJ7518fzYUeXSTwmOI7y67kit+94qCqGIRx6w8J14fYdb2meaQqtLaHqpRgpqiwSqPrFfD58LhSeLDH4mZjyGRnzOfO7y8KjYCzdJKxvESZnKs97urEi2Wvi1AOqsdl7Pr4fOG/bEDidX1BUla5tBq0tgu/DQtlFGI/D4mIlkBVbvlLVAClqA3b52GKBpdW2tgiZjcLElM/1EY+5h8GxFwly6IkVixCrOjKOUwao1MSJBBLEBsarx/+86uL7iohw+E2LpkZh+JLH94PByXn7oEW6KQC698Dn/pzS3By6V4W5hyGQCuNRQDXHvj+b8L8YyA8Jsrt8fHpW+fumxyt7LVpbDD7qizE57WOagWKmGd5RF6+4qELn1hDosa08nA+BBB3qzyZrGrnIHJKguaqxC5c9hi8WKRQV0xQ6tphs3mQswRRd5bfzLnenlO3bDNoz4RZeueriVYSPjlHvph4sXe81Vf7aiM/dqSJ7dhmkmwTTEPKOMn7XZ3LGx3Fg21aDI29ZS/fT9KzP6K2QpuR7MFqMOpYbyH8C8lXUf20bBDuvLBaC/kcEGhpgXVrY/ZJJd1d4WS48Un78uYCdr3Bxsj+b+DrKdz2FADkFfExVxU8lofe9GJYVwCwWwDQgkQjWV17Z78/5/DJUrIY5DZyqG7U+UP0GLd0EL++26OwwSCUrIQpF5f4DZey2x8gtv7oXevYGLYTK7wSJbGFFoDEFiYbgYiy6ip0Hz4tw9H+0sCGUkwFeSJO/otJRcnRMlZMarHRFFryrJwla1mVhYBUfiqWeqYfKqm0D44oOyfP+UKwDZ1BZtW1Y3af0mq3Zau0/FMPoAa+JVcwAAAAASUVORK5CYII=",
+    };
+
+    // ---------- 系別顏色（備用，當圖片載入失敗時） ----------
+    const TYPE_COLORS = {
+        "普通": "#3f89b4",
+        "草": "#4ebc73",
+        "火": "#db5525",
+        "水": "#6aa9fe",
+        "光": "#4fc0ff",
+        "地": "#9a7e3f",
+        "冰": "#5faddd",
+        "龍": "#fc7cac",
+        "電": "#e7c506",
+        "毒": "#ba62e0",
+        "蟲": "#9ece21",
+        "武": "#ff9636",
+        "翼": "#3ec7ca",
+        "萌": "#fc7cac",
+        "幽": "#9446ec",
+        "惡": "#cf467a",
+        "機械": "#40cba9",
+        "幻": "#9fa7f8",
+    };
+
+    // ---------- 精靈資料庫（名稱 -> 蛋組） ----------
+    const SEASON_PRIORITY = {
+        "S1": 1,
+        "S2": 2,
+        "S3": 3,
+    };
+
+    // ---------- 所有蛋組列表 ----------
+    const ALL_EGG_GROUPS = ["妖精", "擬人", "天空", "兩棲", "大地", "軟體", "海洋", "巨靈", "魔力", "機械", "動物", "植物", "昆蟲"];
+
+    // ---------- 儲存操作 ----------
+    function loadRecords() {
+        try {
+            const data = localStorage.getItem('shinyRecords');
+            return data ? JSON.parse(data) : [];
+        } catch { return []; }
+    }
+
+    function saveRecords(records) {
+        localStorage.setItem('shinyRecords', JSON.stringify(records));
+    }
+
+    // ---------- 輔助函式 ----------
+
+    // ---------- 尋找進化鏈起點（初階精靈） ----------
+    function findEvoBase(name) {
+        const data = ROCO_DB[name];
+        // 如果該精靈本身是基礎型態（沒有 evolvesFrom），返回自身
+        if (data && !data.evolvesFrom) {
+            return { name: name, data: data };
+        }
+        // 如果有 evolvesFrom，遞迴往上找
+        if (data && data.evolvesFrom) {
+            return findEvoBase(data.evolvesFrom);
+        }
+        return null;
+    }
+
+    // ---------- 取得進化鏈（從基礎型態到最終進化） ----------
+    function getEvolutionChain(baseName) {
+        const chain = [baseName];
+        let current = baseName;
+        // 查找 evolvesFrom 等於 current 的精靈（往上找進化型）
+        let found = true;
+        while (found) {
+            found = false;
+            for (const [name, data] of Object.entries(ROCO_DB)) {
+                if (data.evolvesFrom === current && !chain.includes(name)) {
+                    chain.push(name);
+                    current = name;
+                    found = true;
+                    break;
+                }
+            }
+        }
+        return chain;
+    }
+
+    // ---------- 檢查是否為進化鏈中的基礎型態 ----------
+    function isEvoBase(name) {
+        const data = ROCO_DB[name];
+        // 如果有 evolvesFrom 則不是基礎型態
+        if (data && data.evolvesFrom) return false;
+        // 沒有 evolvesFrom 就是基礎型態
+        return true;
+    }
+
+    // ---------- 取得某精靈的基礎型態（如果是進化型） ----------
+    function getEvoBaseName(name) {
+        const base = findEvoBase(name);
+        return base ? base.name : name;
+    }
+
+    // ---------- 渲染系別圖示 ----------
+    function renderTypeIcons(types) {
+        if (!types || types.length === 0) return '';
+        
+        return types.map(type => {
+            const icon = TYPE_ICONS[type];
+            const color = TYPE_COLORS[type] || '#999';
+            
+            if (icon) {
+                // 使用 Base64 圖片
+                return `<img src="${icon}" alt="${type}" class="type-icon" title="${type}" style="width:22px;height:22px;display:inline-block;margin:0 1px;vertical-align:middle;">`;
+            } else {
+                // 備用：使用彩色標籤
+                return `<span class="type-badge" style="background:${color};">${type}</span>`;
+            }
+        }).join('');
+    }
+
+    // 取得某個蛋組下所有已知精靈名稱
+    function getRocosByEggGroup(group) {
+        const result = [];
+        for (const [name, data] of Object.entries(ROCO_DB)) {
+            if (data.eggGroups.includes(group)) {
+                result.push({ name, season: data.season });
+            }
+        }
+        // 依賽季排序（早賽季優先）
+        result.sort((a, b) => (SEASON_PRIORITY[a.season] || 999) - (SEASON_PRIORITY[b.season] || 999));
+        return result;
+    }
+
+    // 取得所有已記錄的精靈名稱（去重）
+    function getRecordedNames(records) {
+        const set = new Set();
+        records.forEach(r => set.add(r.name));
+        return set;
+    }
+
+    // 取得所有已記錄的蛋組（去重）
+    function getRecordedGroups(records) {
+        const set = new Set();
+        records.forEach(r => {
+            if (Array.isArray(r.eggGroups)) {
+                r.eggGroups.forEach(g => set.add(g));
+            } else {
+                set.add(r.eggGroup); // 向後相容舊資料
+            }
+        });
+        return set;
+    }
+
+    // 取得某隻精靈的所有蛋組
+    function getEggGroupsForRoco(name) {
+        const data = ROCO_DB[name];
+        return data ? data.eggGroups : [];
+    }
+
+    // 取得某隻精靈的賽季
+    function getSeasonForRoco(name) {
+        const data = ROCO_DB[name];
+        return data ? data.season : null;
+    }
+
+    // 取得目前擁有的異色公精靈列表（用於配種推薦）
+    function getMaleShinies(records) {
+        return records.filter(r => r.gender === '公');
+    }
+
+    // ================================================================
+    // 2. 渲染層
+    // ================================================================
+
+    let records = loadRecords();
+
+    // ---------- 排除清單 ----------
+    let excludeList = JSON.parse(localStorage.getItem('excludeList') || '[]');
+
+    function saveExcludeList() {
+        localStorage.setItem('excludeList', JSON.stringify(excludeList));
+        renderExcludeTags();
+        renderRecommendations(); // 重新整理推薦
+    }
+
+    function renderExcludeTags() {
+        const container = document.getElementById('excludeTags');
+        if (excludeList.length === 0) {
+            container.innerHTML = '<span style="font-size:0.85rem; color:#a0aec0;">無</span>';
+            return;
+        }
+        container.innerHTML = excludeList.map(name => 
+            `<span style="background:#fed7d7; color:#c53030; padding:2px 10px; border-radius:12px; font-size:0.8rem;">${name}</span>`
+        ).join('');
+    }
+
+    function renderExcludeChecklist() {
+        const container = document.getElementById('excludeChecklist');
+        const allRocos = Object.keys(ROCO_DB);
+        
+        // 只顯示基礎型態（沒有 evolvesFrom 的精靈）
+        const baseForms = allRocos.filter(name => isEvoBase(name));
+        
+        // 只顯示尚未擁有的基礎型態
+        const recordedNames = getRecordedNames(records);
+        const missing = baseForms.filter(name => !recordedNames.has(name));
+        
+        if (missing.length === 0) {
+            container.innerHTML = '<div style="color:#a0aec0; text-align:center; padding:20px 0;">🎉 已收集所有基礎型態的異色精靈！</div>';
+            return;
+        }
+        
+        container.innerHTML = missing.map(name => {
+            const checked = excludeList.includes(name) ? 'checked' : '';
+            const data = ROCO_DB[name];
+            const eggDisplay = data.eggGroups.join('、');
+            // 顯示進化鏈資訊
+            const evoChain = getEvolutionChain(name);
+            const evoDisplay = evoChain.length > 1 ? ` → ${evoChain.slice(1).join(' → ')}` : '';
+            const inWishlist = wishlist.includes(name);  // ← 關鍵修復
+            return `
+                <label style="display: flex; align-items: center; gap: 8px; padding: 4px 0; cursor: pointer; border-bottom: 1px solid #f0f0f0;">
+                    <input type="checkbox" class="exclude-checkbox" value="${name}" ${checked}>
+                    <span style="font-weight: 500;">${name}</span>
+                    <span style="font-size:0.75rem; color:#a0aec0;">（${eggDisplay}·${data.season}${evoDisplay}）</span>
+                    ${inWishlist ? '<span style="font-size:0.65rem; color:#d69e2e; margin-left:4px;">⭐ 已在願望清單</span>' : ''}
+                </label>
+            `;
+        }).join('');
+    }
+
+    // ---------- 管理排除清單 ----------
+    document.getElementById('btnManageExclude').addEventListener('click', function() {
+        renderExcludeChecklist();
+        document.getElementById('excludeModal').style.display = 'flex';
+    });
+
+    document.getElementById('btnExcludeClose').addEventListener('click', function() {
+        document.getElementById('excludeModal').style.display = 'none';
+    });
+
+    document.getElementById('btnExcludeSave').addEventListener('click', function() {
+        const checkboxes = document.querySelectorAll('.exclude-checkbox:checked');
+        excludeList = Array.from(checkboxes).map(cb => cb.value);
+        
+        // 排除優先：從願望清單中移除被排除的精靈
+        wishlist = wishlist.filter(name => !excludeList.includes(name));
+        
+        saveExcludeList();
+        saveWishlist();  // 同步儲存願望清單
+        document.getElementById('excludeModal').style.display = 'none';
+        renderWishlistTags();  // 更新願望清單顯示
+    });
+
+    // 清空排除清單
+    document.getElementById('btnExcludeClear').addEventListener('click', function() {
+        showConfirm('確定要清空所有排除清單嗎？', function(confirmed) {
+            if (confirmed) {
+                document.querySelectorAll('.exclude-checkbox').forEach(cb => cb.checked = false);
+            }
+        });
+    });
+
+    // 點擊背景關閉
+    document.getElementById('excludeModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            this.style.display = 'none';
+        }
+    });
+
+    // ---------- 願望清單 ----------
+    let wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+
+    function saveWishlist() {
+        localStorage.setItem('wishlist', JSON.stringify(wishlist));
+        renderWishlistTags();
+        renderRecommendations(); // 重新整理推薦
+    }
+
+    function renderWishlistTags() {
+        const container = document.getElementById('wishlistTags');
+        if (wishlist.length === 0) {
+            container.innerHTML = '<span style="font-size:0.85rem; color:#a0aec0;">無</span>';
+            return;
+        }
+        container.innerHTML = wishlist.map(name => 
+            `<span style="background:#fef3c7; color:#d69e2e; padding:2px 10px; border-radius:12px; font-size:0.8rem; border:1px solid #f6c23e;">⭐ ${name}</span>`
+        ).join('');
+    }
+
+    function renderWishlistChecklist() {
+        const container = document.getElementById('wishlistChecklist');
+        const allRocos = Object.keys(ROCO_DB);
+        
+        // 只顯示基礎型態
+        const baseForms = allRocos.filter(name => isEvoBase(name));
+        const recordedNames = getRecordedNames(records);
+        const missing = baseForms.filter(name => !recordedNames.has(name));
+        
+        if (missing.length === 0) {
+            container.innerHTML = '<div style="color:#a0aec0; text-align:center; padding:20px 0;">🎉 已收集所有基礎型態的異色精靈！</div>';
+            return;
+        }
+        
+        // 顯示提醒：排除優先
+        let html = `<div style="font-size:0.75rem; color:#e53e3e; margin-bottom:8px; padding:4px 8px; background:#fff5f5; border-radius:4px; border-left:3px solid #e53e3e;">
+            ⚠️ 排除清單優先於願望清單（已排除的精靈會自動從願望清單移除）
+        </div>`;
+        
+        container.innerHTML = missing.map(name => {
+            const checked = wishlist.includes(name) ? 'checked' : '';
+            const data = ROCO_DB[name];
+            const eggDisplay = data.eggGroups.join('、');
+            const evoChain = getEvolutionChain(name);
+            const evoDisplay = evoChain.length > 1 ? ` → ${evoChain.slice(1).join(' → ')}` : '';
+            const isExcluded = excludeList.includes(name);
+            return `
+                <label style="display: flex; align-items: center; gap: 8px; padding: 4px 0; cursor: pointer; border-bottom: 1px solid #f0f0f0; ${isExcluded ? 'opacity:0.5;' : ''}">
+                    <input type="checkbox" class="wishlist-checkbox" value="${name}" ${checked} ${isExcluded ? 'disabled' : ''}>
+                    <span style="font-weight: 500;">${name}</span>
+                    <span style="font-size:0.75rem; color:#a0aec0;">（${eggDisplay}·${data.season}${evoDisplay}）</span>
+                    ${isExcluded ? '<span style="font-size:0.65rem; color:#e53e3e; font-weight:600;">（已排除）</span>' : ''}
+                </label>
+            `;
+        }).join('');
+    }
+
+    // ---------- 管理願望清單 ----------
+    document.getElementById('btnManageWishlist').addEventListener('click', function() {
+        renderWishlistChecklist();
+        document.getElementById('wishlistModal').style.display = 'flex';
+    });
+
+    document.getElementById('btnWishlistClose').addEventListener('click', function() {
+        document.getElementById('wishlistModal').style.display = 'none';
+    });
+
+    document.getElementById('btnWishlistSave').addEventListener('click', function() {
+        const checkboxes = document.querySelectorAll('.wishlist-checkbox:checked');
+        // 過濾掉已被排除的精靈（確保排除優先）
+        let selected = Array.from(checkboxes).map(cb => cb.value);
+        wishlist = selected.filter(name => !excludeList.includes(name));
+        saveWishlist();
+        document.getElementById('wishlistModal').style.display = 'none';
+        // 刷新排除清單的顯示（更新「已在願望清單」標記）
+        renderExcludeChecklist();
+    });
+
+    // 清空願望清單
+    document.getElementById('btnWishlistClear').addEventListener('click', function() {
+        showConfirm('確定要清空所有願望清單嗎？', function(confirmed) {
+            if (confirmed) {
+                document.querySelectorAll('.wishlist-checkbox').forEach(cb => cb.checked = false);
+            }
+        });
+    });
+
+    // 點擊背景關閉
+    document.getElementById('wishlistModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            this.style.display = 'none';
+        }
+    });
+
+    function renderTable() {
+        const tbody = document.getElementById('tableBody');
+        const countSpan = document.getElementById('countDisplay');
+        countSpan.textContent = records.length;
+
+        if (records.length === 0) {
+            tbody.innerHTML = `<tr class="empty-row"><td colspan="5">還沒有記錄，快新增第一隻異色精靈吧！</td></tr>`;
+            return;
+        }
+
+        let html = '';
+        records.forEach((r, index) => {
+            const typesHtml = renderTypeIcons(r.types);
+            const eggDisplay = Array.isArray(r.eggGroups) ? r.eggGroups.join('、') : r.eggGroup;
+            const seasonDisplay = r.season || '未知';
+            
+            html += `
+                <tr>
+                    <td><strong>${r.name}</strong></td>
+                    <td>${r.gender === '公' ? '♂ 公' : '♀ 母'}</td>
+                    <td>${typesHtml}</td>
+                    <td>${eggDisplay}</td>
+                    <td>${seasonDisplay}</td>
+                    <td><button class="btn btn-danger btn-sm" data-index="${index}">刪除</button></td>
+                </tr>
+            `;
+        });
+        tbody.innerHTML = html;
+
+        // 綁定刪除事件
+        tbody.querySelectorAll('[data-index]').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const idx = parseInt(this.dataset.index);
+                records.splice(idx, 1);
+                saveRecords(records);
+                renderTable();
+                renderRecommendations();
+            });
+        });
+    }
+
+    // ---------- 推薦引擎（重構版） ----------
+    function renderRecommendations() {
+        const area = document.getElementById('recommendationArea');
+        const targetArea = document.getElementById('targetSelectionArea');
+        
+        if (records.length === 0) {
+            area.innerHTML = `
+                <div class="rec-card" style="border-color:#d69e2e; background:#fffff0;">
+                    <div class="title">暫無記錄</div>
+                    <div class="detail">先新增一些異色精靈，推薦才會出現</div>
+                </div>
+            `;
+            targetArea.style.display = 'none';
+            return;
+        }
+
+        const recordedGroups = getRecordedGroups(records);
+        const recordedNames = getRecordedNames(records);
+        const maleShinies = getMaleShinies(records);
+        const femaleShinies = records.filter(r => r.gender === '母');
+
+        let html = '<div class="rec-grid">';
+
+        // ----- 推薦1：目前圖鑑（保留） -----
+        const allRocos = Object.keys(ROCO_DB);
+        
+        // 分組：基礎型態 vs 進化型
+        const baseForms = [];
+        const evoForms = [];
+        for (const name of allRocos) {
+            if (isEvoBase(name)) {
+                baseForms.push(name);
+            } else {
+                evoForms.push(name);
+            }
+        }
+        
+        // 總基礎型態數量
+        const totalBaseCount = baseForms.length;
+        
+        // 計算真正缺少的精靈（基礎型態中沒有的 + 進化型中沒有對應基礎型態的）
+        const missingBase = baseForms.filter(name => !recordedNames.has(name));
+        // 進化型中，如果對應的基礎型態已擁有，則不算缺少
+        const missingEvo = evoForms.filter(name => {
+            const baseName = getEvoBaseName(name);
+            return !recordedNames.has(baseName);
+        });
+        // 合併缺少清單（只顯示基礎型態名稱）
+        const missingDisplay = [...missingBase];
+        // 對於進化型缺少但基礎型態也缺少的，不重複顯示
+        for (const evoName of missingEvo) {
+            const baseName = getEvoBaseName(evoName);
+            if (!missingDisplay.includes(baseName) && !recordedNames.has(baseName)) {
+                missingDisplay.push(baseName);
+            }
+        }
+
+        // 計算已收集種類（以基礎型態為單位）
+        // 如果玩家擁有基礎型態或其任何進化型的記錄，就算已收集
+        let ownedSpecies = 0;
+        for (const baseName of baseForms) {
+            // 檢查玩家是否有該基礎型態的記錄
+            if (recordedNames.has(baseName)) {
+                ownedSpecies++;
+                continue;
+            }
+            // 檢查玩家是否有該基礎型態的進化型記錄
+            const evoChain = getEvolutionChain(baseName);
+            for (const evoName of evoChain) {
+                if (recordedNames.has(evoName) && evoName !== baseName) {
+                    ownedSpecies++;
+                    break;
+                }
+            }
+        }
+
+        html += `
+            <div class="rec-card" style="border-color:#6c5ce7; background:#faf9ff; grid-column: 1 / -1;">
+                <div class="title">📊 目前圖鑑</div>
+                <div class="detail">
+                    <div>異色總數：<strong>${records.length}</strong> 隻</div>
+                    <div>已收集種類：<strong>${ownedSpecies}/${totalBaseCount}</strong>（不包括通行證精靈）</div>
+                    <div>覆蓋蛋組：${recordedGroups.size ? Array.from(recordedGroups).join('、') : '無'}</div>
+                    <div>可作父本（公）：${maleShinies.length} 隻</div>
+                    <div>可作母本（母）：${femaleShinies.length} 隻</div>
+                    ${missingDisplay.length > 0 ? `<div>尚未擁有：${missingDisplay.join('、')}</div>` : ''}
+                </div>
+            </div>
+        `;
+
+        // 更新 missingSpecies（用於後續推薦）
+        const missingSpecies = missingDisplay;
+
+        // ===== 判斷是否集齊所有精靈（以基礎型態為單位） =====
+        const isComplete = missingSpecies.length === 0;
+
+        // ----- 推薦2：窩位擺放建議（10個slot，兩兩一組） -----
+        if (!isComplete && maleShinies.length > 0) {
+            // 過濾排除清單（使用者不想孵化的精靈）
+            const filteredMissing = missingSpecies.filter(name => !excludeList.includes(name));
+            
+            // 先分組：願望清單優先，同時直接孵化優先於兩步孵化
+            const wishlistDirect = [];     // 願望清單 + 可直接孵化
+            const wishlistIndirect = [];   // 願望清單 + 需要兩步孵化
+            const nonWishlistDirect = [];  // 非願望清單 + 可直接孵化
+            const nonWishlistIndirect = [];// 非願望清單 + 需要兩步孵化
+            
+            for (const name of filteredMissing) {
+                const targetData = ROCO_DB[name];
+                if (!targetData) continue;
+                
+                // 檢查是否可直接孵化
+                let canDirect = false;
+                for (const group of targetData.eggGroups) {
+                    const dads = maleShinies.filter((m, idx) => {
+                        const mGroups = Array.isArray(m.eggGroups) ? m.eggGroups : [m.eggGroup];
+                        return mGroups.includes(group);
+                    });
+                    if (dads.length > 0) {
+                        canDirect = true;
+                        break;
+                    }
+                }
+                
+                const inWishlist = wishlist.includes(name);
+                
+                if (inWishlist && canDirect) {
+                    wishlistDirect.push(name);
+                } else if (inWishlist && !canDirect) {
+                    wishlistIndirect.push(name);
+                } else if (!inWishlist && canDirect) {
+                    nonWishlistDirect.push(name);
+                } else {
+                    nonWishlistIndirect.push(name);
+                }
+            }
+            
+            // 合併：願望清單(直接) → 願望清單(兩步) → 非願望清單(直接) → 非願望清單(兩步)
+            const sortedMissing = [...wishlistDirect, ...wishlistIndirect, ...nonWishlistDirect, ...nonWishlistIndirect];
+            
+            if (sortedMissing.length === 0) {
+                // 所有未擁有的精靈都被排除了
+                html += `
+                    <div class="rec-card" style="border-color:#d69e2e; background:#fffbeb; grid-column: 1 / -1;">
+                        <div class="title">暫無推薦</div>
+                        <div class="detail">
+                            所有尚未擁有的精靈都已加入排除清單。<br>
+                            點擊「管理」取消排除，或新增更多異色精靈。
+                        </div>
+                    </div>
+                `;
+            } else {
+                // 建立推薦組合清單（目標精靈 -> 可用父本）
+                const usedDadIndices = new Set();
+                const recommendations = [];
+                
+                // 先處理可以直接配對的 sortedMissing
+                let remainingMissing = [];
+                
+                for (const missingName of sortedMissing) {
+                    const targetData = ROCO_DB[missingName];
+                    if (!targetData) continue;
+                    
+                    let availableDad = null;
+                    let availableDadIndex = -1;
+                    let usedGroup = null;
+                    
+                    for (const group of targetData.eggGroups) {
+                        const dads = maleShinies.filter((m, idx) => {
+                            const mGroups = Array.isArray(m.eggGroups) ? m.eggGroups : [m.eggGroup];
+                            return mGroups.includes(group) && !usedDadIndices.has(idx);
+                        });
+                        if (dads.length > 0) {
+                            availableDad = dads[0];
+                            availableDadIndex = maleShinies.indexOf(availableDad);
+                            usedGroup = group;
+                            break;
+                        }
+                    }
+                    
+                    if (availableDad) {
+                        usedDadIndices.add(availableDadIndex);
+                        recommendations.push({
+                            target: missingName,
+                            season: targetData.season,
+                            dad: availableDad.name,
+                            dadSeason: availableDad.season,
+                            group: usedGroup,
+                            isDirect: true,
+                            _sortOrder: sortedMissing.indexOf(missingName)
+                        });
+                    } else {
+                        remainingMissing.push({ name: missingName, data: targetData });
+                    }
+                }
+
+                // ===== 處理無法直接配對的目標（兩步孵化推薦） =====
+                for (const { name: missingName, data: targetData } of remainingMissing) {
+                    for (const group of targetData.eggGroups) {
+                        const allInGroup = getRocosByEggGroup(group);
+                        
+                        const availableAltTargets = allInGroup.filter(item => {
+                            if (item.name === missingName) return false;
+                            if (excludeList.includes(item.name)) return false;
+                            const hasFemale = records.some(r => r.name === item.name && r.gender === '母');
+                            if (!hasFemale) return false;
+                            const hasShinyMale = records.some(r => r.name === item.name && r.gender === '公');
+                            return !hasShinyMale;
+                        });
+                        
+                        for (const altTarget of availableAltTargets) {
+                            const altData = ROCO_DB[altTarget.name];
+                            if (!altData) continue;
+                            
+                            let availableDad = null;
+                            let availableDadIndex = -1;
+                            let usedGroup = null;
+                            
+                            for (const altGroup of altData.eggGroups) {
+                                const dads = maleShinies.filter((m, idx) => {
+                                    const mGroups = Array.isArray(m.eggGroups) ? m.eggGroups : [m.eggGroup];
+                                    return mGroups.includes(altGroup) && !usedDadIndices.has(idx);
+                                });
+                                if (dads.length > 0) {
+                                    availableDad = dads[0];
+                                    availableDadIndex = maleShinies.indexOf(availableDad);
+                                    usedGroup = altGroup;
+                                    break;
+                                }
+                            }
+                            
+                            if (availableDad) {
+                                usedDadIndices.add(availableDadIndex);
+                                recommendations.push({
+                                    target: missingName,
+                                    altTarget: altTarget.name,
+                                    season: altData.season,
+                                    dad: availableDad.name,
+                                    dadSeason: availableDad.season,
+                                    group: usedGroup,
+                                    targetGroup: group,
+                                    isDirect: false,
+                                    hasFemale: true,
+                                    _sortOrder: sortedMissing.indexOf(missingName)
+                                });
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                // ===== 按照 sortedMissing 的順序排序 =====
+                recommendations.sort((a, b) => a._sortOrder - b._sortOrder);
+
+                if (recommendations.length === 0) {
+                    html += `
+                        <div class="rec-card" style="border-color:#e53e3e; background:#fff5f5; grid-column: 1 / -1;">
+                            <div class="title">缺少異色公精靈</div>
+                            <div class="detail">
+                                配種需要 <strong>異色父本</strong> 才能高效出異色子代。<br>
+                                建議優先捕捉或孵出一隻異色公精靈。
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    let slotHtml = '<div class="slot-grid">';
+                    const totalSlots = 10;
+                    
+                    for (let i = 0; i < totalSlots; i++) {
+                        const pairIndex = Math.floor(i / 2);
+                        const rec = recommendations[pairIndex] || null;
+                        const isFirst = i % 2 === 0;
+                        
+                        if (rec) {
+                            if (isFirst) {
+                                if (rec.isDirect) {
+                                    slotHtml += `
+                                        <div class="slot-pair has-recommendation">
+                                            <div class="slot-label">⬅ 窩位 ${pairIndex + 1}</div>
+                                            <div class="slot-content">
+                                                <span class="dad">♂ ${rec.dad}</span>
+                                                <span style="font-size:0.65rem; color:#a0aec0;">
+                                                    ${rec.dadSeason} · ${rec.group}
+                                                    <br>直接孵化 <strong style="color:#d69e2e;">${rec.target}（異色）</strong>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    `;
+                                } else {
+                                    slotHtml += `
+                                        <div class="slot-pair has-recommendation" style="border-color:#38a169; background:#f0fff4;">
+                                            <div class="slot-label">⬅ 窩位 ${pairIndex + 1}</div>
+                                            <div class="slot-content">
+                                                <span class="dad">♂ ${rec.dad}</span>
+                                                <span style="font-size:0.65rem; color:#a0aec0;">
+                                                    ${rec.dadSeason} · ${rec.group}
+                                                    <br>孵化 <strong style="color:#6c5ce7;">♂ ${rec.altTarget}（異色）</strong>
+                                                    <br>用以孵化 <strong style="color:#d69e2e;">${rec.target}（異色）</strong>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    `;
+                                }
+                            } else {
+                                if (rec.isDirect) {
+                                    slotHtml += `
+                                        <div class="slot-pair has-recommendation">
+                                            <div class="slot-label">窩位 ${pairIndex + 1} ➡</div>
+                                            <div class="slot-content">
+                                                <span class="mom">${rec.target} ♀</span>
+                                                <span style="font-size:0.65rem; color:#a0aec0;">
+                                                    ${rec.season} · ${rec.group}
+                                                    <br>直接孵化 <strong style="color:#d69e2e;">${rec.target}（異色）</strong>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    `;
+                                } else {
+                                    slotHtml += `
+                                        <div class="slot-pair has-recommendation" style="border-color:#38a169; background:#f0fff4;">
+                                            <div class="slot-label">窩位 ${pairIndex + 1} ➡</div>
+                                            <div class="slot-content">
+                                                <span class="mom">${rec.altTarget} ♀</span>
+                                                <span style="font-size:0.65rem; color:#a0aec0;">
+                                                    ${rec.season} · ${rec.targetGroup}
+                                                    <br>孵化 <strong style="color:#6c5ce7;">♂ ${rec.altTarget}（異色）</strong>
+                                                    <br>用以孵化 <strong style="color:#d69e2e;">${rec.target}（異色）</strong>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    `;
+                                }
+                            }
+                        } else {
+                            slotHtml += `
+                                <div class="slot-pair">
+                                    <div class="slot-label">${isFirst ? '⬅ 窩位 ' + (pairIndex + 1) : '窩位 ' + (pairIndex + 1) + ' ➡'}</div>
+                                    <div class="slot-content">
+                                        <span class="empty-text">空位</span>
+                                    </div>
+                                </div>
+                            `;
+                        }
+                    }
+                    slotHtml += '</div>';
+
+                    html += `
+                        <div class="rec-card" style="border-color:#d69e2e; background:#fffbeb; grid-column: 1 / -1;">
+                            <div class="title">窩位擺放建議（10個窩位）</div>
+                            <div class="detail">
+                                <div style="font-size:0.85rem; margin-bottom:8px; color:#718096;">
+                                    <span style="color:#6c5ce7;">紫色背景</span> = 直接孵化異色精靈 &nbsp;|&nbsp;
+                                    <span style="color:#38a169;">綠色背景</span> = 先孵化替代異色以配目標
+                                </div>
+                                ${slotHtml}
+                                <div style="font-size:0.8rem; color:#718096; margin-top:8px;">
+                                    依賽季排序，早賽季優先推薦
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        // ----- 推薦3：集齊時顯示目標選擇（可勾選） -----
+        if (isComplete) {
+            // 顯示目標選擇區塊
+            targetArea.style.display = 'block';
+            renderTargetGrid();
+        } else {
+            targetArea.style.display = 'none';
+        }
+
+        html += '</div>';
+        area.innerHTML = html;
+
+        // 更新 datalist 自動補全
+        updateDatalist();
+    }
+
+    // ---------- 渲染目標精靈網格（勾選用） ----------
+    function renderTargetGrid() {
+        const grid = document.getElementById('targetGrid');
+        const allRocos = Object.keys(ROCO_DB);
+        const recordedNames = getRecordedNames(records);
+
+        let html = '';
+        for (const name of allRocos) {
+            const data = ROCO_DB[name];
+            const hasShiny = recordedNames.has(name);
+            const eggDisplay = data.eggGroups.join('、');
+            html += `
+                <div class="rec-card" style="cursor: pointer; ${hasShiny ? 'border-color:#6c5ce7; background:#faf9ff;' : 'opacity:0.6;'}"
+                     onclick="toggleTarget('${name}')">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <input type="checkbox" id="target_${name}" ${hasShiny ? '' : 'disabled'}>
+                        <label for="target_${name}" style="font-weight: 700; cursor: pointer;">${name}</label>
+                    </div>
+                    <div class="detail">
+                        蛋組：${eggDisplay}<br>
+                        賽季：${data.season}
+                        ${hasShiny ? '<span style="color:#38a169;"> ✅ 已有異色</span>' : '<span style="color:#e53e3e;"> ⚠️ 尚未擁有</span>'}
+                    </div>
+                </div>
+            `;
+        }
+        grid.innerHTML = html;
+    }
+
+    // ---------- 切換目標精靈選取 ----------
+    let selectedTargets = new Set();
+
+    function toggleTarget(name) {
+        const data = ROCO_DB[name];
+        if (!data) return;
+        const recordedNames = getRecordedNames(records);
+        if (!recordedNames.has(name)) return; // 未擁有異色不可選
+        
+        if (selectedTargets.has(name)) {
+            selectedTargets.delete(name);
+        } else {
+            selectedTargets.add(name);
+        }
+        
+        // 更新 UI 樣式
+        const card = document.querySelector(`[onclick="toggleTarget('${name}')"]`);
+        if (card) {
+            if (selectedTargets.has(name)) {
+                card.style.borderColor = '#d69e2e';
+                card.style.background = '#fffbeb';
+            } else {
+                card.style.borderColor = '#6c5ce7';
+                card.style.background = '#faf9ff';
+            }
+        }
+    }
+
+    // ---------- 檢查能否孵化（雙異色配種） ----------
+    document.getElementById('btnCheckBreed').addEventListener('click', function() {
+        const resultDiv = document.getElementById('breedResult');
+        
+        if (selectedTargets.size === 0) {
+            resultDiv.innerHTML = `<div style="color:#e53e3e;">請至少選擇一隻目標精靈</div>`;
+            return;
+        }
+        
+        // 取得所有異色公與母
+        const maleShinies = records.filter(r => r.gender === '公');
+        const femaleShinies = records.filter(r => r.gender === '母');
+        
+        let resultHtml = '<div style="margin-top:8px;">';
+        let hasAnyBreedable = false;
+        
+        for (const targetName of selectedTargets) {
+            const targetData = ROCO_DB[targetName];
+            if (!targetData) continue;
+            
+            // 檢查該精靈的所有蛋組
+            let canBreed = false;
+            let breedDetails = [];
+            
+            for (const group of targetData.eggGroups) {
+                // 找同蛋組的異色公
+                const availableMales = maleShinies.filter(m => {
+                    const mGroups = Array.isArray(m.eggGroups) ? m.eggGroups : [m.eggGroup];
+                    return mGroups.includes(group);
+                });
+                // 找同蛋組的異色母
+                const availableFemales = femaleShinies.filter(f => {
+                    const fGroups = Array.isArray(f.eggGroups) ? f.eggGroups : [f.eggGroup];
+                    return fGroups.includes(group);
+                });
+                
+                if (availableMales.length > 0 && availableFemales.length > 0) {
+                    canBreed = true;
+                    hasAnyBreedable = true;
+                    breedDetails.push({
+                        group,
+                        males: availableMales.map(m => m.name).join('、'),
+                        females: availableFemales.map(f => f.name).join('、')
+                    });
+                }
+            }
+            
+            if (canBreed) {
+                resultHtml += `
+                    <div style="padding: 8px 12px; margin: 4px 0; background: #f0fff4; border-left: 4px solid #38a169; border-radius: 4px;">
+                        ✅ <strong>${targetName}</strong> 可以孵化！
+                        ${breedDetails.map(d => `
+                            <br>&nbsp;&nbsp;└ 蛋組【${d.group}】：${d.males}（♂） × ${d.females}（♀）
+                        `).join('')}
+                    </div>
+                `;
+            } else {
+                resultHtml += `
+                    <div style="padding: 8px 12px; margin: 4px 0; background: #fff5f5; border-left: 4px solid #e53e3e; border-radius: 4px;">
+                        ❌ <strong>${targetName}</strong> 目前無法孵化（缺少同蛋組的異色公或異色母）
+                        <br>&nbsp;&nbsp;└ 需要蛋組：${targetData.eggGroups.join('、')}
+                    </div>
+                `;
+            }
+        }
+        
+        if (!hasAnyBreedable) {
+            resultHtml += `<div style="color:#e53e3e; margin-top:8px;">⚠️ 所選目標目前皆無法孵化，請先收集更多異色精靈</div>`;
+        }
+        
+        resultHtml += '</div>';
+        resultDiv.innerHTML = resultHtml;
+    });
+
+    // ---------- 更新輸入框自動補全（支援賽季篩選 + 進化型） ----------
+    function updateDatalist() {
+        const datalist = document.getElementById('nameSuggest');
+        const seasonFilter = document.getElementById('seasonFilter').value;
+        
+        // 取得 ROCO_DB 中所有名稱（按照定義順序）
+        let names = Object.keys(ROCO_DB);
+        
+        // 如果有選擇賽季，進行過濾
+        if (seasonFilter !== 'all') {
+            names = names.filter(name => {
+                const data = ROCO_DB[name];
+                return data.season === seasonFilter;
+            });
+        }
+        
+        // 建立結果陣列，並記錄已加入的名稱（避免重複）
+        const result = [];
+        const added = new Set();
+        
+        for (const name of names) {
+            // 如果已經加入過，跳過
+            if (added.has(name)) continue;
+            
+            result.push(name);
+            added.add(name);
+            
+            // 檢查是否有進化型（evolvesFrom 指向當前精靈）
+            for (const [evoName, evoData] of Object.entries(ROCO_DB)) {
+                if (evoData.evolvesFrom === name && !added.has(evoName)) {
+                    // 檢查該進化型是否在當前賽季過濾範圍內
+                    if (seasonFilter === 'all' || evoData.season === seasonFilter) {
+                        result.push(evoName);
+                        added.add(evoName);
+                    }
+                }
+            }
+        }
+        
+        datalist.innerHTML = result.map(n => `<option value="${n}">`).join('');
+    }
+
+    // 自訂確認對話框
+    let confirmCallback = null;
+
+    function showConfirm(message, callback) {
+        document.getElementById('confirmMessage').textContent = message;
+        document.getElementById('customConfirm').style.display = 'flex';
+        confirmCallback = callback;
+    }
+
+    document.getElementById('confirmCancel').addEventListener('click', function() {
+        document.getElementById('customConfirm').style.display = 'none';
+        if (confirmCallback) confirmCallback(false);
+        confirmCallback = null;
+    });
+
+    document.getElementById('confirmOk').addEventListener('click', function() {
+        document.getElementById('customConfirm').style.display = 'none';
+        if (confirmCallback) confirmCallback(true);
+        confirmCallback = null;
+    });
+
+    // 點擊背景關閉
+    document.getElementById('customConfirm').addEventListener('click', function(e) {
+        if (e.target === this) {
+            this.style.display = 'none';
+            if (confirmCallback) confirmCallback(false);
+            confirmCallback = null;
+        }
+    });
+
+    // ================================================================
+    // 3. 事件綁定
+    // ================================================================
+
+    // ---------- 性別自動限制（根據精靈） ----------
+    document.getElementById('inputName').addEventListener('input', function() {
+        const name = this.value.trim();
+        const rocoData = ROCO_DB[name];
+        const genderBtns = document.querySelectorAll('.gender-btn');
+        const hiddenInput = document.getElementById('inputGender');
+        
+        // 重置所有按鈕為可用
+        genderBtns.forEach(btn => {
+            btn.disabled = false;
+            btn.style.opacity = '1';
+            btn.style.cursor = 'pointer';
+        });
+        
+        if (rocoData && rocoData.genderLock) {
+            // 如果有性別限制，禁用另一個性別按鈕
+            genderBtns.forEach(btn => {
+                if (btn.dataset.gender !== rocoData.genderLock) {
+                    btn.disabled = true;
+                    btn.style.opacity = '0.5';
+                    btn.style.cursor = 'not-allowed';
+                } else {
+                    // 自動選取可用性別
+                    hiddenInput.value = rocoData.genderLock;
+                    // 更新按鈕樣式
+                    genderBtns.forEach(b => {
+                        b.classList.remove('active');
+                        b.style.background = 'white';
+                        b.style.color = '#4a5568';
+                        b.style.borderColor = '#e2e8f0';
+                    });
+                    btn.classList.add('active');
+                    btn.style.background = '#6c5ce7';
+                    btn.style.color = 'white';
+                    btn.style.borderColor = '#6c5ce7';
+                }
+            });
+        }
+    });
+
+    // ---------- 性別按鈕切換 ----------
+    document.querySelectorAll('.gender-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const gender = this.dataset.gender;
+            const hiddenInput = document.getElementById('inputGender');
+            
+            // 檢查是否被禁用（由性別限制功能控制）
+            if (this.style.opacity === '0.5' || this.disabled) return;
+            
+            // 更新 hidden input 的值
+            hiddenInput.value = gender;
+            
+            // 更新按鈕樣式
+            document.querySelectorAll('.gender-btn').forEach(b => {
+                b.classList.remove('active');
+                b.style.background = 'white';
+                b.style.color = '#4a5568';
+                b.style.borderColor = '#e2e8f0';
+            });
+            this.classList.add('active');
+            this.style.background = '#6c5ce7';
+            this.style.color = 'white';
+            this.style.borderColor = '#6c5ce7';
+        });
+    });
+
+    // ---------- 新增記錄 ----------
+    document.getElementById('btnAdd').addEventListener('click', function() {
+        const nameInput = document.getElementById('inputName');
+        const gender = document.getElementById('inputGender').value;
+
+        let inputName = nameInput.value.trim();
+        if (!inputName) {
+            alert('請輸入精靈名稱');
+            return;
+        }
+
+        // 1. 先檢查是否直接存在
+        let rocoData = ROCO_DB[inputName];
+        let actualName = inputName;
+        
+        // 2. 如果不存在，或該精靈是進化型（有 evolvesFrom），尋找進化鏈起點
+        if (!rocoData || (rocoData && rocoData.evolvesFrom)) {
+            const base = findEvoBase(inputName);
+            if (base && base.name) {
+                actualName = base.name;
+                rocoData = base.data;
+            }
+        }
+        
+        if (!rocoData) {
+            alert(`「${inputName}」不在資料庫中，且找不到對應的初階形態`);
+            return;
+        }
+
+        // 儲存時記錄初階精靈名稱
+        records.push({
+            name: actualName,              // 存初階精靈
+            gender,
+            eggGroups: rocoData.eggGroups,
+            season: rocoData.season,
+            eggGroup: rocoData.eggGroups[0],
+            types: rocoData.types || [],
+            searchedName: inputName !== actualName ? inputName : undefined
+        });
+        saveRecords(records);
+        renderTable();
+        renderRecommendations();
+        nameInput.value = '';
+        nameInput.focus();
+    });
+
+    // 按下 Enter 快速新增
+    document.getElementById('inputName').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') document.getElementById('btnAdd').click();
+    });
+
+    // ---------- 重新整理推薦 ----------
+    document.getElementById('btnRefresh').addEventListener('click', renderRecommendations);
+
+    // ---------- 賽季篩選變更時更新自動補全 ----------
+    document.getElementById('seasonFilter').addEventListener('change', function() {
+        updateDatalist();
+    });
+
+    // ---------- 匯出資料 ----------
+    document.getElementById('btnExport').addEventListener('click', function() {
+        const exportData = {
+            records: records,
+            excludeList: excludeList,
+            wishlist: wishlist,  // ← 新增
+            version: "1.0",
+            exportedAt: new Date().toISOString()
+        };
+        const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `異色精靈記錄_${new Date().toISOString().slice(0,10)}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+    });
+
+    // ---------- 匯入資料 ----------
+    document.getElementById('btnImport').addEventListener('click', function() {
+        document.getElementById('fileInput').click();
+    });
+    document.getElementById('fileInput').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(ev) {
+            try {
+                const data = JSON.parse(ev.target.result);
+                
+                // 判斷是新版格式（包含 excludeList）還是舊版格式（只有 records）
+                let importedRecords = [];
+                let importedExcludeList = [];
+                let importedWishlist = [];
+
+                if (data.records && Array.isArray(data.records)) {
+                    // 新版格式
+                    importedRecords = data.records;
+                    importedExcludeList = data.excludeList || [];
+                    importedWishlist = data.wishlist || [];
+                } else if (Array.isArray(data)) {
+                    // 舊版格式（只有 records 陣列）
+                    importedRecords = data;
+                } else {
+                    alert('資料格式錯誤，請匯入正確的 JSON 檔案');
+                    return;
+                }
+                
+                // ===== 轉換舊資料格式 =====
+                const convertedRecords = importedRecords.map(r => {
+                    // 1. 賽季格式轉換（舊版 -> 新版）
+                    if (r.season && !r.season.includes('常駐') && !r.season.includes('賽季')) {
+                        const rocoData = ROCO_DB[r.name];
+                        if (rocoData && rocoData.season) {
+                            r.season = rocoData.season;
+                        } else {
+                            r.season = r.season + '常駐';
+                        }
+                    }
+                    
+                    // 2. 補上系別（types）
+                    if (!r.types || r.types.length === 0) {
+                        const rocoData = ROCO_DB[r.name];
+                        if (rocoData && rocoData.types) {
+                            r.types = rocoData.types;
+                        } else {
+                            r.types = [];
+                        }
+                    }
+                    
+                    return r;
+                });
+                
+                records = convertedRecords;
+                excludeList = importedExcludeList;
+                wishlist = importedWishlist;
+
+                saveRecords(records);
+                saveExcludeList();
+                saveWishlist();
+                renderTable();
+                renderRecommendations();
+                renderExcludeTags();
+                
+                alert(`匯入成功！已匯入 ${records.length} 筆記錄，排除清單 ${excludeList.length} 項。`);
+            } catch {
+                alert('檔案解析失敗');
+            }
+        };
+        reader.readAsText(file);
+        this.value = '';
+    });
+
+    // ---------- 清空資料 ----------
+    document.getElementById('btnClear').addEventListener('click', function() {
+        showConfirm('確定要清空所有記錄嗎？\n此操作無法復原！', function(confirmed) {
+            if (confirmed) {
+                records = [];
+                excludeList = [];
+                wishlist = [];
+                saveRecords(records);
+                saveExcludeList();
+                saveWishlist();
+                renderTable();
+                renderRecommendations();
+                renderExcludeTags();
+                renderWishlistTags();
+            }
+        });
+    });
+
+    // ================================================================
+    // 4. 初始化
+    // ================================================================
+
+    // 如果資料庫中已有精靈但蛋組缺失，嘗試補上
+    records = records.map(r => {
+        if (ROCO_DB[r.name] && (!r.eggGroup || r.eggGroup === '未分類')) {
+            r.eggGroup = ROCO_DB[r.name];
+        }
+        return r;
+    });
+    saveRecords(records);
+
+    renderTable();
+    renderRecommendations();
+    updateDatalist();
+    renderExcludeTags();
+    renderWishlistTags();
+
+    console.log('✨ 異色精靈記錄器已啟動！資料保存在瀏覽器本地。');
+    console.log('📦 目前記錄數:', records.length);
+</script>
+
+</body>
+</html>
