@@ -662,11 +662,42 @@
             #btnApplyPriority {
                 flex: 0 0 auto;
                 padding: 3px 10px !important;
-                font-size: 0.7rem !important;
+                font-size: 0.75rem !important;
             }
             .priority-season-wrapper {
                 flex-wrap: nowrap !important;
                 gap: 4px !important;
+            }
+
+            /* 窩位卡片內按鈕手機端保持同一行且字體一致 */
+            #btnManageExcludeInline,
+            #btnManageWishlistInline {
+                flex: 0 0 auto;
+                padding: 3px 10px !important;
+                font-size: 0.75rem !important;
+            }
+            
+            /* 優先孵化賽季整行不要換行 */
+            .rec-card .detail > div:first-child {
+                flex-wrap: nowrap !important;
+                overflow-x: auto;
+            }
+            .rec-card .detail > div:first-child span {
+                font-size: 0.75rem !important;
+                white-space: nowrap;
+            }
+            
+            /* 排除清單和願望清單手機端保持同一行 */
+            .rec-card .detail > div:nth-child(2),
+            .rec-card .detail > div:nth-child(3) {
+                flex-wrap: nowrap !important;
+                overflow-x: auto;
+                gap: 3px !important;
+            }
+            .rec-card .detail > div:nth-child(2) span,
+            .rec-card .detail > div:nth-child(3) span {
+                font-size: 0.7rem !important;
+                white-space: nowrap;
             }
         }
 
@@ -1812,14 +1843,14 @@
                                 <div style="display: flex; flex-wrap: wrap; gap: 4px; align-items: center; margin-bottom: 2px; padding: 2px 0;">
                                     <span style="font-weight: 500; color: #4a5568; font-size: 0.85rem; white-space: nowrap;">排除清單：</span>
                                     <div id="excludeTagsInline" style="display: flex; flex-wrap: wrap; gap: 3px;"></div>
-                                    <button class="btn btn-sm" id="btnManageExcludeInline" style="padding: 3px 12px; font-size: 0.8rem; background: #fc8181; color: white; border: none; border-radius: 14px; cursor: pointer;">管理</button>
+                                    <button class="btn btn-sm" id="btnManageExcludeInline" style="padding: 3px 12px; font-size: 0.8rem; background: #fc8181; color: white; border: none; border-radius: 14px; cursor: pointer; flex: 0 0 auto; white-space: nowrap;">管理</button>
                                 </div>
 
                                 <!-- ===== 願望清單（窩位內） ===== -->
                                 <div style="display: flex; flex-wrap: wrap; gap: 4px; align-items: center; margin-bottom: 6px; padding: 2px 0;">
                                     <span style="font-weight: 500; color: #4a5568; font-size: 0.85rem; white-space: nowrap;">願望清單：</span>
                                     <div id="wishlistTagsInline" style="display: flex; flex-wrap: wrap; gap: 3px;"></div>
-                                    <button class="btn btn-sm" id="btnManageWishlistInline" style="padding: 3px 12px; font-size: 0.8rem; background: #d69e2e; color: white; border: none; border-radius: 14px; cursor: pointer;">管理</button>
+                                    <button class="btn btn-sm" id="btnManageWishlistInline" style="padding: 3px 12px; font-size: 0.8rem; background: #d69e2e; color: white; border: none; border-radius: 14px; cursor: pointer; flex: 0 0 auto; white-space: nowrap;">管理</button>
                                 </div>
 
                                 <div style="border-bottom: 1px dashed #e2e8f0; margin-bottom: 8px;"></div>
