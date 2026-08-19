@@ -416,15 +416,15 @@
 
     <!-- ===== 輸入區域 ===== -->
     <div class="flex-row">
-        <div class="form-group">
+        <div class="form-group" style="flex: 1;">
             <label>精靈名稱</label>
-            <input type="text" id="inputName" placeholder="例如：雪影娃娃" list="nameSuggest">
+            <input type="text" id="inputName" placeholder="例如：雪影娃娃" list="nameSuggest" style="height: 46px;">
             <datalist id="nameSuggest"></datalist>
         </div>
         <!-- ===== 賽季篩選 ===== -->
         <div class="form-group" style="flex: 0 0 auto; min-width: 120px;">
             <label>賽季篩選</label>
-            <select id="seasonFilter">
+            <select id="seasonFilter" style="height: 46px;">
                 <option value="all">全部</option>
                 <option value="S1常駐">S1常駐</option>
                 <option value="S1賽季">S1賽季</option>
@@ -432,19 +432,27 @@
                 <option value="S2賽季">S2賽季</option>
                 <option value="S3常駐">S3常駐</option>
                 <option value="S3賽季">S3賽季</option>
+                <option value="其他">其他</option>
             </select>
         </div>
-        <div class="form-group">
+        <div class="form-group" style="flex: 1;">
             <label>性別</label>
-            <div style="display: flex; gap: 8px;">
-                <button type="button" class="btn gender-btn active" data-gender="公" style="flex:1; padding: 10px; border-radius: 12px; background: #6c5ce7; color: white; border: 2px solid #6c5ce7;">♂ 公</button>
-                <button type="button" class="btn gender-btn" data-gender="母" style="flex:1; padding: 10px; border-radius: 12px; background: white; color: #4a5568; border: 2px solid #e2e8f0;">♀ 母</button>
+            <div style="display: flex; gap: 8px; height: 46px;">
+                <button type="button" class="btn gender-btn active" data-gender="公" style="flex:1; padding: 10px; border-radius: 12px; background: #6c5ce7; color: white; border: 2px solid #6c5ce7; display: flex; align-items: center; justify-content: center; gap: 6px; height: 100%;">
+                    <img src="images/male.svg" alt="公" style="width: 16px; height: 16px; filter: brightness(0) invert(1);">
+                    公
+                </button>
+                <button type="button" class="btn gender-btn" data-gender="母" style="flex:1; padding: 10px; border-radius: 12px; background: white; color: #4a5568; border: 2px solid #e2e8f0; display: flex; align-items: center; justify-content: center; gap: 6px; height: 100%;">
+                    <img src="images/female.svg" alt="母" style="width: 16px; height: 16px;">
+                    母
+                </button>
             </div>
             <input type="hidden" id="inputGender" value="公">
         </div>
 
         <div class="form-group" style="flex: 0 0 auto;">
-            <button class="btn btn-primary" id="btnAdd">新增記錄</button>
+            <label>&nbsp;</label>
+            <button class="btn btn-primary" id="btnAdd" style="height: 46px;">新增記錄</button>
         </div>
     </div>
 
@@ -547,7 +555,7 @@
         <button class="btn btn-sm btn-danger" id="btnClear">🗑️ 清空所有</button>
     </div>
     <div style="text-align: center; margin-top: 16px; font-size: 0.75rem; color: #a0aec0;">
-        v0.24.6
+        v0.25.0
     </div>
 </div>
 
@@ -636,8 +644,8 @@
         "粉星仔": { eggGroups: ["妖精", "天空"], season: "S1賽季", types: ["幻"] },
         "粉耳星兔": { eggGroups: ["妖精", "天空"], season: "S1賽季", types: ["幻"], evolvesFrom: "粉星仔" },
         "落隕星兔": { eggGroups: ["妖精", "天空"], season: "S1賽季", types: ["幻", "幽"], evolvesFrom: "粉星仔" },
-        "火紅尾": { eggGroups: ["動物"], season: "S1常駐", types: ["火"] },
-        "雅丹鬃": { eggGroups: ["動物"], season: "S1常駐", types: ["火"], evolvesFrom: "火紅尾" },
+        "火紅尾": { eggGroups: ["動物"], season: "其他", types: ["火"] },
+        "雅丹鬃": { eggGroups: ["動物"], season: "其他", types: ["火"], evolvesFrom: "火紅尾" },
 
         // ===== S2 賽季 =====
         "惡魔叮": { eggGroups: ["妖精"], season: "S2常駐", types: ["惡", "翼"] },
@@ -646,9 +654,9 @@
         "嘟嘟煲": { eggGroups: ["妖精", "大地"], season: "S2常駐", types: ["毒"] },
         "嘟嘟鍋": { eggGroups: ["妖精", "大地"], season: "S2常駐", types: ["毒"], evolvesFrom: "嘟嘟煲" },
         "菊花梨": { eggGroups: ["植物"], season: "S2常駐", types: ["萌"] },
-        "小夜": { eggGroups: ["妖精", "擬人"], season: "S2常駐", types: ["惡"] },
-        "紫夜": { eggGroups: ["妖精", "擬人"], season: "S2常駐", types: ["惡"], evolvesFrom: "小夜" },
-        "朔夜伊芙": { eggGroups: ["妖精", "擬人"], season: "S2常駐", types: ["惡"], evolvesFrom: "紫夜" },
+        "小夜": { eggGroups: ["妖精", "擬人"], season: "S2常駐", genderLock: "母", types: ["惡"] },
+        "紫夜": { eggGroups: ["妖精", "擬人"], season: "S2常駐", genderLock: "母", types: ["惡"], evolvesFrom: "小夜" },
+        "朔夜伊芙": { eggGroups: ["妖精", "擬人"], season: "S2常駐", genderLock: "母", types: ["惡"], evolvesFrom: "紫夜" },
         "小獨角獸": { eggGroups: ["巨靈", "動物"], season: "S2常駐", types: ["光"] },
         "白金獨角獸": { eggGroups: ["巨靈", "動物"], season: "S2常駐", types: ["光"], evolvesFrom: "小獨角獸" },
         "靈狐": { eggGroups: ["動物"], season: "S2常駐", types: ["火", "冰"] },
@@ -719,6 +727,14 @@
         "稻草守护者": { eggGroups: ["妖精"], season: "S3賽季", types: ["萌", "武"], evolvesFrom: "稻草人" },
 
     };
+
+    // ---------- 查找精靈函數 ----------
+    function findRocoByName(inputName) {
+        if (ROCO_DB[inputName]) {
+            return { name: inputName, data: ROCO_DB[inputName] };
+        }
+        return null;
+    }
 
     // ---------- 系別圖示路徑 ----------
     const TYPE_ICON_PATH = 'images/types/';  // ← 加上這行
@@ -1108,7 +1124,7 @@
         countSpan.textContent = records.length;
 
         if (records.length === 0) {
-            tbody.innerHTML = `<tr class="empty-row"><td colspan="5">還沒有記錄，快新增第一隻異色精靈吧！</td></tr>`;
+            tbody.innerHTML = `<tr class="empty-row"><td colspan="6">還沒有記錄，快新增第一隻異色精靈吧！</td></tr>`;
             return;
         }
 
@@ -1118,10 +1134,15 @@
             const eggDisplay = Array.isArray(r.eggGroups) ? r.eggGroups.join('、') : r.eggGroup;
             const seasonDisplay = r.season || '未知';
             
+            // 性別圖示（小尺寸，文字有空格）
+            const genderIcon = r.gender === '公' 
+                ? `<img src="images/male.svg" alt="公" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;">` 
+                : `<img src="images/female.svg" alt="母" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;">`;
+            
             html += `
                 <tr>
                     <td><strong>${r.name}</strong></td>
-                    <td>${r.gender === '公' ? '♂ 公' : '♀ 母'}</td>
+                    <td>${genderIcon}${r.gender}</td>
                     <td>${typesHtml}</td>
                     <td>${eggDisplay}</td>
                     <td>${seasonDisplay}</td>
@@ -1147,6 +1168,9 @@
     function renderRecommendations() {
         const area = document.getElementById('recommendationArea');
         const targetArea = document.getElementById('targetSelectionArea');
+        
+        // 從 localStorage 讀取優先賽季（唯一數據源）
+        const savedSeason = localStorage.getItem('prioritySeason') || 'all';
         
         if (records.length === 0) {
             area.innerHTML = `
@@ -1282,6 +1306,30 @@
             
             // 合併：願望清單(直接) → 願望清單(兩步) → 非願望清單(直接) → 非願望清單(兩步)
             const sortedMissing = [...wishlistDirect, ...wishlistIndirect, ...nonWishlistDirect, ...nonWishlistIndirect];
+            
+            // ===== 賽季優先排序 =====
+            const prioritySeasonEl = document.getElementById('prioritySeason');
+            if (prioritySeasonEl) {
+                const prioritySeason = prioritySeasonEl.value;
+                if (prioritySeason !== 'all') {
+                    // 將符合優先賽季的精靈移到最前面
+                    const priorityList = [];
+                    const nonPriorityList = [];
+                    for (const name of sortedMissing) {
+                        const data = ROCO_DB[name];
+                        if (data && data.season === prioritySeason) {
+                            priorityList.push(name);
+                        } else {
+                            nonPriorityList.push(name);
+                        }
+                    }
+                    // 重新組裝：優先賽季的在前，其他的在後
+                    const reordered = [...priorityList, ...nonPriorityList];
+                    // 更新 sortedMissing
+                    sortedMissing.length = 0;
+                    sortedMissing.push(...reordered);
+                }
+            }
             
             if (sortedMissing.length === 0) {
                 // 所有未擁有的精靈都被排除了
@@ -1421,9 +1469,12 @@
                                 if (rec.isDirect) {
                                     slotHtml += `
                                         <div class="slot-pair has-recommendation">
-                                            <div class="slot-label">⬅ 窩位 ${pairIndex + 1}</div>
+                                            <div class="slot-label">〈 窩位 ${pairIndex + 1}</div>
                                             <div class="slot-content">
-                                                <span class="dad">♂ ${rec.dad}</span>
+                                                <span class="dad">
+                                                    <img src="images/male.svg" alt="♂" style="width:14px;height:14px;vertical-align:middle;margin-right:2px;" onerror="this.style.display='none';this.nextSibling.style.display='inline';"> 
+                                                    <span style="display:none;">♂</span> <span style="color:#59aaff;">${rec.dad}</span>
+                                                </span>
                                                 <span style="font-size:0.65rem; color:#a0aec0;">
                                                     ${rec.dadSeason} · ${rec.group}
                                                     <br>直接孵化 <strong style="color:#d69e2e;">${rec.target}（異色）</strong>
@@ -1434,9 +1485,12 @@
                                 } else {
                                     slotHtml += `
                                         <div class="slot-pair has-recommendation" style="border-color:#38a169; background:#f0fff4;">
-                                            <div class="slot-label">⬅ 窩位 ${pairIndex + 1}</div>
+                                            <div class="slot-label">〈 窩位 ${pairIndex + 1}</div>
                                             <div class="slot-content">
-                                                <span class="dad">♂ ${rec.dad}</span>
+                                                <span class="dad">
+                                                    <img src="images/male.svg" alt="♂" style="width:14px;height:14px;vertical-align:middle;margin-right:2px;" onerror="this.style.display='none';this.nextSibling.style.display='inline';"> 
+                                                    <span style="display:none;">♂</span> <span style="color:#59aaff;">${rec.dad}</span>
+                                                </span>
                                                 <span style="font-size:0.65rem; color:#a0aec0;">
                                                     ${rec.dadSeason} · ${rec.group}
                                                     <br>孵化 <strong style="color:#6c5ce7;">♂ ${rec.altTarget}（異色）</strong>
@@ -1450,9 +1504,12 @@
                                 if (rec.isDirect) {
                                     slotHtml += `
                                         <div class="slot-pair has-recommendation">
-                                            <div class="slot-label">窩位 ${pairIndex + 1} ➡</div>
+                                            <div class="slot-label">窩位 ${pairIndex + 1} 〉</div>
                                             <div class="slot-content">
-                                                <span class="mom">${rec.target} ♀</span>
+                                                <span class="mom">
+                                                    <img src="images/female.svg" alt="♀" style="width:14px;height:14px;vertical-align:middle;margin-right:2px;" onerror="this.style.display='none';this.nextSibling.style.display='inline';"> 
+                                                    <span style="display:none;">♀</span> <span style="color:#b13c3b;">${rec.target}</span>
+                                                </span>
                                                 <span style="font-size:0.65rem; color:#a0aec0;">
                                                     ${rec.season} · ${rec.group}
                                                     <br>直接孵化 <strong style="color:#d69e2e;">${rec.target}（異色）</strong>
@@ -1463,9 +1520,12 @@
                                 } else {
                                     slotHtml += `
                                         <div class="slot-pair has-recommendation" style="border-color:#38a169; background:#f0fff4;">
-                                            <div class="slot-label">窩位 ${pairIndex + 1} ➡</div>
+                                            <div class="slot-label">窩位 ${pairIndex + 1} 〉</div>
                                             <div class="slot-content">
-                                                <span class="mom">${rec.altTarget} ♀</span>
+                                                <span class="mom">
+                                                    <img src="images/female.svg" alt="♀" style="width:14px;height:14px;vertical-align:middle;margin-right:2px;" onerror="this.style.display='none';this.nextSibling.style.display='inline';"> 
+                                                    <span style="display:none;">♀</span> <span style="color:#b13c3b;">${rec.altTarget}</span>
+                                                </span>
                                                 <span style="font-size:0.65rem; color:#a0aec0;">
                                                     ${rec.season} · ${rec.targetGroup}
                                                     <br>孵化 <strong style="color:#6c5ce7;">♂ ${rec.altTarget}（異色）</strong>
@@ -1479,7 +1539,7 @@
                         } else {
                             slotHtml += `
                                 <div class="slot-pair">
-                                    <div class="slot-label">${isFirst ? '⬅ 窩位 ' + (pairIndex + 1) : '窩位 ' + (pairIndex + 1) + ' ➡'}</div>
+                                    <div class="slot-label">${isFirst ? '〈 窩位 ' + (pairIndex + 1) : '窩位 ' + (pairIndex + 1) + ' 〉'}</div>
                                     <div class="slot-content">
                                         <span class="empty-text">空位</span>
                                     </div>
@@ -1493,6 +1553,20 @@
                         <div class="rec-card" style="border-color:#d69e2e; background:#fffbeb; grid-column: 1 / -1;">
                             <div class="title">窩位擺放建議（10個窩位）</div>
                             <div class="detail">
+                                <div style="display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 10px; padding: 4px 0; border-bottom: 1px dashed #e2e8f0; padding-bottom: 8px;">
+                                    <span style="font-weight: 500; color: #4a5568; font-size: 0.85rem;">優先孵化賽季：</span>
+                                    <select id="prioritySeason" style="padding: 3px 8px; border: 1.5px solid #d69e2e; border-radius: 6px; font-size: 0.85rem; background: #fffbeb; color: #2d3748; outline: none; cursor: pointer;">
+                                        <option value="all" ${savedSeason === 'all' ? 'selected' : ''}>全部（按現行排列）</option>
+                                        <option value="S1常駐" ${savedSeason === 'S1常駐' ? 'selected' : ''}>S1常駐</option>
+                                        <option value="S1賽季" ${savedSeason === 'S1賽季' ? 'selected' : ''}>S1賽季</option>
+                                        <option value="S2常駐" ${savedSeason === 'S2常駐' ? 'selected' : ''}>S2常駐</option>
+                                        <option value="S2賽季" ${savedSeason === 'S2賽季' ? 'selected' : ''}>S2賽季</option>
+                                        <option value="S3常駐" ${savedSeason === 'S3常駐' ? 'selected' : ''}>S3常駐</option>
+                                        <option value="S3賽季" ${savedSeason === 'S3賽季' ? 'selected' : ''}>S3賽季</option>
+                                        <option value="其他" ${savedSeason === '其他' ? 'selected' : ''}>其他</option>
+                                    </select>
+                                    <button class="btn btn-sm" id="btnApplyPriority" style="padding: 3px 12px; font-size: 0.8rem; background: #d69e2e; color: white; border: none; border-radius: 14px; cursor: pointer; transition: 0.2s;">套用</button>
+                                </div>
                                 <div style="font-size:0.85rem; margin-bottom:8px; color:#718096;">
                                     <span style="color:#6c5ce7;">紫色背景</span> = 直接孵化異色精靈 &nbsp;|&nbsp;
                                     <span style="color:#38a169;">綠色背景</span> = 先孵化替代異色以配目標
@@ -1660,10 +1734,8 @@
         const datalist = document.getElementById('nameSuggest');
         const seasonFilter = document.getElementById('seasonFilter').value;
         
-        // 取得 ROCO_DB 中所有名稱（按照定義順序）
         let names = Object.keys(ROCO_DB);
         
-        // 如果有選擇賽季，進行過濾
         if (seasonFilter !== 'all') {
             names = names.filter(name => {
                 const data = ROCO_DB[name];
@@ -1671,30 +1743,29 @@
             });
         }
         
-        // 建立結果陣列，並記錄已加入的名稱（避免重複）
-        const result = [];
+        const options = [];
         const added = new Set();
         
         for (const name of names) {
-            // 如果已經加入過，跳過
             if (added.has(name)) continue;
             
-            result.push(name);
+            options.push({ value: name, label: name });
             added.add(name);
             
-            // 檢查是否有進化型（evolvesFrom 指向當前精靈）
+            // 進化型
             for (const [evoName, evoData] of Object.entries(ROCO_DB)) {
                 if (evoData.evolvesFrom === name && !added.has(evoName)) {
-                    // 檢查該進化型是否在當前賽季過濾範圍內
                     if (seasonFilter === 'all' || evoData.season === seasonFilter) {
-                        result.push(evoName);
+                        options.push({ value: evoName, label: evoName });
                         added.add(evoName);
                     }
                 }
             }
         }
         
-        datalist.innerHTML = result.map(n => `<option value="${n}">`).join('');
+        datalist.innerHTML = options.map(opt => 
+            `<option value="${opt.value}" label="${opt.label}">`
+        ).join('');
     }
 
     // 自訂確認對話框
@@ -1777,7 +1848,7 @@
             const gender = this.dataset.gender;
             const hiddenInput = document.getElementById('inputGender');
             
-            // 檢查是否被禁用（由性別限制功能控制）
+            // 檢查是否被禁用
             if (this.style.opacity === '0.5' || this.disabled) return;
             
             // 更新 hidden input 的值
@@ -1789,11 +1860,24 @@
                 b.style.background = 'white';
                 b.style.color = '#4a5568';
                 b.style.borderColor = '#e2e8f0';
+                
+                // 重置圖片顏色
+                const img = b.querySelector('img');
+                if (img) {
+                    img.style.filter = 'none';
+                }
             });
+            
             this.classList.add('active');
             this.style.background = '#6c5ce7';
             this.style.color = 'white';
             this.style.borderColor = '#6c5ce7';
+            
+            // 讓選中的按鈕圖片變白
+            const img = this.querySelector('img');
+            if (img) {
+                img.style.filter = 'brightness(0) invert(1)';
+            }
         });
     });
 
@@ -1808,13 +1892,19 @@
             return;
         }
 
-        // 1. 先檢查是否直接存在
-        let rocoData = ROCO_DB[inputName];
+        // 查找精靈
+        let result = findRocoByName(inputName);
         let actualName = inputName;
+        let rocoData = null;
         
-        // 2. 如果不存在，或該精靈是進化型（有 evolvesFrom），尋找進化鏈起點
-        if (!rocoData || (rocoData && rocoData.evolvesFrom)) {
-            const base = findEvoBase(inputName);
+        if (result) {
+            actualName = result.name;
+            rocoData = result.data;
+        }
+        
+        // 如果找到的是進化型，尋找基礎型態
+        if (rocoData && rocoData.evolvesFrom) {
+            const base = findEvoBase(actualName);
             if (base && base.name) {
                 actualName = base.name;
                 rocoData = base.data;
@@ -1828,7 +1918,7 @@
 
         // 儲存時記錄初階精靈名稱
         records.push({
-            name: actualName,              // 存初階精靈
+            name: actualName,
             gender,
             eggGroups: rocoData.eggGroups,
             season: rocoData.season,
@@ -1856,13 +1946,29 @@
         updateDatalist();
     });
 
+    // ---------- 優先賽季套用（事件委託） ----------
+    document.addEventListener('click', function(e) {
+        if (e.target && e.target.id === 'btnApplyPriority') {
+            // 儲存優先賽季到 localStorage
+            const prioritySeasonEl = document.getElementById('prioritySeason');
+            if (prioritySeasonEl) {
+                localStorage.setItem('prioritySeason', prioritySeasonEl.value);
+            }
+            renderRecommendations();
+        }
+    });
+
     // ---------- 匯出資料 ----------
     document.getElementById('btnExport').addEventListener('click', function() {
+        // 從 localStorage 讀取優先賽季
+        const prioritySeason = localStorage.getItem('prioritySeason') || 'all';
+        
         const exportData = {
             records: records,
             excludeList: excludeList,
-            wishlist: wishlist,  // ← 新增
-            version: "1.0",
+            wishlist: wishlist,
+            prioritySeason: prioritySeason,
+            version: "1.1",
             exportedAt: new Date().toISOString()
         };
         const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
@@ -1874,30 +1980,34 @@
         URL.revokeObjectURL(url);
     });
 
-    // ---------- 匯入資料 ----------
+    // ---------- 匯入資料按鈕 ----------
     document.getElementById('btnImport').addEventListener('click', function() {
         document.getElementById('fileInput').click();
     });
+
+    // ---------- 匯入資料 ----------
     document.getElementById('fileInput').addEventListener('change', function(e) {
         const file = e.target.files[0];
         if (!file) return;
         const reader = new FileReader();
+        const fileInput = this;  // 保存 fileInput 的引用
+        
         reader.onload = function(ev) {
             try {
                 const data = JSON.parse(ev.target.result);
                 
-                // 判斷是新版格式（包含 excludeList）還是舊版格式（只有 records）
                 let importedRecords = [];
                 let importedExcludeList = [];
                 let importedWishlist = [];
-
+                let importedPrioritySeason = 'all';
+                
+                // 判斷是新版格式還是舊版格式
                 if (data.records && Array.isArray(data.records)) {
-                    // 新版格式
                     importedRecords = data.records;
                     importedExcludeList = data.excludeList || [];
                     importedWishlist = data.wishlist || [];
+                    importedPrioritySeason = data.prioritySeason || 'all';
                 } else if (Array.isArray(data)) {
-                    // 舊版格式（只有 records 陣列）
                     importedRecords = data;
                 } else {
                     alert('資料格式錯誤，請匯入正確的 JSON 檔案');
@@ -1906,7 +2016,6 @@
                 
                 // ===== 轉換舊資料格式 =====
                 const convertedRecords = importedRecords.map(r => {
-                    // 1. 賽季格式轉換（舊版 -> 新版）
                     if (r.season && !r.season.includes('常駐') && !r.season.includes('賽季')) {
                         const rocoData = ROCO_DB[r.name];
                         if (rocoData && rocoData.season) {
@@ -1916,7 +2025,6 @@
                         }
                     }
                     
-                    // 2. 補上系別（types）
                     if (!r.types || r.types.length === 0) {
                         const rocoData = ROCO_DB[r.name];
                         if (rocoData && rocoData.types) {
@@ -1932,21 +2040,43 @@
                 records = convertedRecords;
                 excludeList = importedExcludeList;
                 wishlist = importedWishlist;
-
+                
                 saveRecords(records);
                 saveExcludeList();
                 saveWishlist();
+                
+                // 保存優先賽季到 localStorage
+                if (importedPrioritySeason) {
+                    localStorage.setItem('prioritySeason', importedPrioritySeason);
+                }
+                
                 renderTable();
-                renderRecommendations();
                 renderExcludeTags();
                 
-                alert(`匯入成功！已匯入 ${records.length} 筆記錄，排除清單 ${excludeList.length} 項。`);
-            } catch {
-                alert('檔案解析失敗');
+                // 先渲染推薦，然後設定優先賽季
+                renderRecommendations();
+                
+                // 再次設定優先賽季（因為 renderRecommendations 會重建 select）
+                setTimeout(function() {
+                    const prioritySeasonEl = document.getElementById('prioritySeason');
+                    if (prioritySeasonEl && importedPrioritySeason) {
+                        prioritySeasonEl.value = importedPrioritySeason;
+                        // 最後一次渲染以應用
+                        renderRecommendations();
+                    }
+                }, 300);
+                
+                alert(`匯入成功！已匯入 ${records.length} 筆記錄`);
+                
+            } catch (error) {
+                alert('檔案解析失敗：' + error.message);
             }
+            
+            // 清空 fileInput，允許重複選擇同一個檔案
+            fileInput.value = '';
         };
+        
         reader.readAsText(file);
-        this.value = '';
     });
 
     // ---------- 清空資料 ----------
@@ -1985,6 +2115,16 @@
     updateDatalist();
     renderExcludeTags();
     renderWishlistTags();
+
+    // ===== 從 localStorage 恢復優先賽季 =====
+    const savedPrioritySeason = localStorage.getItem('prioritySeason') || 'all';
+    // 等待 renderRecommendations 完成後設定
+    setTimeout(function() {
+        const prioritySeasonEl = document.getElementById('prioritySeason');
+        if (prioritySeasonEl) {
+            prioritySeasonEl.value = savedPrioritySeason;
+        }
+    }, 100);
 
     console.log('✨ 異色精靈記錄器已啟動！資料保存在瀏覽器本地。');
     console.log('📦 目前記錄數:', records.length);
