@@ -336,6 +336,280 @@
             }
         }
 
+        /* ===== 日間/夜間模式 ===== */
+        body.dark-mode {
+            background: #1a202c;
+        }
+        body.dark-mode .container {
+            background: #2d3748;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+        }
+        body.dark-mode h1,
+        body.dark-mode h2,
+        body.dark-mode .title {
+            color: #e2e8f0;
+        }
+        body.dark-mode .form-group label,
+        body.dark-mode .detail {
+            color: #a0aec0;
+        }
+        body.dark-mode .form-group input,
+        body.dark-mode .form-group select {
+            background: #4a5568;
+            color: #e2e8f0;
+            border-color: #4a5568;
+        }
+        body.dark-mode .form-group input:focus,
+        body.dark-mode .form-group select:focus {
+            border-color: #6c5ce7;
+        }
+
+        /* ===== 性別按鈕夜間模式 ===== */
+        body.dark-mode .gender-btn {
+            background: #4a5568 !important;
+            color: #e2e8f0 !important;
+            border-color: #4a5568 !important;
+        }
+        body.dark-mode .gender-btn.active {
+            background: #6c5ce7 !important;
+            color: white !important;
+            border-color: #6c5ce7 !important;
+        }
+        body.dark-mode .gender-btn img {
+            filter: brightness(0.8);
+        }
+        body.dark-mode .gender-btn.active img {
+            filter: brightness(0) invert(1);
+        }
+
+        /* ===== 目前圖鑑卡片夜間模式 ===== */
+        body.dark-mode .rec-card {
+            background: #4a5568 !important;
+            border-color: #4a5568 !important;
+        }
+        body.dark-mode .rec-card:hover {
+            border-color: #6c5ce7 !important;
+            background: #553c9a !important;
+        }
+        body.dark-mode .rec-card .title {
+            color: #e2e8f0 !important;
+        }
+        body.dark-mode .rec-card .detail {
+            color: #a0aec0 !important;
+        }
+        body.dark-mode .rec-card .detail strong {
+            color: #e2e8f0 !important;
+        }
+
+        /* ===== 窩位擺放建議卡片夜間模式 ===== */
+        body.dark-mode .rec-card[style*="border-color:#d69e2e"],
+        body.dark-mode .rec-card[style*="background:#fffbeb"] {
+            background: #4a5568 !important;
+            border-color: #d69e2e !important;
+        }
+        body.dark-mode .rec-card[style*="border-color:#d69e2e"] .title,
+        body.dark-mode .rec-card[style*="background:#fffbeb"] .title {
+            color: #e2e8f0 !important;
+        }
+        body.dark-mode .rec-card[style*="border-color:#d69e2e"] .detail,
+        body.dark-mode .rec-card[style*="background:#fffbeb"] .detail {
+            color: #a0aec0 !important;
+        }
+
+        /* ===== 窩位卡片內的優先孵化賽季區塊夜間模式 ===== */
+        body.dark-mode .rec-card .detail > div:first-child {
+            border-bottom-color: #4a5568 !important;
+        }
+        body.dark-mode .rec-card .detail > div:first-child span {
+            color: #e2e8f0 !important;
+        }
+
+        /* ===== 窩位擺放夜間模式 ===== */
+        body.dark-mode .slot-pair {
+            background: #4a5568;
+            border-color: #4a5568;
+        }
+        body.dark-mode .slot-pair.has-recommendation {
+            border-color: #6c5ce7;
+            background: #553c9a;
+        }
+        body.dark-mode .slot-pair .slot-label {
+            color: #a0aec0;
+        }
+        body.dark-mode .slot-pair .slot-content .empty-text {
+            color: #718096;
+        }
+        body.dark-mode .slot-pair .slot-content .dad {
+            color: #9f7aea;
+        }
+        body.dark-mode .slot-pair .slot-content .mom {
+            color: #48bb78;
+        }
+        body.dark-mode .slot-pair .slot-content span {
+            color: #a0aec0;
+        }
+        body.dark-mode .slot-pair .slot-content strong {
+            color: #f6e05e;
+        }
+        body.dark-mode .slot-pair .slot-content strong[style*="color:#d69e2e"] {
+            color: #f6e05e !important;
+        }
+        body.dark-mode .slot-pair .slot-content strong[style*="color:#6c5ce7"] {
+            color: #9f7aea !important;
+        }
+
+        /* ===== 表格夜間模式 ===== */
+        body.dark-mode th {
+            background: #4a5568;
+            color: #e2e8f0;
+        }
+        body.dark-mode td {
+            border-bottom-color: #4a5568;
+            color: #e2e8f0;
+        }
+        body.dark-mode .table-scroll {
+            border-color: #4a5568;
+        }
+        body.dark-mode .table-scroll thead th {
+            background: #4a5568;
+            border-bottom-color: #4a5568;
+        }
+
+        /* ===== 按鈕夜間模式 ===== */
+        body.dark-mode .btn {
+            background: #4a5568;
+            color: #e2e8f0;
+        }
+        body.dark-mode .btn-primary {
+            background: #6c5ce7;
+            color: white;
+        }
+        body.dark-mode .btn-primary:hover {
+            background: #5a4bd1;
+        }
+        body.dark-mode .btn-danger {
+            background: #e53e3e;
+            color: white;
+        }
+        body.dark-mode .btn-danger:hover {
+            background: #c53030;
+        }
+
+        /* ===== 彈窗夜間模式 ===== */
+        body.dark-mode .custom-confirm-box {
+            background: #2d3748;
+        }
+        body.dark-mode .custom-confirm-box p {
+            color: #e2e8f0;
+        }
+        body.dark-mode .custom-confirm-box .btn-cancel {
+            background: #4a5568;
+            color: #e2e8f0;
+        }
+
+        /* ===== 版本紀錄彈窗夜間模式 ===== */
+        body.dark-mode #versionModal > div {
+            background: #2d3748;
+        }
+        body.dark-mode #versionModal h3 {
+            color: #e2e8f0;
+        }
+        body.dark-mode #versionModal #versionLogContent {
+            color: #a0aec0;
+        }
+        body.dark-mode #versionModal #versionLogContent strong {
+            color: #9f7aea;
+        }
+        body.dark-mode #versionModal #versionLogContent div {
+            border-bottom-color: #4a5568;
+        }
+
+        /* ===== 排除清單彈窗夜間模式 ===== */
+        body.dark-mode #excludeModal > div {
+            background: #2d3748;
+        }
+        body.dark-mode #excludeModal h3 {
+            color: #e2e8f0;
+        }
+        body.dark-mode #excludeModal p {
+            color: #a0aec0;
+        }
+        body.dark-mode #excludeModal label {
+            color: #e2e8f0;
+        }
+        body.dark-mode #excludeModal label span {
+            color: #a0aec0;
+        }
+        body.dark-mode #excludeModal .btn {
+            background: #4a5568;
+            color: #e2e8f0;
+        }
+        body.dark-mode #excludeModal .btn-primary {
+            background: #6c5ce7;
+            color: white;
+        }
+
+        /* ===== 願望清單彈窗夜間模式 ===== */
+        body.dark-mode #wishlistModal > div {
+            background: #2d3748;
+        }
+        body.dark-mode #wishlistModal h3 {
+            color: #e2e8f0;
+        }
+        body.dark-mode #wishlistModal p {
+            color: #a0aec0;
+        }
+        body.dark-mode #wishlistModal label {
+            color: #e2e8f0;
+        }
+        body.dark-mode #wishlistModal label span {
+            color: #a0aec0;
+        }
+        body.dark-mode #wishlistModal .btn {
+            background: #4a5568;
+            color: #e2e8f0;
+        }
+        body.dark-mode #wishlistModal .btn-primary {
+            background: #6c5ce7;
+            color: white;
+        }
+
+        /* ===== 標籤夜間模式 ===== */
+        body.dark-mode #excludeTags span {
+            background: #553c9a !important;
+            color: #e2e8f0 !important;
+        }
+        body.dark-mode #wishlistTags span {
+            background: #744210 !important;
+            color: #f6e05e !important;
+            border-color: #744210 !important;
+        }
+
+        /* ===== 優先孵化賽季下拉選單夜間模式 ===== */
+        body.dark-mode #prioritySeason {
+            background: #4a5568 !important;
+            color: #e2e8f0 !important;
+            border-color: #d69e2e !important;
+        }
+        body.dark-mode #prioritySeason option {
+            background: #4a5568;
+            color: #e2e8f0;
+        }
+        body.dark-mode #btnApplyPriority {
+            background: #d69e2e !important;
+            color: #2d3748 !important;
+        }
+
+        /* ===== 系別圖示夜間模式 ===== */
+        body.dark-mode .type-icon {
+            filter: brightness(0.9);
+        }
+
+        /* ===== 版本號文字夜間模式 ===== */
+        body.dark-mode #versionDisplay {
+            color: #a0aec0 !important;
+        }
+
         /* ===== RWD 響應式 ===== */
         @media (max-width: 640px) {
             body {
@@ -361,34 +635,6 @@
                 width: 100%;
             }
             .btn { width: 100%; }
-            /* 排除清單中的管理按鈕不撐滿 */
-            #btnManageExclude {
-                width: auto;
-                flex-shrink: 0;
-            }
-            /* 願望清單中的管理按鈕不撐滿 */
-            #btnManageWishlist {
-                width: auto;
-                flex-shrink: 0;
-            }
-            /* 彈窗中的清空按鈕不撐滿 */
-            #btnExcludeClear,
-            #btnWishlistClear {
-                width: auto;
-                flex-shrink: 0;
-                padding: 6px 16px;
-                font-size: 0.75rem;
-            }
-            /* 彈窗中的關閉和儲存按鈕也不撐滿 */
-            #btnExcludeClose,
-            #btnExcludeSave,
-            #btnWishlistClose,
-            #btnWishlistSave {
-                width: auto;
-                flex-shrink: 0;
-                padding: 6px 16px;
-                font-size: 0.75rem;
-            }
             .rec-grid { grid-template-columns: 1fr; }
     
             /* 表格標題不換行 */
@@ -405,6 +651,23 @@
                 padding: 4px 10px;
                 font-size: 0.75rem;
             }
+
+            /* 優先孵化賽季手機端保持同一行 */
+            #prioritySeason {
+                flex: 1;
+                min-width: 80px;
+                font-size: 0.75rem !important;
+                padding: 2px 6px !important;
+            }
+            #btnApplyPriority {
+                flex: 0 0 auto;
+                padding: 3px 10px !important;
+                font-size: 0.7rem !important;
+            }
+            .priority-season-wrapper {
+                flex-wrap: nowrap !important;
+                gap: 4px !important;
+            }
         }
 
     </style>
@@ -412,7 +675,10 @@
 <body>
 
 <div class="container">
-    <h1>異色孵蛋智能配種</h1>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h1 style="margin: 0; border-left: 6px solid #6c5ce7; padding-left: 16px;">異色孵蛋智能配種</h1>
+        <button id="themeToggle" style="background: none; border: 2px solid #e2e8f0; border-radius: 50%; width: 40px; height: 40px; font-size: 1.2rem; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">🌙</button>
+    </div>
 
     <!-- ===== 輸入區域 ===== -->
     <div class="flex-row">
@@ -479,15 +745,6 @@
     <!-- ===== 智能推薦 ===== -->
     <h2>智能配種推薦</h2>
 
-    <!-- ===== 排除清單（可選） ===== -->
-    <div style="margin-top: -6px; margin-bottom: 8px; padding: 4px 0; background: transparent;">
-        <div style="display: flex; flex-wrap: wrap; gap: 6px; align-items: center;">
-            <span style="font-weight: 600; color: #4a5568; font-size: 0.85rem;">排除清單：</span>
-            <div id="excludeTags" style="display: flex; flex-wrap: wrap; gap: 4px;"></div>
-            <button class="btn btn-sm" id="btnManageExclude" style="padding: 2px 12px; font-size: 0.75rem;">管理</button>
-        </div>
-    </div>
-
     <!-- ===== 管理排除清單彈窗 ===== -->
     <div id="excludeModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); z-index: 1000; justify-content: center; align-items: center;">
         <div style="background: white; border-radius: 20px; padding: 24px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3); display: flex; flex-direction: column;">
@@ -501,15 +758,6 @@
                     <button class="btn btn-primary btn-sm" id="btnExcludeSave">儲存</button>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <!-- ===== 願望清單（可選） ===== -->
-    <div style="margin-top: 4px; margin-bottom: 8px; padding: 4px 0; background: transparent;">
-        <div style="display: flex; flex-wrap: wrap; gap: 6px; align-items: center;">
-            <span style="font-weight: 600; color: #4a5568; font-size: 0.85rem;">願望清單：</span>
-            <div id="wishlistTags" style="display: flex; flex-wrap: wrap; gap: 4px;"></div>
-            <button class="btn btn-sm" id="btnManageWishlist" style="padding: 2px 12px; font-size: 0.75rem;">管理</button>
         </div>
     </div>
 
@@ -554,10 +802,23 @@
         <input type="file" id="fileInput" accept=".json" style="display:none;">
         <button class="btn btn-sm btn-danger" id="btnClear">🗑️ 清空所有</button>
     </div>
-    <div style="text-align: center; margin-top: 16px; font-size: 0.75rem; color: #a0aec0;">
-        v0.25.0
+    <div style="text-align: center; margin-top: 16px; font-size: 0.75rem; color: #a0aec0; cursor: pointer;">
+        <span id="versionDisplay" style="cursor: pointer; text-decoration: underline; text-underline-offset: 2px;">v0.25.1</span>
     </div>
 </div>
+
+    <!-- ===== 版本更新紀錄彈窗 ===== -->
+    <div id="versionModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 10000; justify-content: center; align-items: center;">
+        <div style="background: white; border-radius: 20px; padding: 24px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <h3 style="margin: 0; color: #2d3748;">版本更新紀錄</h3>
+                <button id="versionModalClose" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #a0aec0;">&times;</button>
+            </div>
+            <div id="versionLogContent" style="font-size: 0.9rem; color: #4a5568; line-height: 1.8;">
+                <div style="text-align: center; color: #a0aec0;">載入中...</div>
+            </div>
+        </div>
+    </div>
 
     <!-- ===== 自訂確認對話框 ===== -->
     <div class="custom-confirm-overlay" id="customConfirm">
@@ -569,6 +830,9 @@
             </div>
         </div>
     </div>
+
+    <!-- ===== 載入版本紀錄 ===== -->
+    <script src="version.js"></script>
 
 <script>
 
@@ -940,14 +1204,8 @@
     }
 
     function renderExcludeTags() {
-        const container = document.getElementById('excludeTags');
-        if (excludeList.length === 0) {
-            container.innerHTML = '<span style="font-size:0.85rem; color:#a0aec0;">無</span>';
-            return;
-        }
-        container.innerHTML = excludeList.map(name => 
-            `<span style="background:#fed7d7; color:#c53030; padding:2px 10px; border-radius:12px; font-size:0.8rem;">${name}</span>`
-        ).join('');
+        // 已移至窩位卡片內，此處不再需要
+        return;
     }
 
     function renderExcludeChecklist() {
@@ -984,12 +1242,6 @@
             `;
         }).join('');
     }
-
-    // ---------- 管理排除清單 ----------
-    document.getElementById('btnManageExclude').addEventListener('click', function() {
-        renderExcludeChecklist();
-        document.getElementById('excludeModal').style.display = 'flex';
-    });
 
     document.getElementById('btnExcludeClose').addEventListener('click', function() {
         document.getElementById('excludeModal').style.display = 'none';
@@ -1034,14 +1286,8 @@
     }
 
     function renderWishlistTags() {
-        const container = document.getElementById('wishlistTags');
-        if (wishlist.length === 0) {
-            container.innerHTML = '<span style="font-size:0.85rem; color:#a0aec0;">無</span>';
-            return;
-        }
-        container.innerHTML = wishlist.map(name => 
-            `<span style="background:#fef3c7; color:#d69e2e; padding:2px 10px; border-radius:12px; font-size:0.8rem; border:1px solid #f6c23e;">⭐ ${name}</span>`
-        ).join('');
+        // 已移至窩位卡片內，此處不再需要
+        return;
     }
 
     function renderWishlistChecklist() {
@@ -1080,12 +1326,6 @@
             `;
         }).join('');
     }
-
-    // ---------- 管理願望清單 ----------
-    document.getElementById('btnManageWishlist').addEventListener('click', function() {
-        renderWishlistChecklist();
-        document.getElementById('wishlistModal').style.display = 'flex';
-    });
 
     document.getElementById('btnWishlistClose').addEventListener('click', function() {
         document.getElementById('wishlistModal').style.display = 'none';
@@ -1553,8 +1793,8 @@
                         <div class="rec-card" style="border-color:#d69e2e; background:#fffbeb; grid-column: 1 / -1;">
                             <div class="title">窩位擺放建議（10個窩位）</div>
                             <div class="detail">
-                                <div style="display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 10px; padding: 4px 0; border-bottom: 1px dashed #e2e8f0; padding-bottom: 8px;">
-                                    <span style="font-weight: 500; color: #4a5568; font-size: 0.85rem;">優先孵化賽季：</span>
+                                <div style="display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 4px; padding: 4px 0; padding-bottom: 2px;">
+                                    <span style="font-weight: 500; color: #4a5568; font-size: 0.85rem; white-space: nowrap;">優先孵化賽季：</span>
                                     <select id="prioritySeason" style="padding: 3px 8px; border: 1.5px solid #d69e2e; border-radius: 6px; font-size: 0.85rem; background: #fffbeb; color: #2d3748; outline: none; cursor: pointer;">
                                         <option value="all" ${savedSeason === 'all' ? 'selected' : ''}>全部（按現行排列）</option>
                                         <option value="S1常駐" ${savedSeason === 'S1常駐' ? 'selected' : ''}>S1常駐</option>
@@ -1567,6 +1807,23 @@
                                     </select>
                                     <button class="btn btn-sm" id="btnApplyPriority" style="padding: 3px 12px; font-size: 0.8rem; background: #d69e2e; color: white; border: none; border-radius: 14px; cursor: pointer; transition: 0.2s;">套用</button>
                                 </div>
+
+                                <!-- ===== 排除清單（窩位內） ===== -->
+                                <div style="display: flex; flex-wrap: wrap; gap: 4px; align-items: center; margin-bottom: 2px; padding: 2px 0;">
+                                    <span style="font-weight: 500; color: #4a5568; font-size: 0.85rem; white-space: nowrap;">排除清單：</span>
+                                    <div id="excludeTagsInline" style="display: flex; flex-wrap: wrap; gap: 3px;"></div>
+                                    <button class="btn btn-sm" id="btnManageExcludeInline" style="padding: 3px 12px; font-size: 0.8rem; background: #fc8181; color: white; border: none; border-radius: 14px; cursor: pointer;">管理</button>
+                                </div>
+
+                                <!-- ===== 願望清單（窩位內） ===== -->
+                                <div style="display: flex; flex-wrap: wrap; gap: 4px; align-items: center; margin-bottom: 6px; padding: 2px 0;">
+                                    <span style="font-weight: 500; color: #4a5568; font-size: 0.85rem; white-space: nowrap;">願望清單：</span>
+                                    <div id="wishlistTagsInline" style="display: flex; flex-wrap: wrap; gap: 3px;"></div>
+                                    <button class="btn btn-sm" id="btnManageWishlistInline" style="padding: 3px 12px; font-size: 0.8rem; background: #d69e2e; color: white; border: none; border-radius: 14px; cursor: pointer;">管理</button>
+                                </div>
+
+                                <div style="border-bottom: 1px dashed #e2e8f0; margin-bottom: 8px;"></div>
+
                                 <div style="font-size:0.85rem; margin-bottom:8px; color:#718096;">
                                     <span style="color:#6c5ce7;">紫色背景</span> = 直接孵化異色精靈 &nbsp;|&nbsp;
                                     <span style="color:#38a169;">綠色背景</span> = 先孵化替代異色以配目標
@@ -1593,6 +1850,48 @@
 
         html += '</div>';
         area.innerHTML = html;
+
+        // ===== 更新窩位內的排除清單和願望清單 =====
+        const excludeTagsInline = document.getElementById('excludeTagsInline');
+        const wishlistTagsInline = document.getElementById('wishlistTagsInline');
+
+        if (excludeTagsInline) {
+            if (excludeList.length === 0) {
+                excludeTagsInline.innerHTML = '<span style="font-size:0.8rem; color:#a0aec0;">無</span>';
+            } else {
+                excludeTagsInline.innerHTML = excludeList.map(name => 
+                    `<span style="background:#fed7d7; color:#c53030; padding:2px 10px; border-radius:12px; font-size:0.8rem;">${name}</span>`
+                ).join('');
+            }
+        }
+
+        if (wishlistTagsInline) {
+            if (wishlist.length === 0) {
+                wishlistTagsInline.innerHTML = '<span style="font-size:0.8rem; color:#a0aec0;">無</span>';
+            } else {
+                wishlistTagsInline.innerHTML = wishlist.map(name => 
+                    `<span style="background:#fef3c7; color:#d69e2e; padding:2px 10px; border-radius:12px; font-size:0.8rem; border:1px solid #f6c23e;">⭐ ${name}</span>`
+                ).join('');
+            }
+        }
+
+        // 綁定窩位內的排除清單管理按鈕
+        const btnManageExcludeInline = document.getElementById('btnManageExcludeInline');
+        if (btnManageExcludeInline) {
+            btnManageExcludeInline.addEventListener('click', function() {
+                renderExcludeChecklist();
+                document.getElementById('excludeModal').style.display = 'flex';
+            });
+        }
+
+        // 綁定窩位內的願望清單管理按鈕
+        const btnManageWishlistInline = document.getElementById('btnManageWishlistInline');
+        if (btnManageWishlistInline) {
+            btnManageWishlistInline.addEventListener('click', function() {
+                renderWishlistChecklist();
+                document.getElementById('wishlistModal').style.display = 'flex';
+            });
+        }
 
         // 更新 datalist 自動補全
         updateDatalist();
@@ -2097,6 +2396,66 @@
         });
     });
 
+    // ---------- 日間/夜間模式切換 ----------
+    const themeToggle = document.getElementById('themeToggle');
+    
+    // 檢查 localStorage 是否有儲存主題偏好
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+        themeToggle.textContent = '☀️';
+    }
+    
+    themeToggle.addEventListener('click', function() {
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+        this.textContent = isDark ? '☀️' : '🌙';
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    });
+
+    // ===== 版本號點擊顯示更新紀錄 =====
+    document.getElementById('versionDisplay').addEventListener('click', function() {
+        const modal = document.getElementById('versionModal');
+        const content = document.getElementById('versionLogContent');
+        
+        // 直接使用全域變數 VERSION_DATA
+        if (typeof VERSION_DATA !== 'undefined' && VERSION_DATA.versions) {
+            let html = '';
+            for (const v of VERSION_DATA.versions) {
+                html += `
+                    <div style="margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid #e2e8f0;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <strong style="color: #6c5ce7; font-size: 1rem;">${v.version}</strong>
+                            <span style="color: #a0aec0; font-size: 0.8rem;">${v.date}</span>
+                        </div>
+                        <ul style="margin: 6px 0 0 0; padding-left: 20px;">
+                            ${v.changes.map(c => `<li>${c}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+            content.innerHTML = html;
+        } else {
+            content.innerHTML = `
+                <div style="text-align: center; color: #e53e3e; padding: 20px 0;">
+                    ⚠️ 無法載入版本紀錄
+                </div>
+            `;
+        }
+        modal.style.display = 'flex';
+    });
+
+    // ---------- 關閉版本紀錄彈窗 ----------
+    document.getElementById('versionModalClose').addEventListener('click', function() {
+        document.getElementById('versionModal').style.display = 'none';
+    });
+
+    document.getElementById('versionModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            this.style.display = 'none';
+        }
+    });
+
     // ================================================================
     // 4. 初始化
     // ================================================================
@@ -2113,8 +2472,6 @@
     renderTable();
     renderRecommendations();
     updateDatalist();
-    renderExcludeTags();
-    renderWishlistTags();
 
     // ===== 從 localStorage 恢復優先賽季 =====
     const savedPrioritySeason = localStorage.getItem('prioritySeason') || 'all';
