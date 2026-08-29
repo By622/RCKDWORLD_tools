@@ -230,6 +230,22 @@
             border-bottom: 2px solid #e2e8f0;
         }
 
+        /* ===== 表格操作欄位 ===== */
+        .table-scroll td:last-child {
+            white-space: nowrap;
+            min-width: 140px;
+            text-align: left;
+        }
+        .table-scroll .btn-table {
+            display: inline-block !important;
+            width: auto !important;
+            padding: 6px 14px;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            margin: 0 2px;
+        }
+
+
         /* ===== 推薦卡片 ===== */
         .rec-grid {
             display: grid;
@@ -634,22 +650,44 @@
             .form-group select#seasonFilter {
                 width: 100%;
             }
+            .form-group select#typeFilter {
+                width: 100%;
+            }
             .btn { width: 100%; }
             .rec-grid { grid-template-columns: 1fr; }
     
-            /* 表格標題不換行 */
+            /* 系別篩選手動機端調整 */
+            .form-group select#typeFilter {
+                width: 100%;
+                font-size: 0.85rem;
+            }
+
+            /* 表格 */
             .table-scroll th {
                 white-space: nowrap;
-                font-size: 0.8rem;
-                padding: 8px 6px;
-            }
-            .table-scroll td {
-                font-size: 0.8rem;
+                font-size: 0.75rem;
                 padding: 6px 4px;
             }
-            .table-scroll .btn-sm {
-                padding: 4px 10px;
+            .table-scroll td {
                 font-size: 0.75rem;
+                padding: 6px 4px;
+            }
+
+            /* 操作欄位 */
+            .table-scroll td:last-child {
+                white-space: nowrap;
+                width: 1%;
+                min-width: 110px;
+                text-align: left;
+            }
+            .table-scroll .btn-table {
+                display: inline-block !important;
+                width: auto !important;
+                padding: 4px 10px !important;
+                font-size: 0.7rem !important;
+                white-space: nowrap;
+                margin: 0 2px;
+                flex: none !important;
             }
 
             /* 優先孵化賽季手機端保持同一行 */
@@ -760,6 +798,31 @@
                 <option value="其他">其他</option>
             </select>
         </div>
+        <!-- ===== 系別篩選 ===== -->
+        <div class="form-group" style="flex: 0 0 auto; min-width: 100px;">
+            <label>系別篩選</label>
+            <select id="typeFilter" style="height: 46px;">
+                <option value="all">全部</option>
+                <option value="普通" style="color:#3f89b4;">⬤ 普通</option>
+                <option value="草" style="color:#4ebc73;">⬤ 草</option>
+                <option value="火" style="color:#db5525;">⬤ 火</option>
+                <option value="水" style="color:#6aa9fe;">⬤ 水</option>
+                <option value="光" style="color:#4fc0ff;">⬤ 光</option>
+                <option value="地" style="color:#9a7e3f;">⬤ 地</option>
+                <option value="冰" style="color:#5faddd;">⬤ 冰</option>
+                <option value="龍" style="color:#fc7cac;">⬤ 龍</option>
+                <option value="電" style="color:#e7c506;">⬤ 電</option>
+                <option value="毒" style="color:#ba62e0;">⬤ 毒</option>
+                <option value="蟲" style="color:#9ece21;">⬤ 蟲</option>
+                <option value="武" style="color:#ff9636;">⬤ 武</option>
+                <option value="翼" style="color:#3ec7ca;">⬤ 翼</option>
+                <option value="萌" style="color:#fc7cac;">⬤ 萌</option>
+                <option value="幽" style="color:#9446ec;">⬤ 幽</option>
+                <option value="惡" style="color:#cf467a;">⬤ 惡</option>
+                <option value="機械" style="color:#40cba9;">⬤ 機械</option>
+                <option value="幻" style="color:#9fa7f8;">⬤ 幻</option>
+            </select>
+        </div>
         <div class="form-group" style="flex: 1;">
             <label>性別</label>
             <div style="display: flex; gap: 8px; height: 46px;">
@@ -783,6 +846,28 @@
 
     <!-- ===== 已記錄清單 ===== -->
     <h2>我的異色圖鑑（<span id="countDisplay">0</span>）</h2>
+
+    <!-- ===== 數據修改提醒 ===== -->
+    <div id="dataUpdateAlert" style="display: none; background: #fef3c7; border-left: 4px solid #d69e2e; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px;">
+        <div style="display: flex; align-items: flex-start; gap: 10px;">
+            <span style="font-size: 1.5rem; line-height: 1.4;">⚠️</span>
+            <div style="flex: 1;">
+                <strong class="alert-title" style="color: #92400e; font-size: 1rem;">部分精靈數據已更新！</strong>
+                <div class="alert-affected" style="color: #78350f; font-size: 0.9rem; margin-top: 4px; padding-left: 12px;">
+                    <!-- 由 JavaScript 動態生成 -->
+                </div>
+                <div class="affected-detail" style="color: #78350f; font-size: 0.8rem; margin-top: 4px; background: #fef3c7; padding: 4px 8px; border-radius: 4px;">
+                    <!-- 由 JavaScript 動態生成 -->
+                </div>
+                <div style="margin-top: 8px;">
+                    <button id="dismissAlertPermanent" style="background: #d69e2e; color: white; border: none; border-radius: 6px; padding: 4px 14px; font-size: 0.8rem; cursor: pointer; font-weight: 600;">我看過了，不要再提醒</button>
+                    <span style="font-size: 0.7rem; color: #92400e; margin-left: 8px;">（點擊後將不再顯示此提醒）</span>
+                </div>
+            </div>
+            <button id="dismissAlert" style="background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #92400e; padding: 0 4px; line-height: 1;">&times;</button>
+        </div>
+    </div>
+
     <div class="table-scroll">
         <table id="recordTable">
             <thead>
@@ -862,7 +947,7 @@
         <button class="btn btn-sm btn-danger" id="btnClear">🗑️ 清空所有</button>
     </div>
     <div style="text-align: center; margin-top: 16px; font-size: 0.75rem; color: #a0aec0; cursor: pointer;">
-        <span id="versionDisplay" style="cursor: pointer; text-decoration: underline; text-underline-offset: 2px;">v0.25.1</span>
+        <span id="versionDisplay" style="cursor: pointer; text-decoration: underline; text-underline-offset: 2px;">v0.25.2</span>
     </div>
 </div>
 
@@ -1008,9 +1093,12 @@
         // ===== S3 賽季 =====
         "伊貝兒": { eggGroups: ["軟體", "植物"], season: "S3常駐", types: ["草"] },
         "伊貝粉粉": { eggGroups: ["軟體", "植物"], season: "S3常駐", types: ["草"], evolvesFrom: "伊貝兒" },
-        "海盔蟲": { eggGroups: ["海洋", "巨靈"], types: ["水", "毒"], season: "S3常駐" },
-        "刺盔蟲": { eggGroups: ["海洋", "巨靈"], season: "S3常駐", types: ["水", "毒"], evolvesFrom: "海盔蟲" },
-        "千棘盔": { eggGroups: ["海洋", "巨靈"], season: "S3常駐", types: ["水", "毒"], evolvesFrom: "刺盔蟲" },
+        "海盔蟲（本來）": { eggGroups: ["海洋", "巨靈"], types: ["水", "毒"], season: "S3常駐" },
+        "刺盔蟲（本來）": { eggGroups: ["海洋", "巨靈"], season: "S3常駐", types: ["水", "毒"], evolvesFrom: "海盔蟲（本來）" },
+        "千棘盔（本來）": { eggGroups: ["海洋", "巨靈"], season: "S3常駐", types: ["水", "毒"], evolvesFrom: "刺盔蟲（本來）" },
+        "海盔蟲（磨損）": { eggGroups: ["海洋", "巨靈"], types: ["水", "毒"], season: "S3常駐" },
+        "刺盔蟲（磨損）": { eggGroups: ["海洋", "巨靈"], season: "S3常駐", types: ["水", "毒"], evolvesFrom: "海盔蟲（磨損）" },
+        "千棘盔（磨損）": { eggGroups: ["海洋", "巨靈"], season: "S3常駐", types: ["水", "毒"], evolvesFrom: "刺盔蟲（磨損）" },
         "小草蟲": { eggGroups: ["擬人", "昆蟲"], season: "S3常駐", types: ["蟲", "草"] },
         "草衣蟲": { eggGroups: ["海洋", "昆蟲"], season: "S3常駐", types: ["蟲", "草"], evolvesFrom: "小草蟲" },
         "花衣蝶": { eggGroups: ["海洋", "昆蟲"], season: "S3常駐", types: ["蟲", "草"], evolvesFrom: "草衣蟲" },
@@ -1026,9 +1114,12 @@
         "暈暈雞": { eggGroups: ["擬人", "天空"], season: "S3常駐", types: ["火"], evolvesFrom: "可立雞" },
         "紳士雞": { eggGroups: ["擬人", "天空"], season: "S3常駐", types: ["火", "武"], evolvesFrom: "暈暈雞" },
         "武者雞": { eggGroups: ["擬人", "天空"], season: "S3常駐", types: ["火", "武"], evolvesFrom: "暈暈雞" },
-        "地鼠": { eggGroups: ["動物"], season: "S3常駐", types: ["地"] },
-        "遁鼠": { eggGroups: ["動物"], season: "S3常駐", types: ["地"], evolvesFrom: "地鼠" },
-        "遁地鼠": { eggGroups: ["動物"], season: "S3常駐", types: ["地"], evolvesFrom: "遁鼠" },
+        "地鼠（儲水期）": { eggGroups: ["動物"], season: "S3常駐", types: ["地"] },
+        "遁鼠（儲水期）": { eggGroups: ["動物"], season: "S3常駐", types: ["地"], evolvesFrom: "地鼠（儲水期）" },
+        "遁地鼠（儲水期）": { eggGroups: ["動物"], season: "S3常駐", types: ["地"], evolvesFrom: "遁鼠（儲水期）" },
+        "地鼠（枯水期）": { eggGroups: ["動物"], season: "S3常駐", types: ["地"] },
+        "遁鼠（枯水期）": { eggGroups: ["動物"], season: "S3常駐", types: ["地"], evolvesFrom: "地鼠（枯水期）" },
+        "遁地鼠（枯水期）": { eggGroups: ["動物"], season: "S3常駐", types: ["地"], evolvesFrom: "遁鼠（枯水期）" },
 
         "蝴蝶陶陶": { eggGroups: ["擬人", "動物"], season: "S3賽季", types: ["萌"] },
         "鉚釘毛毛": { eggGroups: ["擬人", "動物"], season: "S3賽季", types: ["萌", "毒"], evolvesFrom: "蝴蝶陶陶" },
@@ -1433,34 +1524,179 @@
             const eggDisplay = Array.isArray(r.eggGroups) ? r.eggGroups.join('、') : r.eggGroup;
             const seasonDisplay = r.season || '未知';
             
-            // 性別圖示（小尺寸，文字有空格）
+            const isOldDishu = ['地鼠', '遁鼠', '遁地鼠'].includes(r.name);
+            const isOldHaikui = ['海盔蟲', '刺盔蟲', '千棘盔'].includes(r.name);
+            const needsUpdate = isOldDishu || isOldHaikui;
+            
             const genderIcon = r.gender === '公' 
                 ? `<img src="images/male.svg" alt="公" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;">` 
                 : `<img src="images/female.svg" alt="母" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;">`;
             
+            // 修改按鈕使用 data-fix-index，刪除按鈕使用 data-del-index
+            let actionButtons = '';
+            if (needsUpdate) {
+                actionButtons += `<button class="btn btn-sm btn-fix btn-table" data-fix-index="${index}" style="background:#d69e2e; color:white; border:none; border-radius:40px; cursor:pointer;">修改</button> `;
+            }
+            actionButtons += `<button class="btn btn-danger btn-sm btn-table" data-del-index="${index}">刪除</button>`;
+            
             html += `
                 <tr>
-                    <td><strong>${r.name}</strong></td>
+                    <td><strong>${r.name}</strong>${needsUpdate ? ' <span style="color:#e53e3e; font-size:0.7rem;">(需更新)</span>' : ''}</td>
                     <td>${genderIcon}${r.gender}</td>
                     <td>${typesHtml}</td>
                     <td>${eggDisplay}</td>
                     <td>${seasonDisplay}</td>
-                    <td><button class="btn btn-danger btn-sm" data-index="${index}">刪除</button></td>
+                    <td style="white-space: nowrap;">${actionButtons}</td>
                 </tr>
             `;
         });
         tbody.innerHTML = html;
 
-        // 綁定刪除事件
-        tbody.querySelectorAll('[data-index]').forEach(btn => {
+        // ===== 綁定刪除事件（使用 data-del-index） =====
+        tbody.querySelectorAll('[data-del-index]').forEach(function(btn) {
             btn.addEventListener('click', function() {
-                const idx = parseInt(this.dataset.index);
-                records.splice(idx, 1);
+                const idx = parseInt(this.dataset.delIndex);
+                const recordName = records[idx].name;
+                showConfirm(`確定要刪除「${recordName}」的記錄嗎？\n此操作無法復原！`, function(confirmed) {
+                    if (confirmed) {
+                        records.splice(idx, 1);
+                        saveRecords(records);
+                        renderTable();
+                        renderRecommendations();
+                    }
+                });
+            });
+        });
+
+        // ===== 綁定修改事件（使用 data-fix-index） =====
+        tbody.querySelectorAll('.btn-fix').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                const idx = parseInt(this.dataset.fixIndex);
+                const record = records[idx];
+                showFixDialog(idx, record);
+            });
+        });
+    }
+
+    // ---------- 顯示修改舊版精靈對話框 ----------
+    function showFixDialog(index, record) {
+        const name = record.name;
+        let options = [];
+        let title = '';
+        let message = '';
+        
+        if (['地鼠', '遁鼠', '遁地鼠'].includes(name)) {
+            title = `修改「${name}」為正確樣子`;
+            message = `「${name}」已拆分為「儲水期」和「枯水期」兩種樣子，請選擇正確的樣子：`;
+            // 根據原名稱推測建議選項
+            const baseName = name === '地鼠' ? '地鼠' : name === '遁鼠' ? '遁鼠' : '遁地鼠';
+            options = [
+                { value: `${baseName}（儲水期）`, label: `${baseName}（儲水期）` },
+                { value: `${baseName}（枯水期）`, label: `${baseName}（枯水期）` }
+            ];
+        } else if (['海盔蟲', '刺盔蟲', '千棘盔'].includes(name)) {
+            title = `修改「${name}」為正確樣子`;
+            message = `「${name}」已拆分為「本來」和「磨損」兩種樣子，請選擇正確的樣子：`;
+            // 根據原名稱推測建議選項
+            const baseName = name;
+            options = [
+                { value: `${baseName}（本來）`, label: `${baseName}（本來）` },
+                { value: `${baseName}（磨損）`, label: `${baseName}（磨損）` }
+            ];
+        } else {
+            return;
+        }
+        
+        // 建立自訂對話框
+        const overlay = document.createElement('div');
+        overlay.style.cssText = `
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5); z-index: 10001;
+            display: flex; justify-content: center; align-items: center;
+        `;
+        
+        const box = document.createElement('div');
+        box.style.cssText = `
+            background: white; border-radius: 20px; padding: 24px;
+            max-width: 400px; width: 90%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        `;
+        if (document.body.classList.contains('dark-mode')) {
+            box.style.background = '#2d3748';
+        }
+        
+        box.innerHTML = `
+            <h3 style="margin-top: 0; color: ${document.body.classList.contains('dark-mode') ? '#e2e8f0' : '#2d3748'};">${title}</h3>
+            <p style="font-size: 0.9rem; color: ${document.body.classList.contains('dark-mode') ? '#a0aec0' : '#4a5568'}; white-space: pre-line;">${message}</p>
+            <div style="margin: 16px 0;">
+                ${options.map(opt => `
+                    <label style="display: block; padding: 8px 12px; margin: 4px 0; background: ${document.body.classList.contains('dark-mode') ? '#4a5568' : '#f7fafc'}; border-radius: 8px; cursor: pointer;">
+                        <input type="radio" name="fixOption" value="${opt.value}" style="margin-right: 10px;">
+                        ${opt.label}
+                    </label>
+                `).join('')}
+            </div>
+            <div style="display: flex; gap: 8px; justify-content: flex-end; padding-top: 12px; border-top: 1px solid ${document.body.classList.contains('dark-mode') ? '#4a5568' : '#e2e8f0'};">
+                <button class="btn btn-sm" id="fixCancel" style="background: ${document.body.classList.contains('dark-mode') ? '#4a5568' : '#e2e8f0'}; color: ${document.body.classList.contains('dark-mode') ? '#e2e8f0' : '#2d3748'};">取消</button>
+                <button class="btn btn-primary btn-sm" id="fixConfirm" style="background: #6c5ce7; color: white; border: none; border-radius: 40px; padding: 6px 18px; font-size: 0.9rem; cursor: pointer;">確認修改</button>
+            </div>
+        `;
+        
+        overlay.appendChild(box);
+        document.body.appendChild(overlay);
+        
+        // 事件綁定 - 取消
+        overlay.querySelector('#fixCancel').addEventListener('click', function() {
+            overlay.remove();
+        });
+        
+        // 事件綁定 - 確認修改（使用 index 直接修改 records）
+        overlay.querySelector('#fixConfirm').addEventListener('click', function() {
+            const selected = overlay.querySelector('input[name="fixOption"]:checked');
+            if (!selected) {
+                alert('請選擇一個樣子！');
+                return;
+            }
+            const newName = selected.value;
+            
+            // 更新記錄 - 直接用索引修改 records 陣列
+            const rocoData = ROCO_DB[newName];
+            if (rocoData) {
+                // 直接修改 records 陣列中的該筆資料
+                records[index].name = newName;
+                records[index].eggGroups = rocoData.eggGroups;
+                records[index].season = rocoData.season;
+                records[index].types = rocoData.types || [];
+                records[index].eggGroup = rocoData.eggGroups[0];
+                // 移除舊的 searchedName（如果有）
+                delete records[index].searchedName;
+                
                 saveRecords(records);
                 renderTable();
                 renderRecommendations();
-            });
+                overlay.remove();
+                
+                // 重新檢查數據修改提醒
+                setTimeout(checkDataUpdateAlert, 300);
+            } else {
+                alert('所選樣子不存在於資料庫中，請重新選擇。');
+            }
         });
+        
+        // 點擊背景關閉
+        overlay.addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.remove();
+            }
+        });
+        
+        // 夜間模式樣式
+        if (document.body.classList.contains('dark-mode')) {
+            overlay.querySelectorAll('label').forEach(el => {
+                el.style.background = '#4a5568';
+                el.style.color = '#e2e8f0';
+            });
+        }
     }
 
     // ---------- 推薦引擎（重構版） ----------
@@ -1468,8 +1704,9 @@
         const area = document.getElementById('recommendationArea');
         const targetArea = document.getElementById('targetSelectionArea');
         
-        // 從 localStorage 讀取優先賽季（唯一數據源）
-        const savedSeason = localStorage.getItem('prioritySeason') || 'all';
+        // 優先使用當前 DOM 中的值，避免點擊「重新整理推薦」時重置
+        const existingSelect = document.getElementById('prioritySeason');
+        const savedSeason = existingSelect ? existingSelect.value : (localStorage.getItem('prioritySeason') || 'all');
         
         if (records.length === 0) {
             area.innerHTML = `
@@ -1542,6 +1779,29 @@
             }
         }
 
+        // ===== 檢查磨損樣子孵化限制 =====
+        let wearBreedWarning = '';
+        
+        // 檢查玩家是否擁有海盔蟲（磨損）系列
+        const hasWearBase = recordedNames.has('海盔蟲（磨損）');
+        const hasWearEvo = recordedNames.has('刺盔蟲（磨損）') || recordedNames.has('千棘盔（磨損）');
+        // 檢查玩家是否擁有海盔蟲（本來）系列
+        const hasOriginalBase = recordedNames.has('海盔蟲（本來）');
+        const hasOriginalEvo = recordedNames.has('刺盔蟲（本來）') || recordedNames.has('千棘盔（本來）');
+        
+        // 檢查是否擁有磨損系列
+        const hasWearAny = hasWearBase || hasWearEvo;
+        
+        // ===== 只有當玩家「沒有」磨損系列時，才顯示提醒 =====
+        // 因為磨損樣子只能靠捕捉取得，無法靠孵蛋生出
+        if (!hasWearAny) {
+            wearBreedWarning = `
+                <div style="background: #fff5f5; border-left: 4px solid #e53e3e; border-radius: 4px; padding: 8px 12px; margin-top: 6px; font-size: 0.85rem; color: #c53030;">
+                    ⚠️ <strong>提醒：</strong>「磨損」樣子的海盔蟲家族無法靠孵蛋取得，只能透過捕捉獲得！
+                </div>
+            `;
+        }
+
         html += `
             <div class="rec-card" style="border-color:#6c5ce7; background:#faf9ff; grid-column: 1 / -1;">
                 <div class="title">📊 目前圖鑑</div>
@@ -1552,6 +1812,7 @@
                     <div>可作父本（公）：${maleShinies.length} 隻</div>
                     <div>可作母本（母）：${femaleShinies.length} 隻</div>
                     ${missingDisplay.length > 0 ? `<div>尚未擁有：${missingDisplay.join('、')}</div>` : ''}
+                    ${wearBreedWarning}
                 </div>
             </div>
         `;
@@ -1564,8 +1825,13 @@
 
         // ----- 推薦2：窩位擺放建議（10個slot，兩兩一組） -----
         if (!isComplete && maleShinies.length > 0) {
-            // 過濾排除清單（使用者不想孵化的精靈）
-            const filteredMissing = missingSpecies.filter(name => !excludeList.includes(name));
+            // 過濾排除清單 + 過濾無法孵化的海盔蟲磨損樣子
+            const filteredMissing = missingSpecies.filter(name => {
+                if (excludeList.includes(name)) return false;
+                // 磨損樣子無法靠孵蛋取得，排除
+                if (name === '海盔蟲（磨損）' || name === '刺盔蟲（磨損）' || name === '千棘盔（磨損）') return false;
+                return true;
+            });
             
             // 先分組：願望清單優先，同時直接孵化優先於兩步孵化
             const wishlistDirect = [];     // 願望清單 + 可直接孵化
@@ -1764,6 +2030,15 @@
                         const isFirst = i % 2 === 0;
                         
                         if (rec) {
+                            // 取得系別圖示
+                            const dadData = ROCO_DB[rec.dad];
+                            const dadTypes = dadData ? dadData.types : [];
+                            const dadTypeIcons = renderTypeIcons(dadTypes);
+                            
+                            const targetData = ROCO_DB[rec.target];
+                            const targetTypes = targetData ? targetData.types : [];
+                            const targetTypeIcons = renderTypeIcons(targetTypes);
+                            
                             if (isFirst) {
                                 if (rec.isDirect) {
                                     slotHtml += `
@@ -1773,6 +2048,7 @@
                                                 <span class="dad">
                                                     <img src="images/male.svg" alt="♂" style="width:14px;height:14px;vertical-align:middle;margin-right:2px;" onerror="this.style.display='none';this.nextSibling.style.display='inline';"> 
                                                     <span style="display:none;">♂</span> <span style="color:#59aaff;">${rec.dad}</span>
+                                                    <br><span style="font-size:0.6rem;">${dadTypeIcons}</span>
                                                 </span>
                                                 <span style="font-size:0.65rem; color:#a0aec0;">
                                                     ${rec.dadSeason} · ${rec.group}
@@ -1782,6 +2058,11 @@
                                         </div>
                                     `;
                                 } else {
+                                    // 獲取替代目標的系別
+                                    const altData = ROCO_DB[rec.altTarget];
+                                    const altTypes = altData ? altData.types : [];
+                                    const altTypeIcons = renderTypeIcons(altTypes);
+                                    
                                     slotHtml += `
                                         <div class="slot-pair has-recommendation" style="border-color:#38a169; background:#f0fff4;">
                                             <div class="slot-label">〈 窩位 ${pairIndex + 1}</div>
@@ -1789,6 +2070,7 @@
                                                 <span class="dad">
                                                     <img src="images/male.svg" alt="♂" style="width:14px;height:14px;vertical-align:middle;margin-right:2px;" onerror="this.style.display='none';this.nextSibling.style.display='inline';"> 
                                                     <span style="display:none;">♂</span> <span style="color:#59aaff;">${rec.dad}</span>
+                                                    <br><span style="font-size:0.6rem;">${dadTypeIcons}</span>
                                                 </span>
                                                 <span style="font-size:0.65rem; color:#a0aec0;">
                                                     ${rec.dadSeason} · ${rec.group}
@@ -1808,6 +2090,7 @@
                                                 <span class="mom">
                                                     <img src="images/female.svg" alt="♀" style="width:14px;height:14px;vertical-align:middle;margin-right:2px;" onerror="this.style.display='none';this.nextSibling.style.display='inline';"> 
                                                     <span style="display:none;">♀</span> <span style="color:#b13c3b;">${rec.target}</span>
+                                                    <br><span style="font-size:0.6rem;">${targetTypeIcons}</span>
                                                 </span>
                                                 <span style="font-size:0.65rem; color:#a0aec0;">
                                                     ${rec.season} · ${rec.group}
@@ -1817,6 +2100,10 @@
                                         </div>
                                     `;
                                 } else {
+                                    const altData = ROCO_DB[rec.altTarget];
+                                    const altTypes = altData ? altData.types : [];
+                                    const altTypeIcons = renderTypeIcons(altTypes);
+                                    
                                     slotHtml += `
                                         <div class="slot-pair has-recommendation" style="border-color:#38a169; background:#f0fff4;">
                                             <div class="slot-label">窩位 ${pairIndex + 1} 〉</div>
@@ -1824,6 +2111,7 @@
                                                 <span class="mom">
                                                     <img src="images/female.svg" alt="♀" style="width:14px;height:14px;vertical-align:middle;margin-right:2px;" onerror="this.style.display='none';this.nextSibling.style.display='inline';"> 
                                                     <span style="display:none;">♀</span> <span style="color:#b13c3b;">${rec.altTarget}</span>
+                                                    <br><span style="font-size:0.6rem;">${altTypeIcons}</span>
                                                 </span>
                                                 <span style="font-size:0.65rem; color:#a0aec0;">
                                                     ${rec.season} · ${rec.targetGroup}
@@ -1909,6 +2197,11 @@
 
         html += '</div>';
         area.innerHTML = html;
+
+        // 保存當前選中的優先賽季到 localStorage
+        if (savedSeason) {
+            localStorage.setItem('prioritySeason', savedSeason);
+        }
 
         // ===== 更新窩位內的排除清單和願望清單 =====
         const excludeTagsInline = document.getElementById('excludeTagsInline');
@@ -2087,17 +2380,27 @@
         resultDiv.innerHTML = resultHtml;
     });
 
-    // ---------- 更新輸入框自動補全（支援賽季篩選 + 進化型） ----------
+    // ---------- 更新輸入框自動補全（支援賽季篩選 + 進化型 + 系別篩選） ----------
     function updateDatalist() {
         const datalist = document.getElementById('nameSuggest');
         const seasonFilter = document.getElementById('seasonFilter').value;
+        const typeFilter = document.getElementById('typeFilter').value;
         
         let names = Object.keys(ROCO_DB);
         
+        // 如果有選擇賽季，進行過濾
         if (seasonFilter !== 'all') {
             names = names.filter(name => {
                 const data = ROCO_DB[name];
                 return data.season === seasonFilter;
+            });
+        }
+        
+        // 如果有選擇系別，進行過濾
+        if (typeFilter !== 'all') {
+            names = names.filter(name => {
+                const data = ROCO_DB[name];
+                return data.types && data.types.includes(typeFilter);
             });
         }
         
@@ -2114,8 +2417,11 @@
             for (const [evoName, evoData] of Object.entries(ROCO_DB)) {
                 if (evoData.evolvesFrom === name && !added.has(evoName)) {
                     if (seasonFilter === 'all' || evoData.season === seasonFilter) {
-                        options.push({ value: evoName, label: evoName });
-                        added.add(evoName);
+                        // 檢查進化型是否符合系別篩選
+                        if (typeFilter === 'all' || (evoData.types && evoData.types.includes(typeFilter))) {
+                            options.push({ value: evoName, label: evoName });
+                            added.add(evoName);
+                        }
                     }
                 }
             }
@@ -2250,6 +2556,22 @@
             return;
         }
 
+        // ===== 檢查是否錄入舊版地鼠 =====
+        if (inputName === '地鼠' || inputName === '遁鼠' || inputName === '遁地鼠') {
+            alert(`「${inputName}」已拆分為「儲水期」和「枯水期」兩個樣子。\n\n請在輸入框中輸入完整名稱：\n- ${inputName}（儲水期）\n- ${inputName}（枯水期）`);
+            nameInput.focus();
+            nameInput.select();
+            return;
+        }
+
+        // ===== 檢查是否錄入舊版海盔蟲家族 =====
+        if (inputName === '海盔蟲' || inputName === '刺盔蟲' || inputName === '千棘盔') {
+            alert(`「${inputName}」已拆分為「本來」和「磨損」兩個樣子。\n\n請在輸入框中輸入完整名稱：\n- ${inputName}（本來）\n- ${inputName}（磨損）`);
+            nameInput.focus();
+            nameInput.select();
+            return;
+        }
+
         // 查找精靈
         let result = findRocoByName(inputName);
         let actualName = inputName;
@@ -2301,6 +2623,11 @@
 
     // ---------- 賽季篩選變更時更新自動補全 ----------
     document.getElementById('seasonFilter').addEventListener('change', function() {
+        updateDatalist();
+    });
+
+    // ---------- 系別篩選變更時更新自動補全 ----------
+    document.getElementById('typeFilter').addEventListener('change', function() {
         updateDatalist();
     });
 
@@ -2424,6 +2751,11 @@
                     }
                 }, 300);
                 
+                // ===== 匯入後重新檢查數據修改提醒 =====
+                setTimeout(function() {
+                    checkDataUpdateAlert();
+                }, 500);
+                
                 alert(`匯入成功！已匯入 ${records.length} 筆記錄`);
                 
             } catch (error) {
@@ -2519,6 +2851,106 @@
     // 4. 初始化
     // ================================================================
 
+    // ===== 數據修改提醒（地鼠家族 + 海盔蟲家族拆分） =====
+    function checkDataUpdateAlert() {
+        const alertEl = document.getElementById('dataUpdateAlert');
+        const dismissBtn = document.getElementById('dismissAlert');
+        const dismissPermanentBtn = document.getElementById('dismissAlertPermanent');
+        
+        // 檢查是否已經永久關閉
+        const hasSeenAlert = localStorage.getItem('dataUpdateAlert_seen_v3');
+        
+        if (!hasSeenAlert) {
+            // 檢查記錄中是否有舊版地鼠家族或海盔蟲家族
+            const hasOldDishu = records.some(r => 
+                r.name === '地鼠' || r.name === '遁鼠' || r.name === '遁地鼠'
+            );
+            const hasOldHaikui = records.some(r => 
+                r.name === '海盔蟲' || r.name === '刺盔蟲' || r.name === '千棘盔'
+            );
+            
+            // 如果沒有舊數據，自動標記為已看
+            if (!hasOldDishu && !hasOldHaikui) {
+                localStorage.setItem('dataUpdateAlert_seen_v3', 'true');
+                if (alertEl) alertEl.style.display = 'none';
+                return;
+            }
+            
+            // 有舊數據，顯示提醒
+            if (alertEl) {
+                alertEl.style.display = 'block';
+                
+                // 根據實際存在的舊版精靈，動態生成提醒內容
+                let affectedList = [];
+                let detailText = '';
+                
+                if (hasOldDishu) {
+                    const dishuList = records
+                        .filter(r => r.name === '地鼠' || r.name === '遁鼠' || r.name === '遁地鼠')
+                        .map(r => `${r.name}（${r.gender}）`)
+                        .join('、');
+                    affectedList.push(`地鼠、遁鼠、遁地鼠 → 分為「儲水期」和「枯水期」`);
+                    detailText += `已錄入的舊版地鼠家族：${dishuList}\n`;
+                }
+                
+                if (hasOldHaikui) {
+                    const haikuiList = records
+                        .filter(r => r.name === '海盔蟲' || r.name === '刺盔蟲' || r.name === '千棘盔')
+                        .map(r => `${r.name}（${r.gender}）`)
+                        .join('、');
+                    affectedList.push(`海盔蟲、刺盔蟲、千棘盔 → 分為「本來」和「磨損」`);
+                    detailText += `已錄入的舊版海盔蟲家族：${haikuiList}\n`;
+                }
+                
+                // 更新提醒內容
+                const titleEl = alertEl.querySelector('.alert-title');
+                const affectedEl = alertEl.querySelector('.alert-affected');
+                const detailEl = alertEl.querySelector('.affected-detail');
+                
+                if (titleEl) {
+                    titleEl.textContent = `部分精靈數據已更新！請及時修改，避免推薦錯誤！`;
+                }
+                
+                if (affectedEl) {
+                    affectedEl.innerHTML = affectedList.map(item => `• ${item}`).join('<br>');
+                }
+                
+                if (detailEl) {
+                    detailEl.innerHTML = detailText.trim().replace(/\n/g, '<br>');
+                }
+            }
+        } else {
+            if (alertEl) alertEl.style.display = 'none';
+        }
+        
+        // 暫時關閉（點擊 ✕）
+        if (dismissBtn) {
+            dismissBtn.replaceWith(dismissBtn.cloneNode(true));
+            const newDismissBtn = document.getElementById('dismissAlert');
+            if (newDismissBtn) {
+                newDismissBtn.addEventListener('click', function() {
+                    const alertEl2 = document.getElementById('dataUpdateAlert');
+                    if (alertEl2) alertEl2.style.display = 'none';
+                });
+            }
+        }
+        
+        // 永久關閉（點擊「我看過了，不要再提醒」）
+        if (dismissPermanentBtn) {
+            dismissPermanentBtn.replaceWith(dismissPermanentBtn.cloneNode(true));
+            const newDismissPermanentBtn = document.getElementById('dismissAlertPermanent');
+            if (newDismissPermanentBtn) {
+                newDismissPermanentBtn.addEventListener('click', function() {
+                    const alertEl2 = document.getElementById('dataUpdateAlert');
+                    if (alertEl2) {
+                        alertEl2.style.display = 'none';
+                        localStorage.setItem('dataUpdateAlert_seen_v3', 'true');
+                    }
+                });
+            }
+        }
+    }
+
     // 如果資料庫中已有精靈但蛋組缺失，嘗試補上
     records = records.map(r => {
         if (ROCO_DB[r.name] && (!r.eggGroup || r.eggGroup === '未分類')) {
@@ -2534,13 +2966,17 @@
 
     // ===== 從 localStorage 恢復優先賽季 =====
     const savedPrioritySeason = localStorage.getItem('prioritySeason') || 'all';
-    // 等待 renderRecommendations 完成後設定
     setTimeout(function() {
         const prioritySeasonEl = document.getElementById('prioritySeason');
         if (prioritySeasonEl) {
             prioritySeasonEl.value = savedPrioritySeason;
         }
     }, 100);
+
+    // ===== 數據修改提醒檢查 =====
+    setTimeout(function() {
+        checkDataUpdateAlert();
+    }, 200);
 
     console.log('✨ 異色精靈記錄器已啟動！資料保存在瀏覽器本地。');
     console.log('📦 目前記錄數:', records.length);
