@@ -2,6 +2,14 @@
 const VERSION_DATA = {
   versions: [
     {
+      version: "v0.26.2",
+      date: "2026-09-07",
+      changes: [
+        "✨ 新增自行選擇目標精靈搜尋框",
+        "🐛 解決一些已知問題"
+      ]
+    },
+    {
       version: "v0.26.1",
       date: "2026-09-07",
       changes: [
