@@ -565,6 +565,59 @@
         font-size: 0.7rem !important;
         width: auto !important;
       }
+      /* 手機版：一鍵排除 S4 按鈕與重新整理推薦一樣大 */
+      #btnExcludeS4 {
+        padding: 6px 18px !important;
+        font-size: 0.9rem !important;
+        height: 40px !important;
+        line-height: 1.4 !important;
+        width: auto !important;
+        margin-top: 12px !important;
+        margin-left: 4px !important;
+        flex: 0 1 auto !important;
+        border-radius: 40px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+      #btnRefresh {
+        padding: 6px 18px !important;
+        font-size: 0.9rem !important;
+        height: 40px !important;
+        line-height: 1.4 !important;
+        width: auto !important;
+        margin-top: 12px !important;
+        flex: 0 1 auto !important;
+        border-radius: 40px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+      /* 手機版：匯出匯入按鈕同一行，高度一致 */
+      #btnExport,
+      #btnImport {
+        flex: 1 !important;
+        min-width: 80px !important;
+        padding: 6px 12px !important;
+        font-size: 0.85rem !important;
+        height: 40px !important;
+        line-height: 1.4 !important;
+        width: auto !important;
+        border-radius: 40px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+      #btnClear {
+        height: 40px !important;
+        line-height: 1.4 !important;
+        padding: 6px 12px !important;
+        font-size: 0.85rem !important;
+        border-radius: 40px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
       /* 備註文字在手機上可換行 */
       .rec-card .detail > div:last-child {
         white-space: normal !important;
@@ -792,7 +845,7 @@
       <button class="btn btn-sm btn-danger" id="btnClear">🗑️ 清空所有</button>
     </div>
     <div style="text-align: center; margin-top: 16px; font-size: 0.75rem; color: #a0aec0; cursor: pointer;">
-      <span id="versionDisplay" style="cursor: pointer; text-decoration: underline; text-underline-offset: 2px;">v0.26.0</span>
+      <span id="versionDisplay" style="cursor: pointer; text-decoration: underline; text-underline-offset: 2px;">v0.26.1</span>
     </div>
   </div>
 
@@ -1923,16 +1976,18 @@
                     slotHtml += '<div class="slot-pair has-recommendation" style="border-color:#6c5ce7; background:#faf9ff; min-height:80px; cursor:pointer;" onclick="openSelfTargetSelect(' + pairIndex + ')">' +
                       '<div class="slot-label">〈 窩位自選精靈 ' + (pairIndex + 1) + '</div>' +
                       '<div class="slot-content" style="justify-content:center; gap:2px;">' +
-                      '<span style="display:flex; flex-direction:column; align-items:center; gap:2px; color:' + dadColor + '; font-weight:700; font-size:0.85rem;">' +
-                      '<span style="display:flex; flex-direction:row; align-items:center; justify-content:center; gap:4px; flex-wrap:wrap; text-align:center;">' +
+                      '<span style="display:flex; flex-direction:column; align-items:center; gap:2px;">' +
+                      '<span style="display:flex; flex-direction:row; align-items:center; justify-content:center; gap:4px; flex-wrap:wrap; color:' + dadColor + '; font-weight:700; font-size:0.85rem;">' +
                       '<img src="images/male.svg" alt="♂" style="width:14px;height:14px;vertical-align:middle;">' +
                       dadDisplayName +
                       (dadTypes ? '<span style="font-size:0.6rem;">' + dadTypes + '</span>' : '') +
-  '</span>' +
+                      '</span>' +
                       (dadSubText ? '<span style="font-size:0.6rem; color:' + dadSubColor + ';">' + dadSubText + '</span>' : '') +
                       '</span>' +
-                      '<div style="font-size:0.6rem; color:#a0aec0; text-align:center;">' + dadSeason + ' · ' + dadEggGroups + '</div>' +
-                      '<div style="font-size:0.6rem; color:#d69e2e; text-align:center; font-weight:600;">直接孵化 ' + selectedSelfTarget + '（異色）</div>' +
+                      '<span style="font-size:0.65rem; color:#a0aec0; text-align:center;">' +
+                      dadSeason + ' · ' + dadEggGroups +
+                      '<br>直接孵化 <strong style="color:#d69e2e;">' + selectedSelfTarget + '（異色）</strong>' +
+                      '</span>' +
                       '</div>' +
                       '</div>';
                   } else {
@@ -1945,16 +2000,18 @@
                     slotHtml += '<div class="slot-pair has-recommendation" style="border-color:#6c5ce7; background:#faf9ff; min-height:80px; cursor:pointer;" onclick="openSelfTargetSelect(' + pairIndex + ')">' +
                       '<div class="slot-label">窩位自選精靈 ' + (pairIndex + 1) + ' 〉</div>' +
                       '<div class="slot-content" style="justify-content:center; gap:2px;">' +
-                      '<span style="display:flex; flex-direction:column; align-items:center; gap:2px; color:' + momColor + '; font-weight:700; font-size:0.85rem;">' +
-                      '<span style="display:flex; flex-direction:row; align-items:center; justify-content:center; gap:4px; flex-wrap:wrap; text-align:center;">' +
+                      '<span style="display:flex; flex-direction:column; align-items:center; gap:2px;">' +
+                      '<span style="display:flex; flex-direction:row; align-items:center; justify-content:center; gap:4px; flex-wrap:wrap; color:' + momColor + '; font-weight:700; font-size:0.85rem;">' +
                       '<img src="images/female.svg" alt="♀" style="width:14px;height:14px;vertical-align:middle;">' +
                       momDisplayName +
                       (momTypes ? '<span style="font-size:0.6rem;">' + momTypes + '</span>' : '') +
                       '</span>' +
                       (momSubText ? '<span style="font-size:0.6rem; color:' + momSubColor + ';">' + momSubText + '</span>' : '') +
                       '</span>' +
-                      '<div style="font-size:0.6rem; color:#a0aec0; text-align:center;">' + selfTargetSeason + ' · ' + selfTargetEggDisplay + '</div>' +
-                      '<div style="font-size:0.6rem; color:#d69e2e; text-align:center; font-weight:600;">直接孵化 ' + selectedSelfTarget + '（異色）</div>' +
+                      '<span style="font-size:0.65rem; color:#a0aec0; text-align:center;">' +
+                      selfTargetSeason + ' · ' + selfTargetEggDisplay +
+                      '<br>直接孵化 <strong style="color:#d69e2e;">' + selectedSelfTarget + '（異色）</strong>' +
+                      '</span>' +
                       '</div>' +
                       '</div>';
                   }
@@ -2083,8 +2140,10 @@
               '<div class="slot-label">〈 窩位自選精靈 ' + (pairIndex2 + 1) + '</div>' +
               '<div class="slot-content" style="justify-content:center; gap:2px;">' +
               dadDisplay +
-              '<div style="font-size:0.6rem; color:#a0aec0; text-align:center; margin-top:2px;">' + targetSeason + ' · ' + targetEggDisplay + '</div>' +
-              '<div style="font-size:0.6rem; color:#d69e2e; text-align:center; font-weight:600;">直接孵化 ' + selectedName2 + '（異色）</div>' +
+              '<span style="font-size:0.65rem; color:#a0aec0; text-align:center;">' +
+              targetSeason + ' · ' + targetEggDisplay +
+              '<br>直接孵化 <strong style="color:#d69e2e;">' + selectedName2 + '（異色）</strong>' +
+              '</span>' +
               '</div>' +
               '</div>';
           } else {
@@ -2164,8 +2223,10 @@
               '<div class="slot-label">窩位自選精靈 ' + (pairIndex2 + 1) + ' 〉</div>' +
               '<div class="slot-content" style="justify-content:center; gap:2px;">' +
               momDisplay +
-              '<div style="font-size:0.6rem; color:#a0aec0; text-align:center; margin-top:2px;">' + targetSeason2 + ' · ' + targetEggDisplay2 + '</div>' +
-              '<div style="font-size:0.6rem; color:#d69e2e; text-align:center; font-weight:600;">直接孵化 ' + selectedName2 + '（異色）</div>' +
+              '<span style="font-size:0.65rem; color:#a0aec0; text-align:center;">' +
+              targetSeason2 + ' · ' + targetEggDisplay2 +
+              '<br>直接孵化 <strong style="color:#d69e2e;">' + selectedName2 + '（異色）</strong>' +
+              '</span>' +
               '</div>' +
               '</div>';
           } else {
