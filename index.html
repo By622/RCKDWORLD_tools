@@ -845,7 +845,7 @@
       <button class="btn btn-sm btn-danger" id="btnClear">🗑️ 清空所有</button>
     </div>
     <div style="text-align: center; margin-top: 16px; font-size: 0.75rem; color: #a0aec0; cursor: pointer;">
-      <span id="versionDisplay" style="cursor: pointer; text-decoration: underline; text-underline-offset: 2px;">v0.26.1</span>
+      <span id="versionDisplay" style="cursor: pointer; text-decoration: underline; text-underline-offset: 2px;">v0.26.2</span>
     </div>
   </div>
 
@@ -2424,23 +2424,33 @@
         var data = ROCO_DB[name];
         var eggDisplay = data.eggGroups.join('、');
         var isSelected = (selectedTargets[pairIndex] === name);
-        return '<div style="padding:10px 14px; margin:4px 0; border-radius:8px; cursor:pointer; background:' +
-          (isSelected ? '#fffbeb' : (document.body.classList.contains('dark-mode') ? '#4a5568' : '#f7fafc')) +
-          '; border:2px solid ' + (isSelected ? '#d69e2e' : 'transparent') +
-          '; transition:0.2s;" onclick="selectTargetForSlot(' + pairIndex + ', \'' + name + '\')" ' +
-          'onmouseover="this.style.borderColor=\'#6c5ce7\'" ' +
-          'onmouseout="this.style.borderColor=\'' + (isSelected ? '#d69e2e' : 'transparent') + '\'">' +
-          '<div style="font-weight:700; color:' + (isSelected ? '#d69e2e' : (document.body.classList.contains('dark-mode') ? '#e2e8f0' : '#2d3748')) + ';">' + name + '</div>' +
+        var isExcluded = excludeList.indexOf(name) !== -1;
+        var clickHandler = isExcluded ? '' : ' onclick="selectTargetForSlotPreview(' + pairIndex + ', \'' + name + '\')" ';
+        var cursorStyle = isExcluded ? 'cursor:not-allowed;' : 'cursor:pointer;';
+        var hoverStyle = isExcluded ? '' : ' onmouseover="this.style.borderColor=\'#6c5ce7\'" onmouseout="this.style.borderColor=\'' + (isSelected ? '#d69e2e' : 'transparent') + '\'" ';
+        return '<div style="padding:10px 14px; margin:4px 0; border-radius:8px; background:' +
+          (isSelected ? '#fffbeb' : '#f7fafc') +
+          '; border:2px solid ' + (isSelected ? '#d69e2e' : (isExcluded ? '#e53e3e' : 'transparent')) +
+          '; ' + (isExcluded ? 'opacity:0.5;' : '') +
+          '; ' + cursorStyle +
+          '; transition:0.2s;" ' +
+          clickHandler +
+          hoverStyle +
+          '>' +
+          '<div style="font-weight:700; color:' + (isExcluded ? '#e53e3e' : (isSelected ? '#d69e2e' : '#2d3748')) + ';">' + name + (isExcluded ? '（已排除）' : '') + '</div>' +
           '<div style="font-size:0.75rem; color:#a0aec0;">' + eggDisplay + ' · ' + data.season + '</div>' +
           '</div>';
       }).join('');
 
-      box.innerHTML = '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">' +
-        '<h3 style="margin:0; color:' + (document.body.classList.contains('dark-mode') ? '#e2e8f0' : '#2d3748') + '; font-size:1.1rem;">選擇目標精靈（窩位 ' + (pairIndex + 1) + '）</h3>' +
+      box.innerHTML = '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">' +
+        '<h3 style="margin:0; color:#2d3748; font-size:1.1rem;">選擇目標精靈（窩位 ' + (pairIndex + 1) + '）</h3>' +
         '<button id="targetSelectClose" style="background:none; border:none; font-size:1.5rem; cursor:pointer; color:#a0aec0;">&times;</button>' +
         '</div>' +
-        '<div style="max-height:50vh; overflow-y:auto;">' + optionsHtml + '</div>' +
-        '<div style="margin-top:12px; padding-top:12px; border-top:1px solid ' + (document.body.classList.contains('dark-mode') ? '#4a5568' : '#e2e8f0') + '; display:flex; gap:8px; justify-content:flex-end;">' +
+        '<div style="margin-bottom:12px;">' +
+        '<input type="text" id="targetSearchInput" placeholder="搜尋精靈名稱..." style="width:100%; padding:8px 12px; border:2px solid #e2e8f0; border-radius:8px; font-size:0.9rem; box-sizing:border-box;" oninput="filterTargetOptions(' + pairIndex + ')">' +
+        '</div>' +
+        '<div id="targetOptionsContainer" style="max-height:40vh; overflow-y:auto;">' + optionsHtml + '</div>' +
+        '<div style="margin-top:12px; padding-top:12px; border-top:1px solid #e2e8f0; display:flex; gap:8px; justify-content:flex-end;">' +
         '<button class="btn btn-sm" id="targetSelectClear" style="background:#fc8181; color:white; border:none; border-radius:40px; padding:6px 16px; cursor:pointer;">取消選擇</button>' +
         '<button class="btn btn-sm btn-primary" id="targetSelectConfirm" style="background:#6c5ce7; color:white; border:none; border-radius:40px; padding:6px 16px; cursor:pointer;">確認</button>' +
         '</div>';
@@ -2456,6 +2466,7 @@
         renderRecommendations();
       });
       overlay.querySelector('#targetSelectConfirm').addEventListener('click', function() {
+        saveSelectedTargets();
         overlay.remove();
         renderRecommendations();
       });
@@ -2465,6 +2476,11 @@
     }
 
     function selectTargetForSlot(pairIndex, name) {
+      // 檢查是否已被排除
+      if (excludeList.indexOf(name) !== -1) {
+        alert('「' + name + '」已在排除清單中，無法選擇！');
+        return;
+      }
       if (selectedTargets[pairIndex] === name) {
         delete selectedTargets[pairIndex];
       } else {
@@ -2477,6 +2493,124 @@
         if (parent) parent.remove();
       }
       renderRecommendations();
+    }
+
+    function filterTargetOptions(pairIndex) {
+      var searchInput = document.getElementById('targetSearchInput');
+      var container = document.getElementById('targetOptionsContainer');
+      if (!searchInput || !container) return;
+      var keyword = searchInput.value.trim().toLowerCase();
+      var allBaseForms = Object.keys(ROCO_DB).filter(function(name) { return isEvoBase(name); });
+      var availableTargets = allBaseForms.filter(function(name) {
+        if (name === '海盔蟲（磨損）' || name === '刺盔蟲（磨損）' || name === '千棘盔（磨損）') return false;
+        return true;
+      });
+      // 根據關鍵字過濾
+      var filtered = availableTargets;
+      if (keyword !== '') {
+        filtered = availableTargets.filter(function(name) {
+          return name.toLowerCase().indexOf(keyword) !== -1;
+        });
+      }
+      // 生成選項 HTML
+      var optionsHtml = filtered.map(function(n) {
+        var data = ROCO_DB[n];
+        var eggDisplay = data.eggGroups.join('、');
+        var isSelected = (selectedTargets[pairIndex] === n);
+        var isExcluded = excludeList.indexOf(n) !== -1;
+        var clickHandler = isExcluded ? '' : ' onclick="selectTargetForSlotPreview(' + pairIndex + ', \'' + n + '\')" ';
+        var cursorStyle = isExcluded ? 'cursor:not-allowed;' : 'cursor:pointer;';
+        var hoverStyle = isExcluded ? '' : ' onmouseover="this.style.borderColor=\'#6c5ce7\'" onmouseout="this.style.borderColor=\'' + (isSelected ? '#d69e2e' : 'transparent') + '\'" ';
+        return '<div style="padding:10px 14px; margin:4px 0; border-radius:8px; background:' +
+          (isSelected ? '#fffbeb' : '#f7fafc') +
+          '; border:2px solid ' + (isSelected ? '#d69e2e' : (isExcluded ? '#e53e3e' : 'transparent')) +
+          '; ' + (isExcluded ? 'opacity:0.5;' : '') +
+          '; ' + cursorStyle +
+          '; transition:0.2s;" ' +
+          clickHandler +
+          hoverStyle +
+          '>' +
+          '<div style="font-weight:700; color:' + (isExcluded ? '#e53e3e' : (isSelected ? '#d69e2e' : '#2d3748')) + ';">' + n + (isExcluded ? '（已排除）' : '') + '</div>' +
+          '<div style="font-size:0.75rem; color:#a0aec0;">' + eggDisplay + ' · ' + data.season + '</div>' +
+          '</div>';
+      }).join('');
+      container.innerHTML = optionsHtml;
+    }
+
+    function selectTargetForSlotPreview(pairIndex, name) {
+      // 檢查是否已被排除
+      if (excludeList.indexOf(name) !== -1) {
+        alert('「' + name + '」已在排除清單中，無法選擇！');
+        return;
+      }
+      // 切換選中狀態
+      if (selectedTargets[pairIndex] === name) {
+        delete selectedTargets[pairIndex];
+      } else {
+        selectedTargets[pairIndex] = name;
+      }
+      // 呼叫過濾函數刷新列表（保留搜尋關鍵字）
+      filterTargetOptions(pairIndex);
+    }
+
+    function selectSelfTargetPreview(pairIndex, name) {
+      // 檢查是否已被排除
+      if (excludeList.indexOf(name) !== -1) {
+        alert('「' + name + '」已在排除清單中，無法選擇！');
+        return;
+      }
+      var key = 'slot_' + pairIndex;
+      // 切換選中狀態
+      if (selectedTargets[key] === name) {
+        delete selectedTargets[key];
+      } else {
+        selectedTargets[key] = name;
+      }
+      // 呼叫過濾函數刷新列表（保留搜尋關鍵字）
+      filterSelfTargetOptions(pairIndex);
+    }
+
+    function filterSelfTargetOptions(pairIndex) {
+      var searchInput = document.getElementById('selfTargetSearchInput');
+      var container = document.getElementById('selfTargetOptionsContainer');
+      if (!searchInput || !container) return;
+      var keyword = searchInput.value.trim().toLowerCase();
+      var allBaseForms = Object.keys(ROCO_DB).filter(function(name) { return isEvoBase(name); });
+      var availableTargets = allBaseForms.filter(function(name) {
+        if (name === '海盔蟲（磨損）' || name === '刺盔蟲（磨損）' || name === '千棘盔（磨損）') return false;
+        return true;
+      });
+      // 根據關鍵字過濾
+      var filtered = availableTargets;
+      if (keyword !== '') {
+        filtered = availableTargets.filter(function(name) {
+          return name.toLowerCase().indexOf(keyword) !== -1;
+        });
+      }
+      var currentSelected = selectedTargets['slot_' + pairIndex];
+      // 生成選項 HTML
+      var optionsHtml = filtered.map(function(n) {
+        var data = ROCO_DB[n];
+        var eggDisplay = data.eggGroups.join('、');
+        var isSelected = (currentSelected === n);
+        var isExcluded = excludeList.indexOf(n) !== -1;
+        var clickHandler = isExcluded ? '' : ' onclick="selectSelfTargetPreview(' + pairIndex + ', \'' + n + '\')" ';
+        var cursorStyle = isExcluded ? 'cursor:not-allowed;' : 'cursor:pointer;';
+        var hoverStyle = isExcluded ? '' : ' onmouseover="this.style.borderColor=\'#6c5ce7\'" onmouseout="this.style.borderColor=\'' + (isSelected ? '#d69e2e' : 'transparent') + '\'" ';
+        return '<div style="padding:10px 14px; margin:4px 0; border-radius:8px; background:' +
+          (isSelected ? '#fffbeb' : '#f7fafc') +
+          '; border:2px solid ' + (isSelected ? '#d69e2e' : (isExcluded ? '#e53e3e' : 'transparent')) +
+          '; ' + (isExcluded ? 'opacity:0.5;' : '') +
+          '; ' + cursorStyle +
+          '; transition:0.2s;" ' +
+          clickHandler +
+          hoverStyle +
+          '>' +
+          '<div style="font-weight:700; color:' + (isExcluded ? '#e53e3e' : (isSelected ? '#d69e2e' : '#2d3748')) + ';">' + n + (isExcluded ? '（已排除）' : '') + '</div>' +
+          '<div style="font-size:0.75rem; color:#a0aec0;">' + eggDisplay + ' · ' + data.season + '</div>' +
+          '</div>';
+      }).join('');
+      container.innerHTML = optionsHtml;
     }
 
     function openSelfTargetSelect(pairIndex) {
@@ -2500,25 +2634,32 @@
         var eggDisplay = data.eggGroups.join('、');
         var isSelected = (currentSelected === name);
         var isExcluded = excludeList.indexOf(name) !== -1;
-        return '<div style="padding:10px 14px; margin:4px 0; border-radius:8px; cursor:pointer; background:' +
-          (isSelected ? '#fffbeb' : (document.body.classList.contains('dark-mode') ? '#4a5568' : '#f7fafc')) +
-          '; border:2px solid ' + (isSelected ? '#d69e2e' : 'transparent') +
-          '; ' + (isExcluded ? 'opacity:0.4;' : '') +
-          '; transition:0.2s;" onclick="selectSelfTarget(' + pairIndex + ', \'' + name + '\')" ' +
-          'onmouseover="this.style.borderColor=\'#6c5ce7\'" ' +
-          'onmouseout="this.style.borderColor=\'' + (isSelected ? '#d69e2e' : 'transparent') + '\'">' +
-          '<div style="font-weight:700; color:' + (isSelected ? '#d69e2e' : (document.body.classList.contains('dark-mode') ? '#e2e8f0' : '#2d3748')) + ';">' + name + (isExcluded ? ' ⛔' : '') + '</div>' +
+        var clickHandler = isExcluded ? '' : ' onclick="selectSelfTargetPreview(' + pairIndex + ', \'' + name + '\')" ';
+        var cursorStyle = isExcluded ? 'cursor:not-allowed;' : 'cursor:pointer;';
+        var hoverStyle = isExcluded ? '' : ' onmouseover="this.style.borderColor=\'#6c5ce7\'" onmouseout="this.style.borderColor=\'' + (isSelected ? '#d69e2e' : 'transparent') + '\'" ';
+        return '<div style="padding:10px 14px; margin:4px 0; border-radius:8px; background:' +
+          (isSelected ? '#fffbeb' : '#f7fafc') +
+          '; border:2px solid ' + (isSelected ? '#d69e2e' : (isExcluded ? '#e53e3e' : 'transparent')) +
+          '; ' + (isExcluded ? 'opacity:0.5;' : '') +
+          '; ' + cursorStyle +
+          '; transition:0.2s;" ' +
+          clickHandler +
+          hoverStyle +
+          '>' +
+          '<div style="font-weight:700; color:' + (isExcluded ? '#e53e3e' : (isSelected ? '#d69e2e' : '#2d3748')) + ';">' + name + (isExcluded ? '（已排除）' : '') + '</div>' +
           '<div style="font-size:0.75rem; color:#a0aec0;">' + eggDisplay + ' · ' + data.season + '</div>' +
-          (isExcluded ? '<div style="font-size:0.65rem; color:#e53e3e;">已排除</div>' : '') +
           '</div>';
       }).join('');
 
-      box.innerHTML = '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">' +
-        '<h3 style="margin:0; color:' + (document.body.classList.contains('dark-mode') ? '#e2e8f0' : '#2d3748') + '; font-size:1.1rem;">選擇目標精靈（窩位 ' + (pairIndex + 1) + '）</h3>' +
+      box.innerHTML = '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">' +
+        '<h3 style="margin:0; color:#2d3748; font-size:1.1rem;">選擇目標精靈（窩位 ' + (pairIndex + 1) + '）</h3>' +
         '<button id="selfTargetClose" style="background:none; border:none; font-size:1.5rem; cursor:pointer; color:#a0aec0;">&times;</button>' +
         '</div>' +
-        '<div style="max-height:50vh; overflow-y:auto;">' + optionsHtml + '</div>' +
-        '<div style="margin-top:12px; padding-top:12px; border-top:1px solid ' + (document.body.classList.contains('dark-mode') ? '#4a5568' : '#e2e8f0') + '; display:flex; gap:8px; justify-content:flex-end;">' +
+        '<div style="margin-bottom:12px;">' +
+        '<input type="text" id="selfTargetSearchInput" placeholder="搜尋精靈名稱..." style="width:100%; padding:8px 12px; border:2px solid #e2e8f0; border-radius:8px; font-size:0.9rem; box-sizing:border-box;" oninput="filterSelfTargetOptions(' + pairIndex + ')">' +
+        '</div>' +
+        '<div id="selfTargetOptionsContainer" style="max-height:40vh; overflow-y:auto;">' + optionsHtml + '</div>' +
+        '<div style="margin-top:12px; padding-top:12px; border-top:1px solid #e2e8f0; display:flex; gap:8px; justify-content:flex-end;">' +
         '<button class="btn btn-sm" id="selfTargetClear" style="background:#fc8181; color:white; border:none; border-radius:40px; padding:6px 16px; cursor:pointer;">取消選擇</button>' +
         '<button class="btn btn-sm btn-primary" id="selfTargetConfirm" style="background:#6c5ce7; color:white; border:none; border-radius:40px; padding:6px 16px; cursor:pointer;">確認</button>' +
         '</div>';
@@ -2526,6 +2667,9 @@
       overlay.appendChild(box);
       document.body.appendChild(overlay);
 
+      overlay.querySelector('#selfTargetClose').addEventListener('click', function() {
+        overlay.remove();
+      });
       overlay.querySelector('#selfTargetClear').addEventListener('click', function() {
         var key2 = 'slot_' + pairIndex;
         delete selectedTargets[key2];
@@ -2534,6 +2678,7 @@
         renderRecommendations();
       });
       overlay.querySelector('#selfTargetConfirm').addEventListener('click', function() {
+        saveSelectedTargets();
         overlay.remove();
         renderRecommendations();
       });
@@ -2543,6 +2688,11 @@
     }
 
     function selectSelfTarget(pairIndex, name) {
+      // 檢查是否已被排除
+      if (excludeList.indexOf(name) !== -1) {
+        alert('「' + name + '」已在排除清單中，無法選擇！');
+        return;
+      }
       var key = 'slot_' + pairIndex;
       if (selectedTargets[key] === name) {
         delete selectedTargets[key];
