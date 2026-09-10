@@ -2,6 +2,15 @@
 const VERSION_DATA = {
   versions: [
     {
+      version: "v0.26.3",
+      date: "2026-09-10",
+      changes: [
+        "✨ 新增S4賽季異色精靈",
+        "🔧 修改頁面整體風格",
+        "🐛 解決一些已知問題"
+      ]
+    },
+    {
       version: "v0.26.2",
       date: "2026-09-07",
       changes: [
@@ -13,6 +22,7 @@ const VERSION_DATA = {
       version: "v0.26.1",
       date: "2026-09-07",
       changes: [
+        "✨ 臨時新增一鍵排除S4精靈",
         "🐛 解決一些已知問題"
       ]
     },
