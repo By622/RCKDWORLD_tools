@@ -4,39 +4,63 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>洛克王國 · 異色孵蛋</title>
+  <link href="https://fonts.googleapis.com/css2?family=Huninn&display=swap" rel="stylesheet">
   <style>
     /* ===== 全域樣式 ===== */
+    @font-face {
+      font-family: 'MIANFEIZITI';
+      src: url('fonts/MIANFEIZITI.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
     * {
       box-sizing: border-box;
-      font-family: 'Segoe UI', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+      font-family: 'Huninn', 'Segoe UI', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+    }
+
+    h1, h2 {
+      font-family: 'MIANFEIZITI', 'Segoe UI', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
     }
 
     body {
-      background: #f0f4f8;
+      background-image: url('https://game.gtimg.cn/images/rocom/act/a20260706preview/web/part1/20260706/bg.avif');
+      background-size: cover;
+      background-position: center center;
+      background-attachment: fixed;
+      background-color: #ffffff;
       padding: 20px;
       max-width: 1200px;
       margin: 0 auto;
     }
 
     .container {
-      background: white;
+      background: rgba(232, 225, 209, 0.9);
       border-radius: 24px;
       padding: 30px;
       box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
     }
 
     h1 {
-      color: #2d3748;
-      border-left: 6px solid #6c5ce7;
-      padding-left: 16px;
+      color: #2a2a2a;
+      font-family: 'MIANFEIZITI', 'Segoe UI', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+      font-weight: 400;
+      font-size: 2.8rem;
+      text-align: center;
+      border-left: none;
+      padding-left: 0;
       margin-top: 0;
+      margin-bottom: 4px;
+      width: 100%;
     }
 
     h2 {
       color: #4a5568;
+      font-family: 'MIANFEIZITI', 'Segoe UI', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+      font-weight: 400;
       font-size: 1.3rem;
       margin: 30px 0 16px 0;
-      border-bottom: 2px solid #e2e8f0;
+      border-bottom: 4px solid #bab4a7;
       padding-bottom: 8px;
     }
 
@@ -63,10 +87,10 @@
     .form-group input,
     .form-group select {
       padding: 10px 14px;
-      border: 2px solid #e2e8f0;
+      border: 2px solid #bab4a7;
       border-radius: 12px;
       font-size: 1rem;
-      background: white;
+      background: #f3ede0;
       transition: 0.2s;
     }
 
@@ -75,6 +99,7 @@
       border-color: #6c5ce7;
       outline: none;
       box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.15);
+      background: #faf9ff;
     }
 
     .btn {
@@ -88,14 +113,52 @@
       background: #e2e8f0;
       color: #2d3748;
     }
+    .btn:hover {
+      transform: scale(1.02);
+    }
+    .btn-primary:hover {
+      background: #5a4bd1;
+      transform: scale(1.02);
+    }
+    .btn-danger:hover {
+      background: #f56565;
+      transform: scale(1.02);
+    }
+    #btnExport,
+    #btnImport {
+      background: #f3ede0 !important;
+      color: #2d3748 !important;
+    }
+    #btnExport:hover,
+    #btnImport:hover {
+      background: #e8e1d1 !important;
+      transform: scale(1.02) !important;
+    }
+    #btnRefresh {
+      background: #f3ede0 !important;
+      color: #2d3748 !important;
+    }
+    #btnRefresh:hover {
+      background: #e8e1d1 !important;
+      transform: scale(1.02) !important;
+    }
+    #btnClear {
+      background: #fc8181 !important;
+      color: white !important;
+    }
+    #btnClear:hover {
+      background: #f56565 !important;
+      transform: scale(1.02) !important;
+    }
 
     .btn-primary {
-      background: #6c5ce7;
-      color: white;
+      background: #f3ede0;
+      color: #2d3748;
+      border: none;
     }
 
     .btn-primary:hover {
-      background: #5a4bd1;
+      background: #e8e1d1;
       transform: scale(1.02);
     }
 
@@ -214,7 +277,7 @@
     }
 
     th {
-      background: #edf2f7;
+      background: #e8e1d1;
       color: #2d3748;
       padding: 12px 12px;
       text-align: left;
@@ -224,7 +287,7 @@
 
     td {
       padding: 10px 12px;
-      border-bottom: 1px solid #edf2f7;
+      border-bottom: 1px solid #bab4a7;
     }
 
     .empty-row td {
@@ -239,12 +302,37 @@
       max-height: 400px;
       overflow-x: auto;
       border-radius: 12px;
-      border: 1px solid #e2e8f0;
+      border: 1px solid #bab4a7;
+      background: #f3ede0;
+      padding-right: 4px; /* 為滾動條留出空間，避免擋住邊框 */
+    }
+    /* 滾動條樣式 - 適用於 WebKit 瀏覽器（Chrome、Safari、Edge） */
+    .table-scroll::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .table-scroll::-webkit-scrollbar-track {
+      background: transparent;
+      border-radius: 3px;
+    }
+    .table-scroll::-webkit-scrollbar-thumb {
+      background: rgba(186, 180, 167, 0.5);
+      border-radius: 3px;
+      border: 1px solid #f3ede0;
+    }
+    .table-scroll::-webkit-scrollbar-thumb:hover {
+      background: rgba(186, 180, 167, 0.8);
+    }
+    /* 滾動條樣式 - 適用於 Firefox */
+    .table-scroll {
+      scrollbar-width: thin;
+      scrollbar-color: rgba(186, 180, 167, 0.5) transparent;
     }
 
     .table-scroll table {
       border-collapse: collapse;
       width: 100%;
+      background: #f3ede0;
     }
 
     .table-scroll thead {
@@ -254,8 +342,8 @@
     }
 
     .table-scroll thead th {
-      background: #edf2f7;
-      border-bottom: 2px solid #e2e8f0;
+      background: #e8e1d1;
+      border-bottom: 2px solid #bab4a7;
     }
 
     .table-scroll td:last-child {
@@ -434,15 +522,6 @@
         width: 100% !important;
       }
 
-      #btnExcludeS4 {
-        flex: none !important;
-        padding: 2px 8px !important;
-        font-size: 0.7rem !important;
-        width: auto !important;
-        margin-top: 12px !important;
-        margin-left: 0 !important;
-      }
-
       /* 賽季篩選和系別篩選並排 */
       .form-group:has(select#seasonFilter),
       .form-group:has(select#typeFilter) {
@@ -565,21 +644,6 @@
         font-size: 0.7rem !important;
         width: auto !important;
       }
-      /* 手機版：一鍵排除 S4 按鈕與重新整理推薦一樣大 */
-      #btnExcludeS4 {
-        padding: 6px 18px !important;
-        font-size: 0.9rem !important;
-        height: 40px !important;
-        line-height: 1.4 !important;
-        width: auto !important;
-        margin-top: 12px !important;
-        margin-left: 4px !important;
-        flex: 0 1 auto !important;
-        border-radius: 40px !important;
-        display: inline-flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-      }
       #btnRefresh {
         padding: 6px 18px !important;
         font-size: 0.9rem !important;
@@ -679,7 +743,7 @@
 
   <div class="container">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-      <h1 style="margin: 0; border-left: 6px solid #6c5ce7; padding-left: 16px;">異色孵蛋智能配種</h1>
+      <h1>異色孵蛋智能配種</h1>
     </div>
 
     <!-- ===== 輸入區域 ===== -->
@@ -701,6 +765,7 @@
           <option value="S3常駐">S3常駐</option>
           <option value="S3賽季">S3賽季</option>
           <option value="S4常駐">S4常駐</option>
+          <option value="S4賽季">S4賽季</option>
           <option value="其他">其他</option>
         </select>
       </div>
@@ -733,11 +798,11 @@
       <div class="form-group" style="flex: 1;">
         <label>性別</label>
         <div style="display: flex; gap: 8px; height: 46px;">
-          <button type="button" class="btn gender-btn active" data-gender="公" style="flex:1; padding: 10px; border-radius: 12px; background: #6c5ce7; color: white; border: 2px solid #6c5ce7; display: flex; align-items: center; justify-content: center; gap: 6px; height: 100%;">
+          <button type="button" class="btn gender-btn active" data-gender="公" style="flex:1; padding: 10px; border-radius: 12px; background: #bab4a7; color: white; border: 2px solid #bab4a7; display: flex; align-items: center; justify-content: center; gap: 6px; height: 100%;">
             <img src="images/male.svg" alt="公" style="width: 16px; height: 16px; filter: brightness(0) invert(1);">
             公
           </button>
-          <button type="button" class="btn gender-btn" data-gender="母" style="flex:1; padding: 10px; border-radius: 12px; background: white; color: #4a5568; border: 2px solid #e2e8f0; display: flex; align-items: center; justify-content: center; gap: 6px; height: 100%;">
+          <button type="button" class="btn gender-btn" data-gender="母" style="flex:1; padding: 10px; border-radius: 12px; background: #f3ede0; color: #4a5568; border: 2px solid #bab4a7; display: flex; align-items: center; justify-content: center; gap: 6px; height: 100%;">
             <img src="images/female.svg" alt="母" style="width: 16px; height: 16px;">
             母
           </button>
@@ -752,7 +817,7 @@
     </div>
 
     <!-- ===== 已記錄清單 ===== -->
-    <h2>我的異色圖鑑（<span id="countDisplay">0</span>）</h2>
+    <h2>已擁有異色（<span id="countDisplay" style="font-family: 'MIANFEIZITI', 'Segoe UI', 'PingFang TC', 'Microsoft JhengHei', sans-serif;">0</span>）</h2>
 
     <!-- ===== 數據修改提醒 ===== -->
     <div id="dataUpdateAlert" style="display: none; background: #fef3c7; border-left: 4px solid #d69e2e; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px;">
@@ -790,7 +855,7 @@
     </div>
 
     <!-- ===== 智能推薦 ===== -->
-    <h2>智能配種推薦</h2>
+    <h2>系統配種推介</h2>
 
     <!-- ===== 管理排除清單彈窗 ===== -->
     <div id="excludeModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); z-index: 1000; justify-content: center; align-items: center;">
@@ -835,10 +900,9 @@
       <div id="targetBreedResultInline"></div>
     </div>
     <button class="btn btn-primary btn-sm" id="btnRefresh" style="margin-top:12px;">重新整理推薦</button>
-    <button class="btn btn-sm" id="btnExcludeS4" style="margin-top:12px; margin-left:8px; background: #fc8181; color: white;">一鍵排除 S4 常駐</button>
 
     <!-- ===== 資料管理 ===== -->
-    <div style="margin-top: 30px; border-top: 2px dashed #e2e8f0; padding-top: 20px; display: flex; gap: 12px; flex-wrap: wrap;">
+    <div style="margin-top: 30px; border-top: 2px dashed #bab4a7; padding-top: 20px; display: flex; gap: 12px; flex-wrap: wrap;">
       <button class="btn btn-sm" id="btnExport">📤 匯出資料</button>
       <button class="btn btn-sm" id="btnImport">📥 匯入資料</button>
       <input type="file" id="fileInput" accept=".json" style="display:none;">
@@ -999,9 +1063,9 @@
       "小鷸": { eggGroups: ["天空"], season: "S3常駐", types: ["翼"] },
       "鄙目鷸": { eggGroups: ["天空"], season: "S3常駐", types: ["翼"], evolvesFrom: "小鷸" },
       "高腳鷸": { eggGroups: ["天空"], season: "S3常駐", types: ["翼"], evolvesFrom: "鄙目鷸" },
-      "豆丁魚": { eggGroups: ["海洋"], season: "S3常駐", types: ["水", "龍"] },
-      "快鰭魚": { eggGroups: ["海洋"], season: "S3常駐", types: ["水", "龍"], evolvesFrom: "豆丁魚" },
-      "龍魚": { eggGroups: ["海洋"], season: "S3常駐", types: ["水", "龍"], evolvesFrom: "快鰭魚" },
+      "豆丁魚": { eggGroups: ["海洋", "飛龍"], season: "S3常駐", types: ["水", "龍"] },
+      "快鰭魚": { eggGroups: ["海洋", "飛龍"], season: "S3常駐", types: ["水", "龍"], evolvesFrom: "豆丁魚" },
+      "龍魚": { eggGroups: ["海洋", "飛龍"], season: "S3常駐", types: ["水", "龍"], evolvesFrom: "快鰭魚" },
       "可立雞": { eggGroups: ["擬人", "天空"], season: "S3常駐", types: ["火"] },
       "暈暈雞": { eggGroups: ["擬人", "天空"], season: "S3常駐", types: ["火"], evolvesFrom: "可立雞" },
       "紳士雞": { eggGroups: ["擬人", "天空"], season: "S3常駐", types: ["火", "武"], evolvesFrom: "暈暈雞" },
@@ -1056,6 +1120,21 @@
       "芽眼魔": { eggGroups: ["妖精", "巨靈"], season: "S4常駐", types: ["惡", "水"] },
       "葉眼魔": { eggGroups: ["妖精", "巨靈"], season: "S4常駐", types: ["惡", "水"], evolvesFrom: "芽眼魔" },
       "障眼魔": { eggGroups: ["妖精", "巨靈"], season: "S4常駐", types: ["惡", "水"], evolvesFrom: "葉眼魔" },
+
+      "章腦丸": { eggGroups: ["妖精", "軟體"], season: "S4賽季", types: ["光", "水"] },
+      "智輝章腦": { eggGroups: ["妖精", "軟體"], season: "S4賽季", types: ["光", "水"], evolvesFrom: "章腦丸" },
+      "未完蟲": { eggGroups: ["魔力", "昆蟲"], season: "S4賽季", types: ["幽", "蟲"] },
+      "玳龜": { eggGroups: ["兩棲", "巨靈"], season: "S4賽季", types: ["幻"] },
+      "玳塔": { eggGroups: ["兩棲", "巨靈"], season: "S4賽季", types: ["幻"], evolvesFrom: "玳龜" },
+      "量風碗": { eggGroups: ["機械", "昆蟲"], season: "S4賽季", types: ["翼", "機械"] },
+      "測風蟬": { eggGroups: ["機械", "昆蟲"], season: "S4賽季", types: ["翼", "機械"], evolvesFrom: "量風碗" },
+      "小浣蛋": { eggGroups: ["擬人", "動物"], season: "S4賽季", types: ["惡"] },
+      "黑手浣熊": { eggGroups: ["擬人", "動物"], season: "S4賽季", types: ["惡"], evolvesFrom: "小浣蛋" },
+      "幽鈴": { eggGroups: ["妖精", "魔力"], season: "S4賽季", types: ["幽"] },
+      "搖鈴魔偶": { eggGroups: ["妖精", "魔力"], season: "S4賽季", types: ["幽"], evolvesFrom: "幽鈴" },
+      "星星眼": { eggGroups: ["天空", "大地"], season: "S4賽季", types: ["幻"] },
+      "布靈": { eggGroups: ["妖精"], season: "S4賽季", types: ["幻", "光"] },
+      "布靈布靈": { eggGroups: ["妖精"], season: "S4賽季", types: ["幻", "光"], evolvesFrom: "布靈" },
     };
 
     var TYPE_ICON_PATH = 'images/types/';
@@ -1105,9 +1184,10 @@
       "S1": 1,
       "S2": 2,
       "S3": 3,
+      "S4": 4,
     };
 
-    var ALL_EGG_GROUPS = ["妖精", "擬人", "天空", "兩棲", "大地", "軟體", "海洋", "巨靈", "魔力", "機械", "動物", "植物", "昆蟲"];
+    var ALL_EGG_GROUPS = ["妖精", "擬人", "天空", "兩棲", "大地", "軟體", "海洋", "巨靈", "魔力", "機械", "動物", "植物", "昆蟲", "飛龍"];
 
     // ---------- 儲存操作 ----------
     function loadRecords() {
@@ -1560,7 +1640,7 @@
           '</div>';
       }
 
-      html += '<div class="rec-card" style="border-color:#6c5ce7; background:#faf9ff; grid-column: 1 / -1;">' +
+      html += '<div class="rec-card" style="border-color:#bab4a7; background:#f3ede0; grid-column: 1 / -1;">' +
         '<div class="title">📊 目前圖鑑</div>' +
         '<div class="detail">' +
         '<div>異色總數：<strong>' + records.length + '</strong> 隻</div>' +
@@ -1584,7 +1664,6 @@
         for (var reverseIdx = 0; reverseIdx < totalSlots / 2; reverseIdx++) {
           if (selectedTargets[reverseIdx] !== undefined) {
             var selfKey = 'slot_' + reverseIdx;
-            // 只有當未集齊的字串鍵沒有值時，才從數字鍵複製過來（避免覆蓋）
             if (selectedTargets[selfKey] === undefined) {
               selectedTargets[selfKey] = selectedTargets[reverseIdx];
             }
@@ -1773,6 +1852,73 @@
 
           recommendations.sort(function(a, b) { return a._sortOrder - b._sortOrder; });
 
+          // ===== 處理自選目標緊貼系統推薦之後的排列邏輯 =====
+          // 系統推薦佔用索引 0 到 recommendations.length-1
+          var recCount = recommendations.length;
+
+          // 收集所有自選目標（含 slot_ 前綴和數字鍵）
+          var selfTargetsList = [];
+          for (var stKey in selectedTargets) {
+            if (selectedTargets.hasOwnProperty(stKey)) {
+              var stValue = selectedTargets[stKey];
+              if (!stValue) continue;
+              var stSlotIndex = -1;
+              if (stKey.indexOf('slot_') === 0) {
+                stSlotIndex = parseInt(stKey.replace('slot_', ''), 10);
+              } else {
+                stSlotIndex = parseInt(stKey, 10);
+              }
+              if (isNaN(stSlotIndex)) continue;
+              selfTargetsList.push({ slotIndex: stSlotIndex, target: stValue });
+            }
+          }
+          // 按原窩位索引排序，保持自選目標的相對順序
+          selfTargetsList.sort(function(a, b) { return a.slotIndex - b.slotIndex; });
+
+          // 重新分配：自選目標從 recCount 開始連續排列
+          var newSelectedTargets = {};
+          var assignIndex = recCount;
+          for (var si = 0; si < selfTargetsList.length; si++) {
+            if (assignIndex >= totalSlots / 2) {
+              // 所有窩位都被系統推薦和自選佔滿，捨棄剩下的自選目標
+              break;
+            }
+            newSelectedTargets['slot_' + assignIndex] = selfTargetsList[si].target;
+            assignIndex++;
+          }
+
+          // 檢查是否有變化
+          var hasChanged = false;
+          var oldSlotKeys = [];
+          for (var oldKey in selectedTargets) {
+            if (selectedTargets.hasOwnProperty(oldKey)) {
+              if (oldKey.indexOf('slot_') === 0) {
+                oldSlotKeys.push(oldKey);
+                if (newSelectedTargets[oldKey] === undefined) {
+                  hasChanged = true;
+                }
+              } else {
+                hasChanged = true;
+              }
+            }
+          }
+          if (!hasChanged) {
+            for (var newKey in newSelectedTargets) {
+              if (newSelectedTargets.hasOwnProperty(newKey)) {
+                if (selectedTargets[newKey] !== newSelectedTargets[newKey]) {
+                  hasChanged = true;
+                  break;
+                }
+              }
+            }
+          }
+
+          // 更新 selectedTargets（只保留 slot_ 鍵）
+          selectedTargets = newSelectedTargets;
+          if (hasChanged) {
+            saveSelectedTargets();
+          }
+
           if (recommendations.length === 0) {
             slotHtml = '<div style="grid-column: 1 / -1; text-align: center; padding: 20px 0; color: #a0aec0;">' +
               '配種需要 <strong>異色父本</strong> 才能高效出異色子代。<br>建議優先捕捉或孵出一隻異色公精靈。' +
@@ -1905,13 +2051,11 @@
                     var g = selfTargetData.eggGroups[gi];
                     var malesInGroup = allMaleShinies.filter(function(m, idx) {
                       var mGroups = Array.isArray(m.eggGroups) ? m.eggGroups : [m.eggGroup];
-                      // 檢查：同蛋組 + 未被自動推薦使用 + 未被其他自選目標使用
                       return mGroups.indexOf(g) !== -1 && !usedDadIndices[idx] && !selfUsedDadIndices[idx];
                     });
                     if (malesInGroup.length > 0) {
                       foundShinyDad = true;
                       dadName = malesInGroup[0].name;
-                      // 標記該異色公已被自選目標使用
                       selfUsedDadIndices[allMaleShinies.indexOf(malesInGroup[0])] = true;
                       break;
                     }
@@ -1932,7 +2076,6 @@
                     }
                     dadStatus = hasNormalDad ? '普通公' : '無公種';
                     dadColor = hasNormalDad ? '#a0aec0' : '#e53e3e';
-                    // 有普通公時，顯示目標精靈名稱（因為目標精靈本身就是同蛋組的公精靈）
                     dadName = hasNormalDad ? selectedSelfTarget : '';
                   }
 
@@ -1955,12 +2098,21 @@
                     var dadSubText = foundShinyDad ? '異色公' : (dadStatus === '普通公' ? '普通公' : '');
                     var dadSubColor = foundShinyDad ? '#59aaff' : (dadStatus === '普通公' ? '#a0aec0' : '');
                     var dadTypes = (foundShinyDad || dadStatus === '普通公') ? renderTypeIcons(ROCO_DB[dadName] ? ROCO_DB[dadName].types : []) : '';
-                    // 取得父本的蛋組
+                    // 取得父本與目標的共同蛋組
                     var dadEggGroups = '';
+                    var targetGroupsForDad = selfTargetData.eggGroups;
                     if (foundShinyDad && ROCO_DB[dadName]) {
-                      dadEggGroups = ROCO_DB[dadName].eggGroups.join('、');
+                      var dadGroups = ROCO_DB[dadName].eggGroups;
+                      var commonGroups = dadGroups.filter(function(g) {
+                        return targetGroupsForDad.indexOf(g) !== -1;
+                      });
+                      dadEggGroups = commonGroups.length > 0 ? commonGroups.join('、') : dadGroups.join('、');
                     } else if (dadStatus === '普通公' && ROCO_DB[dadName]) {
-                      dadEggGroups = ROCO_DB[dadName].eggGroups.join('、');
+                      var dadGroups2 = ROCO_DB[dadName].eggGroups;
+                      var commonGroups2 = dadGroups2.filter(function(g) {
+                        return targetGroupsForDad.indexOf(g) !== -1;
+                      });
+                      dadEggGroups = commonGroups2.length > 0 ? commonGroups2.join('、') : dadGroups2.join('、');
                     } else {
                       dadEggGroups = selfTargetEggDisplay;
                     }
@@ -1997,6 +2149,27 @@
                     var momSubColor = hasShinyMom ? '#b13c3b' : '#a0aec0';
                     var momTypes = hasShinyMom ? selfTargetTypeIcons : selfTargetTypeIcons;
 
+                    // 計算父母雙方的共同蛋組（母種）
+                    var momCommonEggDisplay = selfTargetEggDisplay;
+                    var targetGroupsForMom = selfTargetData.eggGroups;
+                    if (foundShinyDad && ROCO_DB[dadName]) {
+                      var dadGroupsForMom = ROCO_DB[dadName].eggGroups;
+                      var commonForMom = dadGroupsForMom.filter(function(g) {
+                        return targetGroupsForMom.indexOf(g) !== -1;
+                      });
+                      if (commonForMom.length > 0) {
+                        momCommonEggDisplay = commonForMom.join('、');
+                      }
+                    } else if (dadStatus === '普通公' && ROCO_DB[dadName]) {
+                      var dadGroupsForMom2 = ROCO_DB[dadName].eggGroups;
+                      var commonForMom2 = dadGroupsForMom2.filter(function(g) {
+                        return targetGroupsForMom.indexOf(g) !== -1;
+                      });
+                      if (commonForMom2.length > 0) {
+                        momCommonEggDisplay = commonForMom2.join('、');
+                      }
+                    }
+
                     slotHtml += '<div class="slot-pair has-recommendation" style="border-color:#6c5ce7; background:#faf9ff; min-height:80px; cursor:pointer;" onclick="openSelfTargetSelect(' + pairIndex + ')">' +
                       '<div class="slot-label">窩位自選精靈 ' + (pairIndex + 1) + ' 〉</div>' +
                       '<div class="slot-content" style="justify-content:center; gap:2px;">' +
@@ -2009,7 +2182,7 @@
                       (momSubText ? '<span style="font-size:0.6rem; color:' + momSubColor + ';">' + momSubText + '</span>' : '') +
                       '</span>' +
                       '<span style="font-size:0.65rem; color:#a0aec0; text-align:center;">' +
-                      selfTargetSeason + ' · ' + selfTargetEggDisplay +
+                      selfTargetSeason + ' · ' + momCommonEggDisplay +
                       '<br>直接孵化 <strong style="color:#d69e2e;">' + selectedSelfTarget + '（異色）</strong>' +
                       '</span>' +
                       '</div>' +
@@ -2136,12 +2309,39 @@
               }
             }
 
+            // 計算共同蛋組
+            var commonEggDisplay = targetEggDisplay;
+            if (targetData5) {
+              var targetGroups3 = targetData5.eggGroups;
+              var dadGroupsForCommon = null;
+              // 找出使用的父本
+              for (var zc = 0; zc < targetData5.eggGroups.length; zc++) {
+                var groupC = targetData5.eggGroups[zc];
+                var shinyMalesC = allMaleShinies.filter(function(m) {
+                  var mGroups = Array.isArray(m.eggGroups) ? m.eggGroups : [m.eggGroup];
+                  return mGroups.indexOf(groupC) !== -1;
+                });
+                if (shinyMalesC.length > 0) {
+                  dadGroupsForCommon = Array.isArray(shinyMalesC[0].eggGroups) ? shinyMalesC[0].eggGroups : [shinyMalesC[0].eggGroup];
+                  break;
+                }
+              }
+              if (dadGroupsForCommon) {
+                var commonC = dadGroupsForCommon.filter(function(g) {
+                  return targetGroups3.indexOf(g) !== -1;
+                });
+                if (commonC.length > 0) {
+                  commonEggDisplay = commonC.join('、');
+                }
+              }
+            }
+
             slotHtml2 += '<div class="slot-pair has-recommendation" style="border-color:#6c5ce7; background:#faf9ff; min-height:80px; cursor:pointer;" onclick="openTargetSelect(' + pairIndex2 + ')">' +
               '<div class="slot-label">〈 窩位自選精靈 ' + (pairIndex2 + 1) + '</div>' +
               '<div class="slot-content" style="justify-content:center; gap:2px;">' +
               dadDisplay +
               '<span style="font-size:0.65rem; color:#a0aec0; text-align:center;">' +
-              targetSeason + ' · ' + targetEggDisplay +
+              targetSeason + ' · ' + commonEggDisplay +
               '<br>直接孵化 <strong style="color:#d69e2e;">' + selectedName2 + '（異色）</strong>' +
               '</span>' +
               '</div>' +
@@ -2240,7 +2440,7 @@
         }
         slotHtml2 += '</div>';
 
-        html += '<div class="rec-card" style="border-color:#d69e2e; background:#fffbeb; grid-column: 1 / -1;">' +
+        html += '<div class="rec-card" style="border-color:#bab4a7; background:#f3ede0; grid-column: 1 / -1;">' +
           '<div class="title">您已集齊所有異色！點擊窩位選擇目標精靈</div>' +
           '<div class="detail">' +
           // 優先孵化賽季
@@ -2255,6 +2455,7 @@
           '<option value="S3常駐" ' + (savedSeason === 'S3常駐' ? 'selected' : '') + '>S3常駐</option>' +
           '<option value="S3賽季" ' + (savedSeason === 'S3賽季' ? 'selected' : '') + '>S3賽季</option>' +
           '<option value="S4常駐" ' + (savedSeason === 'S4常駐' ? 'selected' : '') + '>S4常駐</option>' +
+          '<option value="S4賽季" ' + (savedSeason === 'S4賽季' ? 'selected' : '') + '>S4賽季</option>' +
           '<option value="其他" ' + (savedSeason === '其他' ? 'selected' : '') + '>其他</option>' +
           '</select>' +
           '<button class="btn btn-sm" id="btnApplyPriority" style="padding: 3px 12px; font-size: 0.8rem; background: #d69e2e; color: white; border: none; border-radius: 14px; cursor: pointer; transition: 0.2s;">套用</button>' +
@@ -2289,7 +2490,7 @@
 
       // 補上 slotHtml 加入 html 的邏輯
       if (slotHtml && slotHtml !== '<div class="slot-grid">') {
-        html += '<div class="rec-card" style="border-color:#d69e2e; background:#fffbeb; grid-column: 1 / -1;">' +
+        html += '<div class="rec-card" style="border-color:#bab4a7; background:#f3ede0; grid-column: 1 / -1;">' +
           '<div class="title">窩位擺放建議（10個窩位）</div>' +
           '<div class="detail">' +
           // 優先孵化賽季
@@ -2875,9 +3076,9 @@
               b.style.borderColor = '#e2e8f0';
             });
             btn.classList.add('active');
-            btn.style.background = '#6c5ce7';
+            btn.style.background = '#bab4a7';
             btn.style.color = 'white';
-            btn.style.borderColor = '#6c5ce7';
+            btn.style.borderColor = '#bab4a7';
           }
         });
       }
@@ -2894,9 +3095,9 @@
 
         document.querySelectorAll('.gender-btn').forEach(function(b) {
           b.classList.remove('active');
-          b.style.background = 'white';
+          b.style.background = '#f3ede0';
           b.style.color = '#4a5568';
-          b.style.borderColor = '#e2e8f0';
+          b.style.borderColor = '#bab4a7';
           var img = b.querySelector('img');
           if (img) {
             img.style.filter = 'none';
@@ -2904,9 +3105,9 @@
         });
 
         this.classList.add('active');
-        this.style.background = '#6c5ce7';
+        this.style.background = '#bab4a7';
         this.style.color = 'white';
-        this.style.borderColor = '#6c5ce7';
+        this.style.borderColor = '#bab4a7';
 
         var img = this.querySelector('img');
         if (img) {
@@ -2982,49 +3183,6 @@
     });
 
     document.getElementById('btnRefresh').addEventListener('click', renderRecommendations);
-
-    document.getElementById('btnExcludeS4').addEventListener('click', function() {
-      var s4Rocos = [
-        "小靈菇",
-        "小黑猫",
-        "逗逗",
-        "刺輪砣（上弦）",
-        "刺輪砣（下弦）",
-        "叮叮卯",
-        "瑰眼仔",
-        "覓覓蝠",
-        "芽眼魔"
-      ];
-
-      var alreadyExcluded = s4Rocos.filter(function(name) { return excludeList.indexOf(name) !== -1; });
-      var notExcluded = s4Rocos.filter(function(name) { return excludeList.indexOf(name) === -1; });
-
-      if (notExcluded.length === 0) {
-        alert('所有 S4 常駐精靈已在排除清單中！');
-        return;
-      }
-
-      var message = '確定要將以下 ' + notExcluded.length + ' 隻 S4 常駐精靈加入排除清單嗎？\n\n';
-      message += notExcluded.join('、');
-
-      showConfirm(message, function(confirmed) {
-        if (confirmed) {
-          notExcluded.forEach(function(name) {
-            if (excludeList.indexOf(name) === -1) {
-              excludeList.push(name);
-            }
-          });
-          // 從願望清單中移除被排除的精靈
-          wishlist = wishlist.filter(function(name) { return excludeList.indexOf(name) === -1; });
-          saveExcludeList();
-          saveWishlist();
-          renderRecommendations();
-          renderExcludeChecklist();
-          renderWishlistChecklist();
-          alert('已將 ' + notExcluded.length + ' 隻 S4 常駐精靈加入排除清單！');
-        }
-      });
-    });
 
     document.getElementById('seasonFilter').addEventListener('change', function() {
       updateDatalist();
