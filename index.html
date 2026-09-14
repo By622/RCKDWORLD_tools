@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>洛克王國 · 異色孵蛋</title>
   <link href="https://fonts.googleapis.com/css2?family=Huninn&display=swap" rel="stylesheet">
+  <link href="https://fontsapi.zeoseven.com/414/main/result.css" onload="this.rel='stylesheet'" rel="preload" as="style" crossorigin />
+  <noscript><link rel="stylesheet" href="https://fontsapi.zeoseven.com/414/main/result.css" /></noscript>
   <style>
     /* ===== 全域樣式 ===== */
     @font-face {
@@ -16,7 +18,7 @@
 
     * {
       box-sizing: border-box;
-      font-family: 'Huninn', 'Segoe UI', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+      font-family: 'WenYuan Rounded SC VF', 'Huninn', 'Segoe UI', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
     }
 
     h1, h2 {
@@ -62,6 +64,21 @@
       margin: 30px 0 16px 0;
       border-bottom: 4px solid #bab4a7;
       padding-bottom: 8px;
+    }
+
+    #rocodexToggle {
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      -webkit-user-select: none;
+      cursor: pointer;
+      pointer-events: auto;
+      padding: 8px 0;
+      margin: -8px 0;
+    }
+
+    #rocodexContent.rocodex-hidden {
+      display: none !important;
     }
 
     .flex-row {
@@ -194,7 +211,7 @@
     }
 
     .custom-confirm-box {
-      background: white;
+      background: #f3ede0;
       border-radius: 20px;
       padding: 24px;
       max-width: 340px;
@@ -414,6 +431,12 @@
       margin-top: 8px;
     }
 
+    @media (max-width: 900px) {
+      .slot-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+      }
+    }
+
     .slot-pair {
       display: flex;
       flex-direction: column;
@@ -499,7 +522,7 @@
 
     @media (max-width: 480px) {
       .slot-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, 1fr) !important;
       }
     }
 
@@ -523,12 +546,30 @@
       }
 
       /* 賽季篩選和系別篩選並排 */
-      .form-group:has(select#seasonFilter),
-      .form-group:has(select#typeFilter) {
+      .form-group:has(#seasonFilterInput),
+      .form-group:has(#typeFilterInput) {
         flex: 1 1 45% !important;
         width: 45% !important;
         min-width: 0 !important;
       }
+      #seasonFilterInput,
+      #typeFilterInput {
+        width: 100% !important;
+      }
+      #seasonFilterInput,
+      #typeFilterInput {
+        min-width: 0 !important;
+      }
+      #seasonFilterInput,
+      #typeFilterInput {
+        flex: 1 1 45% !important;
+      }
+      .form-group.filter-group {
+        flex: 1 1 45% !important;
+        width: 45% !important;
+        min-width: 0 !important;
+      }
+
       .form-group input,
       .form-group select {
         width: 100%;
@@ -612,16 +653,16 @@
       .table-scroll td:last-child {
         white-space: nowrap;
         width: 1%;
-        min-width: 110px;
+        min-width: 90px;
         text-align: left;
       }
       .table-scroll .btn-table {
         display: inline-block !important;
         width: auto !important;
-        padding: 4px 10px !important;
-        font-size: 0.7rem !important;
+        padding: 3px 8px !important;
+        font-size: 0.65rem !important;
         white-space: nowrap;
-        margin: 0 2px;
+        margin: 0 1px;
         flex: none !important;
       }
       #prioritySeason {
@@ -643,6 +684,15 @@
         padding: 2px 8px !important;
         font-size: 0.7rem !important;
         width: auto !important;
+      }
+      #btnExcludeClear,
+      #btnWishlistClear,
+      #btnExcludeClose,
+      #btnWishlistClose,
+      #btnExcludeSave,
+      #btnWishlistSave {
+        width: auto !important;
+        flex: 0 0 auto !important;
       }
       #btnRefresh {
         padding: 6px 18px !important;
@@ -748,51 +798,24 @@
 
     <!-- ===== 輸入區域 ===== -->
     <div class="flex-row">
-      <div class="form-group" style="flex: 1;">
+      <div class="form-group" style="flex: 1; position: relative;">
         <label>精靈名稱</label>
-        <input type="text" id="inputName" placeholder="例如：雪影娃娃" list="nameSuggest" style="height: 46px;">
-        <datalist id="nameSuggest"></datalist>
+        <input type="text" id="inputName" placeholder="例如：雪影娃娃" style="height: 46px;" autocomplete="off">
+        <div id="nameSuggestDropdown" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: #ffffff; border: 2px solid #bab4a7; border-radius: 12px; max-height: 200px; overflow-y: auto; z-index: 100; box-shadow: 0 4px 12px rgba(0,0,0,0.1);"></div>
       </div>
 
-      <div class="form-group" style="flex: 0 0 auto; min-width: 120px;">
+      <div class="form-group filter-group" style="flex: 0 0 auto; width: 110px; position: relative;">
         <label>賽季篩選</label>
-        <select id="seasonFilter" style="height: 46px;">
-          <option value="all">全部</option>
-          <option value="S1常駐">S1常駐</option>
-          <option value="S1賽季">S1賽季</option>
-          <option value="S2常駐">S2常駐</option>
-          <option value="S2賽季">S2賽季</option>
-          <option value="S3常駐">S3常駐</option>
-          <option value="S3賽季">S3賽季</option>
-          <option value="S4常駐">S4常駐</option>
-          <option value="S4賽季">S4賽季</option>
-          <option value="其他">其他</option>
-        </select>
+        <input type="text" id="seasonFilterInput" readonly value="全部" style="height: 46px; cursor: pointer; width: 100%;" autocomplete="off">
+        <input type="hidden" id="seasonFilter" value="all">
+        <div id="seasonSuggestDropdown" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: #ffffff; border: 2px solid #bab4a7; border-radius: 12px; max-height: 200px; overflow-y: auto; z-index: 100; box-shadow: 0 4px 12px rgba(0,0,0,0.1);"></div>
       </div>
 
-      <div class="form-group" style="flex: 0 0 auto; min-width: 100px;">
+      <div class="form-group filter-group" style="flex: 0 0 auto; width: 110px; position: relative;">
         <label>系別篩選</label>
-        <select id="typeFilter" style="height: 46px;">
-          <option value="all">全部</option>
-          <option value="普通" style="color:#3f89b4;">⬤ 普通</option>
-          <option value="草" style="color:#4ebc73;">⬤ 草</option>
-          <option value="火" style="color:#db5525;">⬤ 火</option>
-          <option value="水" style="color:#6aa9fe;">⬤ 水</option>
-          <option value="光" style="color:#4fc0ff;">⬤ 光</option>
-          <option value="地" style="color:#9a7e3f;">⬤ 地</option>
-          <option value="冰" style="color:#5faddd;">⬤ 冰</option>
-          <option value="龍" style="color:#fc7cac;">⬤ 龍</option>
-          <option value="電" style="color:#e7c506;">⬤ 電</option>
-          <option value="毒" style="color:#ba62e0;">⬤ 毒</option>
-          <option value="蟲" style="color:#9ece21;">⬤ 蟲</option>
-          <option value="武" style="color:#ff9636;">⬤ 武</option>
-          <option value="翼" style="color:#3ec7ca;">⬤ 翼</option>
-          <option value="萌" style="color:#fc7cac;">⬤ 萌</option>
-          <option value="幽" style="color:#9446ec;">⬤ 幽</option>
-          <option value="惡" style="color:#cf467a;">⬤ 惡</option>
-          <option value="機械" style="color:#40cba9;">⬤ 機械</option>
-          <option value="幻" style="color:#9fa7f8;">⬤ 幻</option>
-        </select>
+        <div id="typeFilterInput" tabindex="0" style="height: 46px; cursor: pointer; width: 100%; padding: 10px 14px; border: 2px solid #bab4a7; border-radius: 12px; font-size: 1rem; background: #f3ede0; display: flex; align-items: center; gap: 6px; box-sizing: border-box;">全部</div>
+        <input type="hidden" id="typeFilter" value="all">
+        <div id="typeSuggestDropdown" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: #ffffff; border: 2px solid #bab4a7; border-radius: 12px; max-height: 200px; overflow-y: auto; z-index: 100; box-shadow: 0 4px 12px rgba(0,0,0,0.1);"></div>
       </div>
 
       <div class="form-group" style="flex: 1;">
@@ -822,17 +845,12 @@
     <!-- ===== 數據修改提醒 ===== -->
     <div id="dataUpdateAlert" style="display: none; background: #fef3c7; border-left: 4px solid #d69e2e; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px;">
       <div style="display: flex; align-items: flex-start; gap: 10px;">
-        <span style="font-size: 1.5rem; line-height: 1.4;">⚠️</span>
+        <span style="font-size: 1.5rem; line-height: 1.4;">！</span>
         <div style="flex: 1;">
           <strong class="alert-title" style="color: #92400e; font-size: 1rem;">部分精靈數據已更新！</strong>
           <div class="alert-affected" style="color: #78350f; font-size: 0.9rem; margin-top: 4px; padding-left: 12px;"></div>
           <div class="affected-detail" style="color: #78350f; font-size: 0.8rem; margin-top: 4px; background: #fef3c7; padding: 4px 8px; border-radius: 4px;"></div>
-          <div style="margin-top: 8px;">
-            <button id="dismissAlertPermanent" style="background: #d69e2e; color: white; border: none; border-radius: 6px; padding: 4px 14px; font-size: 0.8rem; cursor: pointer; font-weight: 600;">我看過了，不要再提醒</button>
-            <span style="font-size: 0.7rem; color: #92400e; margin-left: 8px;">（點擊後將不再顯示此提醒）</span>
-          </div>
         </div>
-        <button id="dismissAlert" style="background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #92400e; padding: 0 4px; line-height: 1;">&times;</button>
       </div>
     </div>
 
@@ -840,11 +858,11 @@
       <table id="recordTable">
         <thead>
           <tr>
-            <th>精靈</th>
-            <th>性別</th>
+            <th class="sortable" data-sort="name" style="cursor:pointer;">精靈 <span class="sort-icon"></span></th>
+            <th class="sortable" data-sort="gender" style="cursor:pointer;">性別 <span class="sort-icon"></span></th>
             <th>系別</th>
-            <th>蛋組</th>
-            <th>賽季</th>
+            <th class="sortable" data-sort="egg" style="cursor:pointer;">蛋組 <span class="sort-icon"></span></th>
+            <th class="sortable" data-sort="season" style="cursor:pointer;">賽季 <span class="sort-icon"></span></th>
             <th style="width:80px;">操作</th>
           </tr>
         </thead>
@@ -859,15 +877,15 @@
 
     <!-- ===== 管理排除清單彈窗 ===== -->
     <div id="excludeModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); z-index: 1000; justify-content: center; align-items: center;">
-      <div style="background: white; border-radius: 20px; padding: 24px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3); display: flex; flex-direction: column;">
+      <div style="background: #f3ede0; border-radius: 20px; padding: 24px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3); display: flex; flex-direction: column;">
         <h3 style="margin-top: 0;">管理排除清單</h3>
         <p style="font-size: 0.85rem; color: #718096; flex-shrink: 0;">勾選你暫時不想孵化的精靈</p>
         <div id="excludeChecklist" style="display: flex; flex-direction: column; gap: 4px; margin: 12px 0; flex: 1; overflow-y: auto;"></div>
-        <div style="display: flex; gap: 8px; justify-content: space-between; flex-shrink: 0; padding-top: 12px; border-top: 1px solid #e2e8f0; background: white;">
+        <div style="display: flex; gap: 8px; justify-content: space-between; flex-shrink: 0; padding-top: 12px; border-top: 1px solid #bab4a7; background: #f3ede0;">
           <button class="btn btn-sm" id="btnExcludeClear" style="background: #fc8181; color: white;">清空</button>
           <div style="display: flex; gap: 8px;">
             <button class="btn btn-sm" id="btnExcludeClose" style="background: #e2e8f0;">關閉</button>
-            <button class="btn btn-primary btn-sm" id="btnExcludeSave">儲存</button>
+            <button class="btn btn-primary btn-sm" id="btnExcludeSave" style="background: #6c5ce7; color: white;">儲存</button>
           </div>
         </div>
       </div>
@@ -875,18 +893,18 @@
 
     <!-- ===== 管理願望清單彈窗 ===== -->
     <div id="wishlistModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); z-index: 1000; justify-content: center; align-items: center;">
-      <div style="background: white; border-radius: 20px; padding: 24px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3); display: flex; flex-direction: column;">
+      <div style="background: #f3ede0; border-radius: 20px; padding: 24px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3); display: flex; flex-direction: column;">
         <h3 style="margin-top: 0;">管理願望清單</h3>
         <p style="font-size: 0.85rem; color: #718096; flex-shrink: 0;">
           勾選你優先想孵化的精靈（將優先顯示在推薦中）
           <br><span style="color:#e53e3e; font-weight:600;">排除清單優先於願望清單！！！</span>（已排除的精靈無法加入願望清單）
         </p>
         <div id="wishlistChecklist" style="display: flex; flex-direction: column; gap: 4px; margin: 12px 0; flex: 1; overflow-y: auto;"></div>
-        <div style="display: flex; gap: 8px; justify-content: space-between; flex-shrink: 0; padding-top: 12px; border-top: 1px solid #e2e8f0; background: white;">
+        <div style="display: flex; gap: 8px; justify-content: space-between; flex-shrink: 0; padding-top: 12px; border-top: 1px solid #bab4a7; background: #f3ede0;">
           <button class="btn btn-sm" id="btnWishlistClear" style="background: #fc8181; color: white;">清空</button>
           <div style="display: flex; gap: 8px;">
             <button class="btn btn-sm" id="btnWishlistClose" style="background: #e2e8f0;">關閉</button>
-            <button class="btn btn-primary btn-sm" id="btnWishlistSave">儲存</button>
+            <button class="btn btn-primary btn-sm" id="btnWishlistSave" style="background: #6c5ce7; color: white;">儲存</button>
           </div>
         </div>
       </div>
@@ -903,19 +921,19 @@
 
     <!-- ===== 資料管理 ===== -->
     <div style="margin-top: 30px; border-top: 2px dashed #bab4a7; padding-top: 20px; display: flex; gap: 12px; flex-wrap: wrap;">
-      <button class="btn btn-sm" id="btnExport">📤 匯出資料</button>
-      <button class="btn btn-sm" id="btnImport">📥 匯入資料</button>
+      <button class="btn btn-sm" id="btnExport">匯出資料</button>
+      <button class="btn btn-sm" id="btnImport">匯入資料</button>
       <input type="file" id="fileInput" accept=".json" style="display:none;">
-      <button class="btn btn-sm btn-danger" id="btnClear">🗑️ 清空所有</button>
+      <button class="btn btn-sm btn-danger" id="btnClear">清空所有</button>
     </div>
     <div style="text-align: center; margin-top: 16px; font-size: 0.75rem; color: #a0aec0; cursor: pointer;">
-      <span id="versionDisplay" style="cursor: pointer; text-decoration: underline; text-underline-offset: 2px;">v0.26.2</span>
+      <span id="versionDisplay" style="cursor: pointer; text-decoration: underline; text-underline-offset: 2px;"></span>
     </div>
   </div>
 
   <!-- ===== 版本更新紀錄彈窗 ===== -->
   <div id="versionModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 10000; justify-content: center; align-items: center;">
-    <div style="background: white; border-radius: 20px; padding: 24px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+    <div style="background: #f3ede0; border-radius: 20px; padding: 24px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
         <h3 style="margin: 0; color: #2d3748;">版本更新紀錄</h3>
         <button id="versionModalClose" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #a0aec0;">&times;</button>
@@ -1137,6 +1155,68 @@
       "布靈布靈": { eggGroups: ["妖精"], season: "S4賽季", types: ["幻", "光"], evolvesFrom: "布靈" },
     };
 
+    // ---------- 簡體轉繁體對照表（僅涵蓋精靈名稱中出現的字） ----------
+    var SIMP_TO_TRAD = {
+      '灵': '靈', '丽': '麗', '恶': '惡', '魔': '魔', '猪': '豬', '獠': '獠',
+      '兜': '兜', '娃': '娃', '雪': '雪', '影': '影', '拉': '拉', '酷': '酷',
+      '疗': '療', '愈': '癒', '兔': '兔', '红': '紅', '绒': '絨', '丝': '絲',
+      '机': '機', '械': '械', '方': '方', '多': '多', '彩': '彩', '立': '立',
+      '兰': '蘭', '种': '種', '子': '子', '花': '花', '球': '球',
+      '双': '雙', '灯': '燈', '鱼': '魚', '利': '利', '月': '月', '牙': '牙',
+      '熊': '熊', '嗜': '嗜', '光': '光', '嗡': '嗡', '窃': '竊', '蚊': '蚊',
+      '柴': '柴', '渣': '渣', '虫': '蟲', '燃': '燃', '薪': '薪',
+      '空': '空', '颅': '顱', '夜': '夜', '宿': '宿', '枭': '梟',
+      '粉': '粉', '星': '星', '皮': '皮', '贝': '貝', '瑟': '瑟',
+      '加': '加', '尔': '爾', '古': '古', '斯': '斯',
+      '耳': '耳', '陨': '隕', '火': '火', '尾': '尾', '雅': '雅', '丹': '丹',
+      '鬃': '鬃', '叮': '叮', '幽': '幽', '树': '樹', '嘟': '嘟', '煲': '煲',
+      '锅': '鍋', '菊': '菊', '梨': '梨', '小': '小', '紫': '紫',
+      '朔': '朔', '伊': '伊', '芙': '芙', '独': '獨', '角': '角', '兽': '獸',
+      '白': '白', '金': '金', '灵': '靈', '狐': '狐', '九': '九', '尾': '尾',
+      '尖': '尖', '嘴': '嘴', '仙': '仙', '公': '公', '平': '平', '鸽': '鴿',
+      '猴': '猴', '麦': '麥', '仔': '仔', '音': '音', '碟': '碟', '吼': '吼',
+      '油': '油', '海': '海', '葵': '葵', '蟹': '蟹', '丑': '醜', '豆': '豆',
+      '兔': '兔', '公': '公', '爵': '爵', '烟': '煙', '花': '花', '团': '團',
+      '伯': '伯', '咕': '咕', '帽': '帽', '德': '德', '炫': '炫', '迪': '迪',
+      '霹': '霹', '雳': '靂', '鼓': '鼓', '象': '象', '巨': '巨',
+      '牵': '牽', '线': '線', '木': '木', '偶': '偶', '帅': '帥',
+      '贝': '貝', '儿': '兒', '粉': '粉', '海': '海', '盔': '盔',
+      '刺': '刺', '千': '千', '棘': '棘', '本': '本', '来': '來', '磨': '磨', '损': '損',
+      '草': '草', '衣': '衣', '蝶': '蝶', '斑': '斑', '小': '小', '鹬': '鷸',
+      '鄙': '鄙', '目': '目', '高': '高', '脚': '腳', '豆': '豆', '丁': '丁',
+      '快': '快', '鳍': '鰭', '龙': '龍', '可': '可', '立': '立', '鸡': '雞',
+      '晕': '暈', '绅': '紳', '士': '士', '武': '武', '者': '者',
+      '地': '地', '鼠': '鼠', '遁': '遁', '储': '儲', '水': '水', '期': '期',
+      '枯': '枯', '蝴': '蝴', '蝶': '蝶', '陶': '陶', '铆': '鉚', '钉': '釘',
+      '毛': '毛', '徘': '徘', '徊': '徊', '爪': '爪', '苞': '苞', '米': '米',
+      '炮': '炮', '十': '十', '字': '字', '蝌': '蝌', '蚪': '蚪', '蛙': '蛙',
+      '深': '深', '渊': '淵', '卡': '卡', '波': '波', '拉': '拉',
+      '守': '守', '烛': '燭', '流': '流', '明': '明', '坎': '坎', '德': '德',
+      '蜜': '蜜', '果': '果', '骸': '骸', '半': '半', '朽': '朽',
+      '栗': '栗', '壳': '殼', '丝': '絲', '稻': '稻', '守': '守', '护': '護',
+      '灵': '靈', '菇': '菇', '幻': '幻', '黑': '黑', '猫': '貓', '巫': '巫',
+      '师': '師', '逗': '逗', '气': '氣', '球': '球', '梦': '夢', '想': '想',
+      '三': '三', '刺': '刺', '轮': '輪', '砣': '砣', '上': '上', '弦': '弦',
+      '下': '下', '月': '月', '亮': '亮', '叮': '叮', '卯': '卯', '飞': '飛',
+      '钥': '鑰', '瑰': '瑰', '眼': '眼', '翎': '翎', '魅': '魅', '邪': '邪',
+      '巨': '巨', '魔': '魔', '觅': '覓', '蝠': '蝠', '翻': '翻', '游': '遊',
+      '芽': '芽', '叶': '葉', '障': '障', '章': '章', '脑': '腦', '丸': '丸',
+      '智': '智', '辉': '輝', '未': '未', '完': '完', '玳': '玳', '龟': '龜',
+      '塔': '塔', '量': '量', '风': '風', '碗': '碗', '测': '測', '蝉': '蟬',
+      '浣': '浣', '蛋': '蛋', '手': '手', '幽': '幽', '铃': '鈴', '摇': '搖',
+      '星': '星', '布': '布', '灵': '靈', '灵': '靈'
+    };
+
+    // 將簡體字串轉為繁體
+    function simpToTrad(str) {
+      var result = '';
+      for (var i = 0; i < str.length; i++) {
+        var ch = str.charAt(i);
+        result += SIMP_TO_TRAD[ch] || ch;
+      }
+      return result;
+    }
+
     var TYPE_ICON_PATH = 'images/types/';
     var TYPE_ICONS = {
       "普通": TYPE_ICON_PATH + "普通.png",
@@ -1299,16 +1379,6 @@
       return Object.keys(set);
     }
 
-    function getEggGroupsForRoco(name) {
-      var data = ROCO_DB[name];
-      return data ? data.eggGroups : [];
-    }
-
-    function getSeasonForRoco(name) {
-      var data = ROCO_DB[name];
-      return data ? data.season : null;
-    }
-
     function getMaleShinies(records) {
       return records.filter(function(r) { return r.gender === '公'; });
     }
@@ -1353,7 +1423,7 @@
           '<input type="checkbox" class="exclude-checkbox" value="' + name + '" ' + checked + '>' +
           '<span class="exclude-name" style="font-weight: 500;">' + name + '</span>' +
           '<span style="font-size:0.75rem; color:#a0aec0;">（' + eggDisplay + '·' + data.season + evoDisplay + '）</span>' +
-          (inWishlist ? '<span style="font-size:0.65rem; color:#d69e2e; margin-left:4px;">⭐ 已在願望清單</span>' : '') +
+          (inWishlist ? '<span style="font-size:0.7rem; color:#d69e2e; font-weight:600; margin-left:4px; padding:2px 8px; background:#fef3c7; border-radius:10px; border:1px solid #f6c23e; white-space:nowrap;">已在願望清單</span>' : '') +
           '</label>';
       }).join('');
     }
@@ -1384,7 +1454,7 @@
       }
 
       var html = '<div style="font-size:0.75rem; color:#e53e3e; margin-bottom:8px; padding:4px 8px; background:#fff5f5; border-radius:4px; border-left:3px solid #e53e3e;">' +
-        '⚠️ 排除清單優先於願望清單（已排除的精靈會自動從願望清單移除）</div>';
+        '排除清單優先於願望清單（已排除的精靈會自動從願望清單移除）</div>';
 
       container.innerHTML = html + missing.map(function(name) {
         var checked = wishlist.indexOf(name) !== -1 ? 'checked' : '';
@@ -1402,6 +1472,48 @@
       }).join('');
     }
 
+    // ---------- 表格排序 ----------
+    var sortState = { field: null, asc: true };
+
+    function sortRecords() {
+      if (!sortState.field) return;
+      var field = sortState.field;
+      var asc = sortState.asc;
+      records.sort(function(a, b) {
+        var valA, valB;
+        if (field === 'name') {
+          valA = a.name;
+          valB = b.name;
+          var result = valA.localeCompare(valB, 'zh-Hant');
+          return asc ? result : -result;
+        } else if (field === 'gender') {
+          valA = a.gender;
+          valB = b.gender;
+        } else if (field === 'egg') {
+          valA = Array.isArray(a.eggGroups) ? a.eggGroups.join('、') : (a.eggGroup || '');
+          valB = Array.isArray(b.eggGroups) ? b.eggGroups.join('、') : (b.eggGroup || '');
+        } else if (field === 'season') {
+          valA = a.season || '';
+          valB = b.season || '';
+        }
+        if (valA < valB) return asc ? -1 : 1;
+        if (valA > valB) return asc ? 1 : -1;
+        return 0;
+      });
+    }
+
+    function updateSortIcons() {
+      document.querySelectorAll('.sortable').forEach(function(th) {
+        var icon = th.querySelector('.sort-icon');
+        if (!icon) return;
+        if (th.dataset.sort === sortState.field) {
+          icon.textContent = sortState.asc ? ' ▲' : ' ▼';
+        } else {
+          icon.textContent = '';
+        }
+      });
+    }
+
     // ---------- 表格渲染 ----------
     function renderTable() {
       var tbody = document.getElementById('tableBody');
@@ -1413,6 +1525,8 @@
         return;
       }
 
+      sortRecords();
+
       var html = '';
       records.forEach(function(r, index) {
         var typesHtml = renderTypeIcons(r.types);
@@ -1421,7 +1535,9 @@
 
         var isOldDishu = ['地鼠', '遁鼠', '遁地鼠'].indexOf(r.name) !== -1;
         var isOldHaikui = ['海盔蟲', '刺盔蟲', '千棘盔'].indexOf(r.name) !== -1;
-        var needsUpdate = isOldDishu || isOldHaikui;
+        // 檢查是否為只有母種的精靈但性別為公
+        var isInvalidMale = ROCO_DB[r.name] && ROCO_DB[r.name].genderLock === '母' && r.gender === '公';
+        var needsUpdate = isOldDishu || isOldHaikui || isInvalidMale;
 
         var genderIcon = r.gender === '公' ?
           '<img src="images/male.svg" alt="公" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;">' :
@@ -1429,12 +1545,23 @@
 
         var actionButtons = '';
         if (needsUpdate) {
-          actionButtons += '<button class="btn btn-sm btn-fix btn-table" data-fix-index="' + index + '" style="background:#d69e2e; color:white; border:none; border-radius:40px; cursor:pointer;">修改</button> ';
+          if (isInvalidMale) {
+            actionButtons += '<button class="btn btn-sm btn-fix-gender btn-table" data-fix-gender-index="' + index + '" style="background:#d69e2e; color:white; border:none; border-radius:40px; cursor:pointer;">修改</button> ';
+          } else {
+            actionButtons += '<button class="btn btn-sm btn-fix btn-table" data-fix-index="' + index + '" style="background:#d69e2e; color:white; border:none; border-radius:40px; cursor:pointer;">修改</button> ';
+          }
         }
         actionButtons += '<button class="btn btn-danger btn-sm btn-table" data-del-index="' + index + '">刪除</button>';
 
+        var needUpdateLabel = '';
+        if (isInvalidMale) {
+          needUpdateLabel = ' <span style="color:#e53e3e; font-size:0.7rem;">(需修改)</span>';
+        } else if (needsUpdate) {
+          needUpdateLabel = ' <span style="color:#e53e3e; font-size:0.7rem;">(需更新)</span>';
+        }
+
         html += '<tr>' +
-          '<td><strong>' + r.name + '</strong>' + (needsUpdate ? ' <span style="color:#e53e3e; font-size:0.7rem;">(需更新)</span>' : '') + '</td>' +
+          '<td><strong>' + r.name + '</strong>' + needUpdateLabel + '</td>' +
           '<td>' + genderIcon + r.gender + '</td>' +
           '<td>' + typesHtml + '</td>' +
           '<td>' + eggDisplay + '</td>' +
@@ -1443,6 +1570,7 @@
           '</tr>';
       });
       tbody.innerHTML = html;
+      updateSortIcons();
 
       tbody.querySelectorAll('[data-del-index]').forEach(function(btn) {
         btn.addEventListener('click', function() {
@@ -1464,6 +1592,14 @@
           var idx = parseInt(this.dataset.fixIndex);
           var record = records[idx];
           showFixDialog(idx, record);
+        });
+      });
+
+      tbody.querySelectorAll('.btn-fix-gender').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          var idx = parseInt(this.dataset.fixGenderIndex);
+          var record = records[idx];
+          showFixGenderDialog(idx, record);
         });
       });
     }
@@ -1499,20 +1635,20 @@
       overlay.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 10001; display: flex; justify-content: center; align-items: center;';
 
       var box = document.createElement('div');
-      box.style.cssText = 'background: white; border-radius: 20px; padding: 24px; max-width: 400px; width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,0.3);';
+      box.style.cssText = 'background: #f3ede0; border-radius: 20px; padding: 24px; max-width: 400px; width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,0.3);';
 
-      box.innerHTML = '<h3 style="margin-top: 0; color: ' + (document.body.classList.contains('dark-mode') ? '#e2e8f0' : '#2d3748') + ';">' + title + '</h3>' +
-        '<p style="font-size: 0.9rem; color: ' + (document.body.classList.contains('dark-mode') ? '#a0aec0' : '#4a5568') + '; white-space: pre-line;">' + message + '</p>' +
+      box.innerHTML = '<h3 style="margin-top: 0; color: #2d3748;">' + title + '</h3>' +
+        '<p style="font-size: 0.9rem; color: #4a5568; white-space: pre-line;">' + message + '</p>' +
         '<div style="margin: 16px 0;">' +
         options.map(function(opt) {
-          return '<label style="display: block; padding: 8px 12px; margin: 4px 0; background: ' + (document.body.classList.contains('dark-mode') ? '#4a5568' : '#f7fafc') + '; border-radius: 8px; cursor: pointer;">' +
+          return '<label style="display: block; padding: 8px 12px; margin: 4px 0; background: #ffffff; border-radius: 8px; cursor: pointer; border: 1px solid #bab4a7;">' +
             '<input type="radio" name="fixOption" value="' + opt.value + '" style="margin-right: 10px;">' +
             opt.label +
             '</label>';
         }).join('') +
         '</div>' +
-        '<div style="display: flex; gap: 8px; justify-content: flex-end; padding-top: 12px; border-top: 1px solid ' + (document.body.classList.contains('dark-mode') ? '#4a5568' : '#e2e8f0') + ';">' +
-        '<button class="btn btn-sm" id="fixCancel" style="background: ' + (document.body.classList.contains('dark-mode') ? '#4a5568' : '#e2e8f0') + '; color: ' + (document.body.classList.contains('dark-mode') ? '#e2e8f0' : '#2d3748') + ';">取消</button>' +
+        '<div style="display: flex; gap: 8px; justify-content: flex-end; padding-top: 12px; border-top: 1px solid #bab4a7;">' +
+        '<button class="btn btn-sm" id="fixCancel" style="background: #e8e1d1; color: #2d3748; border: none; border-radius: 40px; padding: 6px 18px; font-size: 0.9rem; cursor: pointer;">取消</button>' +
         '<button class="btn btn-primary btn-sm" id="fixConfirm" style="background: #6c5ce7; color: white; border: none; border-radius: 40px; padding: 6px 18px; font-size: 0.9rem; cursor: pointer;">確認修改</button>' +
         '</div>';
 
@@ -1550,10 +1686,62 @@
         }
       });
 
-      overlay.addEventListener('click', function(e) {
-        if (e.target === this) {
+      var mouseDownOnOverlay = false;
+      overlay.addEventListener('mousedown', function(e) {
+        mouseDownOnOverlay = (e.target === this);
+      });
+      overlay.addEventListener('mouseup', function(e) {
+        if (mouseDownOnOverlay && e.target === this) {
           this.remove();
         }
+        mouseDownOnOverlay = false;
+      });
+    }
+
+    // ---------- 顯示修改性別對話框 ----------
+    function showFixGenderDialog(index, record) {
+      var name = record.name;
+      var title = '確定要將修改「' + name + '」為正確性別「母」嗎？';
+      var message = '「' + name + '」只有母種，不可能有異色公';
+
+      var overlay = document.createElement('div');
+      overlay.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 10001; display: flex; justify-content: center; align-items: center;';
+
+      var box = document.createElement('div');
+      box.style.cssText = 'background: #f3ede0; border-radius: 20px; padding: 24px; max-width: 400px; width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,0.3);';
+
+      box.innerHTML = '<h3 style="margin-top: 0; color: #2d3748;">' + title + '</h3>' +
+        '<p style="font-size: 0.9rem; color: #4a5568; white-space: pre-line;">' + message + '</p>' +
+        '<div style="display: flex; gap: 8px; justify-content: flex-end; padding-top: 12px; border-top: 1px solid #bab4a7;">' +
+        '<button class="btn btn-sm" id="fixGenderCancel" style="background: #e8e1d1; color: #2d3748; border: none; border-radius: 40px; padding: 6px 18px; font-size: 0.9rem; cursor: pointer;">取消</button>' +
+        '<button class="btn btn-primary btn-sm" id="fixGenderConfirm" style="background: #6c5ce7; color: white; border: none; border-radius: 40px; padding: 6px 18px; font-size: 0.9rem; cursor: pointer;">確認修改</button>' +
+        '</div>';
+
+      overlay.appendChild(box);
+      document.body.appendChild(overlay);
+
+      overlay.querySelector('#fixGenderCancel').addEventListener('click', function() {
+        overlay.remove();
+      });
+
+      overlay.querySelector('#fixGenderConfirm').addEventListener('click', function() {
+        records[index].gender = '母';
+        saveRecords(records);
+        renderTable();
+        renderRecommendations();
+        overlay.remove();
+        setTimeout(checkDataUpdateAlert, 300);
+      });
+
+      var mouseDownOnOverlay = false;
+      overlay.addEventListener('mousedown', function(e) {
+        mouseDownOnOverlay = (e.target === this);
+      });
+      overlay.addEventListener('mouseup', function(e) {
+        if (mouseDownOnOverlay && e.target === this) {
+          this.remove();
+        }
+        mouseDownOnOverlay = false;
       });
     }
 
@@ -1636,13 +1824,17 @@
 
       if (!hasWearAny) {
         wearBreedWarning = '<div style="background: #fff5f5; border-left: 4px solid #e53e3e; border-radius: 4px; padding: 8px 12px; margin-top: 6px; font-size: 0.85rem; color: #c53030;">' +
-          '⚠️ <strong>提醒：</strong>「磨損」樣子的海盔蟲家族無法靠孵蛋取得，只能透過捕捉獲得！' +
+          '<strong>提醒：</strong>「磨損」樣子的海盔蟲家族無法靠孵蛋取得，只能透過捕捉獲得！' +
           '</div>';
       }
 
+      var rocodexCollapsed = localStorage.getItem('rocodexCollapsed') === 'true';
       html += '<div class="rec-card" style="border-color:#bab4a7; background:#f3ede0; grid-column: 1 / -1;">' +
-        '<div class="title">📊 目前圖鑑</div>' +
-        '<div class="detail">' +
+        '<div class="title" id="rocodexToggle" style="cursor:pointer; display:flex; justify-content:space-between; align-items:center;">' +
+        '<span>目前圖鑑</span>' +
+        '<span id="rocodexArrow" style="font-size:0.8rem; color:#a0aec0;">' + (rocodexCollapsed ? '▼' : '▲') + '</span>' +
+        '</div>' +
+        '<div class="detail' + (rocodexCollapsed ? ' rocodex-hidden' : '') + '" id="rocodexContent" style="display:' + (rocodexCollapsed ? 'none' : 'block') + ';">' +
         '<div>異色總數：<strong>' + records.length + '</strong> 隻</div>' +
         '<div>已收集種類：<strong>' + ownedSpecies + '/' + totalBaseCount + '</strong>（不包括通行證精靈）</div>' +
         '<div>覆蓋蛋組：' + (recordedGroups.length ? recordedGroups.join('、') : '無') + '</div>' +
@@ -1740,7 +1932,7 @@
             var isFirstEmpty = emptyIdx % 2 === 0;
             var pairNum = Math.floor(emptyIdx / 2) + 1;
             // 使用與未集齊自選空位相同的樣式：可點擊選擇
-            emptySlotHtml += '<div class="slot-pair" style="cursor:pointer; border-color:#e2e8f0; background:#f7fafc; min-height:80px; transition:0.2s;" onclick="openSelfTargetSelect(' + (emptyIdx % 2 === 0 ? Math.floor(emptyIdx / 2) : Math.floor(emptyIdx / 2)) + ')">' +
+            emptySlotHtml += '<div class="slot-pair" style="cursor:pointer; border-color:#e2e8f0; background:#f7fafc; min-height:80px; transition:0.2s;" onclick="openTargetSelect(' + Math.floor(emptyIdx / 2) + ', true)">' +
               '<div class="slot-label">' + (isFirstEmpty ? '〈 窩位 ' + pairNum : '窩位 ' + pairNum + ' 〉') + '</div>' +
               '<div class="slot-content">' +
               '<span style="font-weight:700; font-size:0.9rem; color:#a0aec0;">點擊選擇</span>' +
@@ -1797,13 +1989,18 @@
                 var group3 = targetData3.eggGroups[u];
                 var allInGroup = getRocosByEggGroup(group3);
 
+                // 替代目標只需要是同蛋組中可作為母本的精靈（不需要已有異色母）
+                // 但必須能夠產生異色公，所以排除只有母種的精靈（genderLock === '母'）
                 var availableAltTargets = allInGroup.filter(function(item) {
                   if (item.name === missingName) return false;
                   if (excludeList.indexOf(item.name) !== -1) return false;
-                  var hasFemale = records.some(function(r) { return r.name === item.name && r.gender === '母'; });
-                  if (!hasFemale) return false;
-                  var hasShinyMale = records.some(function(r) { return r.name === item.name && r.gender === '公'; });
-                  return !hasShinyMale;
+                  var itemData = ROCO_DB[item.name];
+                  if (!itemData) return false;
+                  // 排除只有母種的精靈（不可能有異色公）
+                  if (itemData.genderLock === '母') return false;
+                  // 排除本身只有公種的精靈
+                  if (itemData.genderLock === '公') return false;
+                  return true;
                 });
 
                 for (var v = 0; v < availableAltTargets.length; v++) {
@@ -1840,7 +2037,6 @@
                       group: usedGroup2,
                       targetGroup: group3,
                       isDirect: false,
-                      hasFemale: true,
                       _sortOrder: sortedMissing.indexOf(missingName)
                     });
                     break;
@@ -1970,14 +2166,17 @@
                     slotHtml += '<div class="slot-pair has-recommendation" style="border-color:#38a169; background:#f0fff4;">' +
                       '<div class="slot-label">〈 窩位推薦精靈 ' + (pairIndex + 1) + '</div>' +
                       '<div class="slot-content">' +
-                      '<span class="dad" style="display:inline-flex; align-items:center; gap:4px; flex-wrap:wrap;">' +
+                      '<span style="display:flex; flex-direction:column; align-items:center; gap:2px;">' +
+                      '<span style="display:flex; align-items:center; justify-content:center; gap:4px; flex-wrap:wrap; color:#59aaff; font-weight:700; text-align:center;">' +
                       '<img src="images/male.svg" alt="♂" style="width:14px;height:14px;vertical-align:middle;" onerror="this.style.display=\'none\';this.nextSibling.style.display=\'inline\';">' +
-                      '<span style="display:none;">♂</span><span style="color:#59aaff;">' + rec.dad + '</span><span style="font-size:0.6rem;">' + dadTypeIcons2 + '</span>' +
+                      '<span style="display:none;">♂</span><span>' + rec.dad + '</span><span style="font-size:0.6rem;">' + dadTypeIcons2 + '</span>' +
+                      '</span>' +
+                      '<span style="font-size:0.6rem; color:#59aaff;">異色公</span>' +
                       '</span>' +
                       '<span style="font-size:0.65rem; color:#a0aec0;">' +
                       rec.dadSeason + ' · ' + rec.group +
-                      '<br>孵化 <strong style="color:#6c5ce7;">♂ ' + rec.altTarget + '（異色）</strong>' +
-                      '<br>用以孵化 <strong style="color:#d69e2e;">' + rec.target + '（異色）</strong>' +
+                      '<div style="margin-top:2px;">孵化 <strong style="color:#6c5ce7;">♂ ' + rec.altTarget + '（異色公）</strong></div>' +
+                      '<div>用以孵化 <strong style="color:#d69e2e;">' + rec.target + '（異色）</strong></div>' +
                       '</span>' +
                       '</div>' +
                       '</div>';
@@ -2013,14 +2212,17 @@
                     slotHtml += '<div class="slot-pair has-recommendation" style="border-color:#38a169; background:#f0fff4;">' +
                       '<div class="slot-label">窩位推薦精靈 ' + (pairIndex + 1) + ' 〉</div>' +
                       '<div class="slot-content">' +
-                      '<span class="mom" style="display:inline-flex; align-items:center; gap:4px; flex-wrap:wrap;">' +
+                      '<span style="display:flex; flex-direction:column; align-items:center; gap:2px;">' +
+                      '<span style="display:flex; align-items:center; justify-content:center; gap:4px; flex-wrap:wrap; color:#a0aec0; font-weight:700; text-align:center;">' +
                       '<img src="images/female.svg" alt="♀" style="width:14px;height:14px;vertical-align:middle;" onerror="this.style.display=\'none\';this.nextSibling.style.display=\'inline\';">' +
-                      '<span style="display:none;">♀</span><span style="color:#b13c3b;">' + rec.altTarget + '</span><span style="font-size:0.6rem;">' + altTypeIcons3 + '</span>' +
+                      '<span style="display:none;">♀</span><span>' + rec.altTarget + '</span><span style="font-size:0.6rem;">' + altTypeIcons3 + '</span>' +
+                      '</span>' +
+                      '<span style="font-size:0.6rem; color:#a0aec0;">普通母</span>' +
                       '</span>' +
                       '<span style="font-size:0.65rem; color:#a0aec0;">' +
                       rec.season + ' · ' + rec.targetGroup +
-                      '<br>孵化 <strong style="color:#6c5ce7;">♂ ' + rec.altTarget + '（異色）</strong>' +
-                      '<br>用以孵化 <strong style="color:#d69e2e;">' + rec.target + '（異色）</strong>' +
+                      '<div style="margin-top:2px;">孵化 <strong style="color:#6c5ce7;">♂ ' + rec.altTarget + '（異色公）</strong></div>' +
+                      '<div>用以孵化 <strong style="color:#d69e2e;">' + rec.target + '（異色）</strong></div>' +
                       '</span>' +
                       '</div>' +
                       '</div>';
@@ -2069,14 +2271,36 @@
                     for (var gi2 = 0; gi2 < selfTargetData.eggGroups.length; gi2++) {
                       var g2 = selfTargetData.eggGroups[gi2];
                       var allInGroup = getRocosByEggGroup(g2);
-                      if (allInGroup.length > 0) {
+                      // 過濾掉本身只有母種的精靈（genderLock === '母'）
+                      var validDads = allInGroup.filter(function(item) {
+                        var itemData = ROCO_DB[item.name];
+                        return itemData && itemData.genderLock !== '母';
+                      });
+                      if (validDads.length > 0) {
                         hasNormalDad = true;
                         break;
                       }
                     }
                     dadStatus = hasNormalDad ? '普通公' : '無公種';
                     dadColor = hasNormalDad ? '#a0aec0' : '#e53e3e';
-                    dadName = hasNormalDad ? selectedSelfTarget : '';
+                    // 如果目標精靈本身只有母種，不顯示為父本
+                    if (hasNormalDad) {
+                      // 找一個同蛋組且可作為父本的精靈
+                      for (var gi3b = 0; gi3b < selfTargetData.eggGroups.length; gi3b++) {
+                        var g3b = selfTargetData.eggGroups[gi3b];
+                        var allInGroup3b = getRocosByEggGroup(g3b);
+                        var validDads3b = allInGroup3b.filter(function(item) {
+                          var itemData = ROCO_DB[item.name];
+                          return itemData && itemData.genderLock !== '母';
+                        });
+                        if (validDads3b.length > 0) {
+                          dadName = validDads3b[0].name;
+                          break;
+                        }
+                      }
+                    } else {
+                      dadName = '';
+                    }
                   }
 
                   // ----- 母種狀態 -----
@@ -2125,7 +2349,7 @@
                       dadSeason = selfTargetSeason;
                     }
 
-                    slotHtml += '<div class="slot-pair has-recommendation" style="border-color:#6c5ce7; background:#faf9ff; min-height:80px; cursor:pointer;" onclick="openSelfTargetSelect(' + pairIndex + ')">' +
+                    slotHtml += '<div class="slot-pair has-recommendation" style="border-color:#6c5ce7; background:#faf9ff; min-height:80px; cursor:pointer;" onclick="openTargetSelect(' + pairIndex + ', true)">' +
                       '<div class="slot-label">〈 窩位自選精靈 ' + (pairIndex + 1) + '</div>' +
                       '<div class="slot-content" style="justify-content:center; gap:2px;">' +
                       '<span style="display:flex; flex-direction:column; align-items:center; gap:2px;">' +
@@ -2170,7 +2394,7 @@
                       }
                     }
 
-                    slotHtml += '<div class="slot-pair has-recommendation" style="border-color:#6c5ce7; background:#faf9ff; min-height:80px; cursor:pointer;" onclick="openSelfTargetSelect(' + pairIndex + ')">' +
+                    slotHtml += '<div class="slot-pair has-recommendation" style="border-color:#6c5ce7; background:#faf9ff; min-height:80px; cursor:pointer;" onclick="openTargetSelect(' + pairIndex + ', true)">' +
                       '<div class="slot-label">窩位自選精靈 ' + (pairIndex + 1) + ' 〉</div>' +
                       '<div class="slot-content" style="justify-content:center; gap:2px;">' +
                       '<span style="display:flex; flex-direction:column; align-items:center; gap:2px;">' +
@@ -2191,14 +2415,14 @@
                 } else {
                   // 未選擇：與集齊後空位樣式完全一致
                   if (isFirst2) {
-                    slotHtml += '<div class="slot-pair" style="cursor:pointer; border-color:#e2e8f0; background:#f7fafc; min-height:80px; transition:0.2s;" onclick="openSelfTargetSelect(' + pairIndex + ')">' +
+                    slotHtml += '<div class="slot-pair" style="cursor:pointer; border-color:#e2e8f0; background:#f7fafc; min-height:80px; transition:0.2s;" onclick="openTargetSelect(' + pairIndex + ', true)">' +
                       '<div class="slot-label">〈 窩位 ' + (pairIndex + 1) + '</div>' +
                       '<div class="slot-content">' +
                       '<span style="font-weight:700; font-size:0.9rem; color:#a0aec0;">點擊選擇</span>' +
                       '</div>' +
                       '</div>';
                   } else {
-                    slotHtml += '<div class="slot-pair" style="cursor:pointer; border-color:#e2e8f0; background:#f7fafc; min-height:80px; transition:0.2s;" onclick="openSelfTargetSelect(' + pairIndex + ')">' +
+                    slotHtml += '<div class="slot-pair" style="cursor:pointer; border-color:#e2e8f0; background:#f7fafc; min-height:80px; transition:0.2s;" onclick="openTargetSelect(' + pairIndex + ', true)">' +
                       '<div class="slot-label">窩位 ' + (pairIndex + 1) + ' 〉</div>' +
                       '<div class="slot-content">' +
                       '<span style="font-weight:700; font-size:0.9rem; color:#a0aec0;">點擊選擇</span>' +
@@ -2285,22 +2509,35 @@
               }
 
               if (!foundShinyDad && hasShinyMomForTarget) {
-                var firstGroup2 = targetData5.eggGroups[0];
-                var allInGroup2 = getRocosByEggGroup(firstGroup2);
-                var normalDadName = allInGroup2.length > 0 ? allInGroup2[0].name : '同蛋組公精靈';
-                var normalDadData = ROCO_DB[normalDadName];
-                var normalDadTypes = normalDadData ? normalDadData.types : [];
-                var normalDadTypeIcons = renderTypeIcons(normalDadTypes);
-                schemeName = '普通公';
-                dadDisplay = '<span class="dad" style="display:flex; flex-direction:column; align-items:center; gap:2px; color:#a0aec0; font-weight:700; font-size:0.85rem;">' +
-                  '<span style="display:flex; flex-direction:row; align-items:center; gap:4px;">' +
-                  '<img src="images/male.svg" alt="♂" style="width:14px;height:14px;vertical-align:middle;">' +
-                  normalDadName +
-                  '</span>' +
-                  '<span style="font-size:0.6rem; color:#a0aec0;">普通公</span>' +
-                  (normalDadTypeIcons ? '<span style="font-size:0.6rem;">' + normalDadTypeIcons + '</span>' : '') +
-                  '</span>';
-                canBreed = true;
+                // 找出所有蛋組中可作為父本的精靈（排除 genderLock === '母'）
+                var normalDadName = null;
+                for (var gi3 = 0; gi3 < targetData5.eggGroups.length; gi3++) {
+                  var g3 = targetData5.eggGroups[gi3];
+                  var allInGroup3 = getRocosByEggGroup(g3);
+                  var validDads3 = allInGroup3.filter(function(item) {
+                    var itemData = ROCO_DB[item.name];
+                    return itemData && itemData.genderLock !== '母';
+                  });
+                  if (validDads3.length > 0) {
+                    normalDadName = validDads3[0].name;
+                    break;
+                  }
+                }
+                if (normalDadName) {
+                  var normalDadData = ROCO_DB[normalDadName];
+                  var normalDadTypes = normalDadData ? normalDadData.types : [];
+                  var normalDadTypeIcons = renderTypeIcons(normalDadTypes);
+                  schemeName = '普通公';
+                  dadDisplay = '<span class="dad" style="display:flex; flex-direction:column; align-items:center; gap:2px; color:#a0aec0; font-weight:700; font-size:0.85rem;">' +
+                    '<span style="display:flex; flex-direction:row; align-items:center; gap:4px;">' +
+                    '<img src="images/male.svg" alt="♂" style="width:14px;height:14px;vertical-align:middle;">' +
+                    normalDadName +
+                    '</span>' +
+                    '<span style="font-size:0.6rem; color:#a0aec0;">普通公</span>' +
+                    (normalDadTypeIcons ? '<span style="font-size:0.6rem;">' + normalDadTypeIcons + '</span>' : '') +
+                    '</span>';
+                  canBreed = true;
+                }
               }
 
               if (!canBreed) {
@@ -2336,7 +2573,7 @@
               }
             }
 
-            slotHtml2 += '<div class="slot-pair has-recommendation" style="border-color:#6c5ce7; background:#faf9ff; min-height:80px; cursor:pointer;" onclick="openTargetSelect(' + pairIndex2 + ')">' +
+            slotHtml2 += '<div class="slot-pair has-recommendation" style="border-color:#6c5ce7; background:#faf9ff; min-height:80px; cursor:pointer;" onclick="openTargetSelect(' + pairIndex2 + ', false)">' +
               '<div class="slot-label">〈 窩位自選精靈 ' + (pairIndex2 + 1) + '</div>' +
               '<div class="slot-content" style="justify-content:center; gap:2px;">' +
               dadDisplay +
@@ -2347,7 +2584,7 @@
               '</div>' +
               '</div>';
           } else {
-            slotHtml2 += '<div class="slot-pair" style="cursor:pointer; border-color:#e2e8f0; background:#f7fafc; min-height:80px; transition:0.2s;" onclick="openTargetSelect(' + pairIndex2 + ')">' +
+            slotHtml2 += '<div class="slot-pair" style="cursor:pointer; border-color:#e2e8f0; background:#f7fafc; min-height:80px; transition:0.2s;" onclick="openTargetSelect(' + pairIndex2 + ', false)">' +
               '<div class="slot-label">〈 窩位 ' + (pairIndex2 + 1) + '</div>' +
               '<div class="slot-content">' +
               '<span style="font-weight:700; font-size:0.9rem; color:#a0aec0;">點擊選擇</span>' +
@@ -2419,7 +2656,7 @@
               }
             }
 
-            slotHtml2 += '<div class="slot-pair has-recommendation" style="border-color:#6c5ce7; background:#faf9ff; min-height:80px; cursor:pointer;" onclick="openTargetSelect(' + pairIndex2 + ')">' +
+            slotHtml2 += '<div class="slot-pair has-recommendation" style="border-color:#6c5ce7; background:#faf9ff; min-height:80px; cursor:pointer;" onclick="openTargetSelect(' + pairIndex2 + ', false)">' +
               '<div class="slot-label">窩位自選精靈 ' + (pairIndex2 + 1) + ' 〉</div>' +
               '<div class="slot-content" style="justify-content:center; gap:2px;">' +
               momDisplay +
@@ -2430,7 +2667,7 @@
               '</div>' +
               '</div>';
           } else {
-            slotHtml2 += '<div class="slot-pair" style="cursor:pointer; border-color:#e2e8f0; background:#f7fafc; min-height:80px; transition:0.2s;" onclick="openTargetSelect(' + pairIndex2 + ')">' +
+            slotHtml2 += '<div class="slot-pair" style="cursor:pointer; border-color:#e2e8f0; background:#f7fafc; min-height:80px; transition:0.2s;" onclick="openTargetSelect(' + pairIndex2 + ', false)">' +
               '<div class="slot-label">窩位 ' + (pairIndex2 + 1) + ' 〉</div>' +
               '<div class="slot-content">' +
               '<span style="font-weight:700; font-size:0.9rem; color:#a0aec0;">點擊選擇</span>' +
@@ -2541,6 +2778,34 @@
 
       area.innerHTML = html;
 
+      // 綁定圖鑑折疊
+      var rocodexToggle = document.getElementById('rocodexToggle');
+      if (rocodexToggle) {
+        var toggleRocodex = function(e) {
+          if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+          var content = document.getElementById('rocodexContent');
+          var arrow = document.getElementById('rocodexArrow');
+          if (content && arrow) {
+            var isHidden = content.classList.contains('rocodex-hidden');
+            if (isHidden) {
+              content.classList.remove('rocodex-hidden');
+              content.style.display = 'block';
+              arrow.textContent = '▲';
+              localStorage.setItem('rocodexCollapsed', 'false');
+            } else {
+              content.classList.add('rocodex-hidden');
+              content.style.display = 'none';
+              arrow.textContent = '▼';
+              localStorage.setItem('rocodexCollapsed', 'true');
+            }
+          }
+        };
+        rocodexToggle.onclick = toggleRocodex;
+      }
+
       if (savedSeason) {
         localStorage.setItem('prioritySeason', savedSeason);
       }
@@ -2584,7 +2849,7 @@
         });
       }
 
-      updateDatalist();
+      updateNameSuggest();
     }
 
     // ---------- 目標精靈選擇 ----------
@@ -2608,7 +2873,21 @@
 
     loadSelectedTargets();
 
-    function openTargetSelect(pairIndex) {
+    // ---------- 目標精靈選擇（通用） ----------
+    // isSelf = false：集齊後（數字鍵），isSelf = true：未集齊（slot_ 前綴）
+    function getTargetKey(pairIndex, isSelf) {
+      return isSelf ? ('slot_' + pairIndex) : pairIndex;
+    }
+
+    function openTargetSelect(pairIndex, isSelf) {
+      var key = getTargetKey(pairIndex, isSelf);
+      var inputId = isSelf ? 'selfTargetSearchInput' : 'targetSearchInput';
+      var containerId = isSelf ? 'selfTargetOptionsContainer' : 'targetOptionsContainer';
+      var closeId = isSelf ? 'selfTargetClose' : 'targetSelectClose';
+      var clearId = isSelf ? 'selfTargetClear' : 'targetSelectClear';
+      var confirmId = isSelf ? 'selfTargetConfirm' : 'targetSelectConfirm';
+      var zIndex = isSelf ? '10003' : '10002';
+
       var allBaseForms = Object.keys(ROCO_DB).filter(function(name) { return isEvoBase(name); });
       var availableTargets = allBaseForms.filter(function(name) {
         if (name === '海盔蟲（磨損）' || name === '刺盔蟲（磨損）' || name === '千棘盔（磨損）') return false;
@@ -2616,348 +2895,365 @@
       });
 
       var overlay = document.createElement('div');
-      overlay.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 10002; display: flex; justify-content: center; align-items: center;';
+      overlay.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: ' + zIndex + '; display: flex; justify-content: center; align-items: center;';
 
       var box = document.createElement('div');
-      box.style.cssText = 'background: white; border-radius: 20px; padding: 24px; max-width: 350px; width: 90%; max-height: 80vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3);';
+      box.style.cssText = 'background: #f3ede0; border-radius: 20px; padding: 24px; max-width: 350px; width: 90%; max-height: 80vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3);';
 
-      var optionsHtml = availableTargets.map(function(name) {
-        var data = ROCO_DB[name];
-        var eggDisplay = data.eggGroups.join('、');
-        var isSelected = (selectedTargets[pairIndex] === name);
-        var isExcluded = excludeList.indexOf(name) !== -1;
-        var clickHandler = isExcluded ? '' : ' onclick="selectTargetForSlotPreview(' + pairIndex + ', \'' + name + '\')" ';
-        var cursorStyle = isExcluded ? 'cursor:not-allowed;' : 'cursor:pointer;';
-        var hoverStyle = isExcluded ? '' : ' onmouseover="this.style.borderColor=\'#6c5ce7\'" onmouseout="this.style.borderColor=\'' + (isSelected ? '#d69e2e' : 'transparent') + '\'" ';
-        return '<div style="padding:10px 14px; margin:4px 0; border-radius:8px; background:' +
-          (isSelected ? '#fffbeb' : '#f7fafc') +
-          '; border:2px solid ' + (isSelected ? '#d69e2e' : (isExcluded ? '#e53e3e' : 'transparent')) +
-          '; ' + (isExcluded ? 'opacity:0.5;' : '') +
-          '; ' + cursorStyle +
-          '; transition:0.2s;" ' +
-          clickHandler +
-          hoverStyle +
-          '>' +
-          '<div style="font-weight:700; color:' + (isExcluded ? '#e53e3e' : (isSelected ? '#d69e2e' : '#2d3748')) + ';">' + name + (isExcluded ? '（已排除）' : '') + '</div>' +
-          '<div style="font-size:0.75rem; color:#a0aec0;">' + eggDisplay + ' · ' + data.season + '</div>' +
-          '</div>';
-      }).join('');
-
-      box.innerHTML = '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">' +
-        '<h3 style="margin:0; color:#2d3748; font-size:1.1rem;">選擇目標精靈（窩位 ' + (pairIndex + 1) + '）</h3>' +
-        '<button id="targetSelectClose" style="background:none; border:none; font-size:1.5rem; cursor:pointer; color:#a0aec0;">&times;</button>' +
-        '</div>' +
-        '<div style="margin-bottom:12px;">' +
-        '<input type="text" id="targetSearchInput" placeholder="搜尋精靈名稱..." style="width:100%; padding:8px 12px; border:2px solid #e2e8f0; border-radius:8px; font-size:0.9rem; box-sizing:border-box;" oninput="filterTargetOptions(' + pairIndex + ')">' +
-        '</div>' +
-        '<div id="targetOptionsContainer" style="max-height:40vh; overflow-y:auto;">' + optionsHtml + '</div>' +
-        '<div style="margin-top:12px; padding-top:12px; border-top:1px solid #e2e8f0; display:flex; gap:8px; justify-content:flex-end;">' +
-        '<button class="btn btn-sm" id="targetSelectClear" style="background:#fc8181; color:white; border:none; border-radius:40px; padding:6px 16px; cursor:pointer;">取消選擇</button>' +
-        '<button class="btn btn-sm btn-primary" id="targetSelectConfirm" style="background:#6c5ce7; color:white; border:none; border-radius:40px; padding:6px 16px; cursor:pointer;">確認</button>' +
-        '</div>';
-
-      overlay.appendChild(box);
-      document.body.appendChild(overlay);
-
-      overlay.querySelector('#targetSelectClose').addEventListener('click', function() { overlay.remove(); });
-      overlay.querySelector('#targetSelectClear').addEventListener('click', function() {
-        delete selectedTargets[pairIndex];
-        saveSelectedTargets();
-        overlay.remove();
-        renderRecommendations();
-      });
-      overlay.querySelector('#targetSelectConfirm').addEventListener('click', function() {
-        saveSelectedTargets();
-        overlay.remove();
-        renderRecommendations();
-      });
-      overlay.addEventListener('click', function(e) {
-        if (e.target === this) this.remove();
-      });
-    }
-
-    function selectTargetForSlot(pairIndex, name) {
-      // 檢查是否已被排除
-      if (excludeList.indexOf(name) !== -1) {
-        alert('「' + name + '」已在排除清單中，無法選擇！');
-        return;
-      }
-      if (selectedTargets[pairIndex] === name) {
-        delete selectedTargets[pairIndex];
-      } else {
-        selectedTargets[pairIndex] = name;
-      }
-      saveSelectedTargets();
-      var overlay = document.querySelector('#targetSelectClose');
-      if (overlay) {
-        var parent = overlay.closest('div[style*="position: fixed"]');
-        if (parent) parent.remove();
-      }
-      renderRecommendations();
-    }
-
-    function filterTargetOptions(pairIndex) {
-      var searchInput = document.getElementById('targetSearchInput');
-      var container = document.getElementById('targetOptionsContainer');
-      if (!searchInput || !container) return;
-      var keyword = searchInput.value.trim().toLowerCase();
-      var allBaseForms = Object.keys(ROCO_DB).filter(function(name) { return isEvoBase(name); });
-      var availableTargets = allBaseForms.filter(function(name) {
-        if (name === '海盔蟲（磨損）' || name === '刺盔蟲（磨損）' || name === '千棘盔（磨損）') return false;
-        return true;
-      });
-      // 根據關鍵字過濾
-      var filtered = availableTargets;
-      if (keyword !== '') {
-        filtered = availableTargets.filter(function(name) {
-          return name.toLowerCase().indexOf(keyword) !== -1;
-        });
-      }
-      // 生成選項 HTML
-      var optionsHtml = filtered.map(function(n) {
-        var data = ROCO_DB[n];
-        var eggDisplay = data.eggGroups.join('、');
-        var isSelected = (selectedTargets[pairIndex] === n);
-        var isExcluded = excludeList.indexOf(n) !== -1;
-        var clickHandler = isExcluded ? '' : ' onclick="selectTargetForSlotPreview(' + pairIndex + ', \'' + n + '\')" ';
-        var cursorStyle = isExcluded ? 'cursor:not-allowed;' : 'cursor:pointer;';
-        var hoverStyle = isExcluded ? '' : ' onmouseover="this.style.borderColor=\'#6c5ce7\'" onmouseout="this.style.borderColor=\'' + (isSelected ? '#d69e2e' : 'transparent') + '\'" ';
-        return '<div style="padding:10px 14px; margin:4px 0; border-radius:8px; background:' +
-          (isSelected ? '#fffbeb' : '#f7fafc') +
-          '; border:2px solid ' + (isSelected ? '#d69e2e' : (isExcluded ? '#e53e3e' : 'transparent')) +
-          '; ' + (isExcluded ? 'opacity:0.5;' : '') +
-          '; ' + cursorStyle +
-          '; transition:0.2s;" ' +
-          clickHandler +
-          hoverStyle +
-          '>' +
-          '<div style="font-weight:700; color:' + (isExcluded ? '#e53e3e' : (isSelected ? '#d69e2e' : '#2d3748')) + ';">' + n + (isExcluded ? '（已排除）' : '') + '</div>' +
-          '<div style="font-size:0.75rem; color:#a0aec0;">' + eggDisplay + ' · ' + data.season + '</div>' +
-          '</div>';
-      }).join('');
-      container.innerHTML = optionsHtml;
-    }
-
-    function selectTargetForSlotPreview(pairIndex, name) {
-      // 檢查是否已被排除
-      if (excludeList.indexOf(name) !== -1) {
-        alert('「' + name + '」已在排除清單中，無法選擇！');
-        return;
-      }
-      // 切換選中狀態
-      if (selectedTargets[pairIndex] === name) {
-        delete selectedTargets[pairIndex];
-      } else {
-        selectedTargets[pairIndex] = name;
-      }
-      // 呼叫過濾函數刷新列表（保留搜尋關鍵字）
-      filterTargetOptions(pairIndex);
-    }
-
-    function selectSelfTargetPreview(pairIndex, name) {
-      // 檢查是否已被排除
-      if (excludeList.indexOf(name) !== -1) {
-        alert('「' + name + '」已在排除清單中，無法選擇！');
-        return;
-      }
-      var key = 'slot_' + pairIndex;
-      // 切換選中狀態
-      if (selectedTargets[key] === name) {
-        delete selectedTargets[key];
-      } else {
-        selectedTargets[key] = name;
-      }
-      // 呼叫過濾函數刷新列表（保留搜尋關鍵字）
-      filterSelfTargetOptions(pairIndex);
-    }
-
-    function filterSelfTargetOptions(pairIndex) {
-      var searchInput = document.getElementById('selfTargetSearchInput');
-      var container = document.getElementById('selfTargetOptionsContainer');
-      if (!searchInput || !container) return;
-      var keyword = searchInput.value.trim().toLowerCase();
-      var allBaseForms = Object.keys(ROCO_DB).filter(function(name) { return isEvoBase(name); });
-      var availableTargets = allBaseForms.filter(function(name) {
-        if (name === '海盔蟲（磨損）' || name === '刺盔蟲（磨損）' || name === '千棘盔（磨損）') return false;
-        return true;
-      });
-      // 根據關鍵字過濾
-      var filtered = availableTargets;
-      if (keyword !== '') {
-        filtered = availableTargets.filter(function(name) {
-          return name.toLowerCase().indexOf(keyword) !== -1;
-        });
-      }
-      var currentSelected = selectedTargets['slot_' + pairIndex];
-      // 生成選項 HTML
-      var optionsHtml = filtered.map(function(n) {
-        var data = ROCO_DB[n];
-        var eggDisplay = data.eggGroups.join('、');
-        var isSelected = (currentSelected === n);
-        var isExcluded = excludeList.indexOf(n) !== -1;
-        var clickHandler = isExcluded ? '' : ' onclick="selectSelfTargetPreview(' + pairIndex + ', \'' + n + '\')" ';
-        var cursorStyle = isExcluded ? 'cursor:not-allowed;' : 'cursor:pointer;';
-        var hoverStyle = isExcluded ? '' : ' onmouseover="this.style.borderColor=\'#6c5ce7\'" onmouseout="this.style.borderColor=\'' + (isSelected ? '#d69e2e' : 'transparent') + '\'" ';
-        return '<div style="padding:10px 14px; margin:4px 0; border-radius:8px; background:' +
-          (isSelected ? '#fffbeb' : '#f7fafc') +
-          '; border:2px solid ' + (isSelected ? '#d69e2e' : (isExcluded ? '#e53e3e' : 'transparent')) +
-          '; ' + (isExcluded ? 'opacity:0.5;' : '') +
-          '; ' + cursorStyle +
-          '; transition:0.2s;" ' +
-          clickHandler +
-          hoverStyle +
-          '>' +
-          '<div style="font-weight:700; color:' + (isExcluded ? '#e53e3e' : (isSelected ? '#d69e2e' : '#2d3748')) + ';">' + n + (isExcluded ? '（已排除）' : '') + '</div>' +
-          '<div style="font-size:0.75rem; color:#a0aec0;">' + eggDisplay + ' · ' + data.season + '</div>' +
-          '</div>';
-      }).join('');
-      container.innerHTML = optionsHtml;
-    }
-
-    function openSelfTargetSelect(pairIndex) {
-      var allBaseForms = Object.keys(ROCO_DB).filter(function(name) { return isEvoBase(name); });
-      var availableTargets = allBaseForms.filter(function(name) {
-        if (name === '海盔蟲（磨損）' || name === '刺盔蟲（磨損）' || name === '千棘盔（磨損）') return false;
-        return true;
-      });
-
-      var overlay = document.createElement('div');
-      overlay.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 10003; display: flex; justify-content: center; align-items: center;';
-
-      var box = document.createElement('div');
-      box.style.cssText = 'background: white; border-radius: 20px; padding: 24px; max-width: 350px; width: 90%; max-height: 80vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3);';
-
-      var key = 'slot_' + pairIndex;
       var currentSelected = selectedTargets[key];
-
       var optionsHtml = availableTargets.map(function(name) {
         var data = ROCO_DB[name];
         var eggDisplay = data.eggGroups.join('、');
         var isSelected = (currentSelected === name);
         var isExcluded = excludeList.indexOf(name) !== -1;
-        var clickHandler = isExcluded ? '' : ' onclick="selectSelfTargetPreview(' + pairIndex + ', \'' + name + '\')" ';
+        var clickHandler = isExcluded ? '' : ' onclick="selectTargetPreview(' + pairIndex + ', \'' + name + '\', ' + isSelf + ')" ';
         var cursorStyle = isExcluded ? 'cursor:not-allowed;' : 'cursor:pointer;';
-        var hoverStyle = isExcluded ? '' : ' onmouseover="this.style.borderColor=\'#6c5ce7\'" onmouseout="this.style.borderColor=\'' + (isSelected ? '#d69e2e' : 'transparent') + '\'" ';
+        var hoverStyle = isExcluded ? '' : ' onmouseover="this.style.borderColor=\'#6c5ce7\'" onmouseout="this.style.borderColor=\'' + (isSelected ? '#bab4a7' : '#bab4a7') + '\'" ';
         return '<div style="padding:10px 14px; margin:4px 0; border-radius:8px; background:' +
-          (isSelected ? '#fffbeb' : '#f7fafc') +
-          '; border:2px solid ' + (isSelected ? '#d69e2e' : (isExcluded ? '#e53e3e' : 'transparent')) +
+          (isSelected ? '#bab4a7' : '#ffffff') +
+          '; border:2px solid ' + (isSelected ? '#bab4a7' : (isExcluded ? '#e53e3e' : '#bab4a7')) +
           '; ' + (isExcluded ? 'opacity:0.5;' : '') +
           '; ' + cursorStyle +
           '; transition:0.2s;" ' +
           clickHandler +
           hoverStyle +
           '>' +
-          '<div style="font-weight:700; color:' + (isExcluded ? '#e53e3e' : (isSelected ? '#d69e2e' : '#2d3748')) + ';">' + name + (isExcluded ? '（已排除）' : '') + '</div>' +
-          '<div style="font-size:0.75rem; color:#a0aec0;">' + eggDisplay + ' · ' + data.season + '</div>' +
+          '<div style="font-weight:700; color:' + (isExcluded ? '#e53e3e' : (isSelected ? '#ffffff' : '#2d3748')) + ';">' + name + (isExcluded ? '（已排除）' : '') + '</div>' +
+          '<div style="font-size:0.75rem; color:' + (isSelected ? '#f3ede0' : '#a0aec0') + ';">' + eggDisplay + ' · ' + data.season + '</div>' +
           '</div>';
       }).join('');
 
       box.innerHTML = '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">' +
         '<h3 style="margin:0; color:#2d3748; font-size:1.1rem;">選擇目標精靈（窩位 ' + (pairIndex + 1) + '）</h3>' +
-        '<button id="selfTargetClose" style="background:none; border:none; font-size:1.5rem; cursor:pointer; color:#a0aec0;">&times;</button>' +
+        '<button id="' + closeId + '" style="background:none; border:none; font-size:1.5rem; cursor:pointer; color:#a0aec0;">&times;</button>' +
         '</div>' +
         '<div style="margin-bottom:12px;">' +
-        '<input type="text" id="selfTargetSearchInput" placeholder="搜尋精靈名稱..." style="width:100%; padding:8px 12px; border:2px solid #e2e8f0; border-radius:8px; font-size:0.9rem; box-sizing:border-box;" oninput="filterSelfTargetOptions(' + pairIndex + ')">' +
+        '<input type="text" id="' + inputId + '" placeholder="搜尋精靈名稱..." style="width:100%; padding:8px 12px; border:2px solid #bab4a7; border-radius:8px; font-size:0.9rem; box-sizing:border-box; background:#ffffff;">' +
         '</div>' +
-        '<div id="selfTargetOptionsContainer" style="max-height:40vh; overflow-y:auto;">' + optionsHtml + '</div>' +
-        '<div style="margin-top:12px; padding-top:12px; border-top:1px solid #e2e8f0; display:flex; gap:8px; justify-content:flex-end;">' +
-        '<button class="btn btn-sm" id="selfTargetClear" style="background:#fc8181; color:white; border:none; border-radius:40px; padding:6px 16px; cursor:pointer;">取消選擇</button>' +
-        '<button class="btn btn-sm btn-primary" id="selfTargetConfirm" style="background:#6c5ce7; color:white; border:none; border-radius:40px; padding:6px 16px; cursor:pointer;">確認</button>' +
+        '<div id="' + containerId + '" style="max-height:40vh; overflow-y:auto;">' + optionsHtml + '</div>' +
+        '<div style="margin-top:12px; padding-top:12px; border-top:1px solid #bab4a7; display:flex; gap:8px; justify-content:flex-end;">' +
+        '<button class="btn btn-sm" id="' + clearId + '" style="background:#fc8181; color:white; border:none; border-radius:40px; padding:6px 16px; cursor:pointer;">取消選擇</button>' +
+        '<button class="btn btn-sm btn-primary" id="' + confirmId + '" style="background:#6c5ce7; color:white; border:none; border-radius:40px; padding:6px 16px; cursor:pointer;">確認</button>' +
         '</div>';
 
       overlay.appendChild(box);
       document.body.appendChild(overlay);
 
-      overlay.querySelector('#selfTargetClose').addEventListener('click', function() {
-        overlay.remove();
-      });
-      overlay.querySelector('#selfTargetClear').addEventListener('click', function() {
-        var key2 = 'slot_' + pairIndex;
-        delete selectedTargets[key2];
+      // 綁定搜尋框事件
+      var searchInput = overlay.querySelector('#' + inputId);
+      if (searchInput) {
+        searchInput.addEventListener('input', function() {
+          filterTargetOptions(pairIndex, isSelf);
+        });
+      }
+
+      overlay.querySelector('#' + closeId).addEventListener('click', function() { overlay.remove(); });
+      overlay.querySelector('#' + clearId).addEventListener('click', function() {
+        delete selectedTargets[key];
         saveSelectedTargets();
         overlay.remove();
         renderRecommendations();
       });
-      overlay.querySelector('#selfTargetConfirm').addEventListener('click', function() {
+      overlay.querySelector('#' + confirmId).addEventListener('click', function() {
         saveSelectedTargets();
         overlay.remove();
         renderRecommendations();
       });
-      overlay.addEventListener('click', function(e) {
-        if (e.target === this) this.remove();
+      // 只有當點擊（按下和放開）都在遮罩上時，才關閉彈窗
+      var mouseDownOnOverlay = false;
+      overlay.addEventListener('mousedown', function(e) {
+        mouseDownOnOverlay = (e.target === this);
+      });
+      overlay.addEventListener('mouseup', function(e) {
+        if (mouseDownOnOverlay && e.target === this) {
+          this.remove();
+        }
+        mouseDownOnOverlay = false;
       });
     }
 
-    function selectSelfTarget(pairIndex, name) {
-      // 檢查是否已被排除
+    function selectTargetPreview(pairIndex, name, isSelf) {
       if (excludeList.indexOf(name) !== -1) {
         alert('「' + name + '」已在排除清單中，無法選擇！');
         return;
       }
-      var key = 'slot_' + pairIndex;
+      var key = getTargetKey(pairIndex, isSelf);
       if (selectedTargets[key] === name) {
         delete selectedTargets[key];
       } else {
         selectedTargets[key] = name;
       }
-      saveSelectedTargets();
-      var overlay = document.querySelector('#selfTargetClose');
-      if (overlay) {
-        var parent = overlay.closest('div[style*="position: fixed"]');
-        if (parent) parent.remove();
-      }
-      renderRecommendations();
+      filterTargetOptions(pairIndex, isSelf);
     }
 
-    // ---------- 更新輸入框自動補全 ----------
-    function updateDatalist() {
-      var datalist = document.getElementById('nameSuggest');
+    // ---------- 精靈名稱自動補全 ----------
+    var suggestOptions = []; // 儲存所有可選的精靈（初階精靈）
+
+    function buildSuggestOptions() {
       var seasonFilter = document.getElementById('seasonFilter').value;
       var typeFilter = document.getElementById('typeFilter').value;
 
-      var names = Object.keys(ROCO_DB);
+      var allNames = Object.keys(ROCO_DB);
+      // 篩選初階精靈
+      var baseForms = allNames.filter(function(name) {
+        if (!isEvoBase(name)) return false;
+        var data = ROCO_DB[name];
+        if (seasonFilter !== 'all' && data.season !== seasonFilter) return false;
+        if (typeFilter !== 'all' && (!data.types || data.types.indexOf(typeFilter) === -1)) return false;
+        return true;
+      });
 
-      if (seasonFilter !== 'all') {
-        names = names.filter(function(name) {
-          var data = ROCO_DB[name];
-          return data.season === seasonFilter;
+      suggestOptions = baseForms.map(function(name) {
+        var evoChain = getEvolutionChain(name);
+        // 收集所有進化鏈中的名稱，用於搜尋匹配
+        var searchTerms = evoChain.map(function(n) { return n.toLowerCase(); });
+        return {
+          name: name,
+          evoChain: evoChain,
+          display: name + '（' + evoChain.join(' → ') + '）',
+          searchTerms: searchTerms
+        };
+      });
+    }
+
+    function updateNameSuggest() {
+      buildSuggestOptions();
+    }
+
+    // 初始化篩選框顯示
+    document.getElementById('seasonFilterInput').value = '全部';
+    document.getElementById('typeFilterInput').value = '全部';
+
+    function showSuggestDropdown(keyword) {
+      var dropdown = document.getElementById('nameSuggestDropdown');
+      var input = document.getElementById('inputName');
+      if (!dropdown || !input) return;
+
+      var kw = keyword.trim().toLowerCase();
+      // 將簡體關鍵字轉為繁體後再匹配
+      var kwTrad = simpToTrad(kw);
+
+      // 過濾：只顯示初階精靈，但用進化鏈中的所有名稱匹配
+      // 若關鍵字為空，則顯示全部
+      var matched = suggestOptions.filter(function(opt) {
+        if (kw === '') return true;
+        return opt.searchTerms.some(function(term) {
+          return term.indexOf(kw) !== -1 || term.indexOf(kwTrad) !== -1;
         });
+      });
+
+      if (matched.length === 0) {
+        dropdown.style.display = 'none';
+        return;
       }
 
-      if (typeFilter !== 'all') {
-        names = names.filter(function(name) {
-          var data = ROCO_DB[name];
-          return data.types && data.types.indexOf(typeFilter) !== -1;
-        });
-      }
-
-      var options = [];
-      var added = {};
-
-      for (var i = 0; i < names.length; i++) {
-        var name = names[i];
-        if (added[name]) continue;
-        options.push({ value: name, label: name });
-        added[name] = true;
-
-        for (var evoName in ROCO_DB) {
-          if (ROCO_DB.hasOwnProperty(evoName)) {
-            var evoData = ROCO_DB[evoName];
-            if (evoData.evolvesFrom === name && !added[evoName]) {
-              if (seasonFilter === 'all' || evoData.season === seasonFilter) {
-                if (typeFilter === 'all' || (evoData.types && evoData.types.indexOf(typeFilter) !== -1)) {
-                  options.push({ value: evoName, label: evoName });
-                  added[evoName] = true;
-                }
-              }
-            }
-          }
+      dropdown.innerHTML = matched.map(function(opt) {
+        var nameDisplay = opt.name;
+        var evoDisplay = '';
+        // 如果有進化鏈（不只一個階段），顯示灰色小字
+        if (opt.evoChain.length > 1) {
+          evoDisplay = '<div style="font-size:0.75rem; color:#a0aec0; margin-top:2px;">→ ' + opt.evoChain.slice(1).join(' → ') + '</div>';
         }
-      }
-
-      datalist.innerHTML = options.map(function(opt) {
-        return '<option value="' + opt.value + '" label="' + opt.label + '">';
+        return '<div class="suggest-item" data-name="' + opt.name + '" style="padding:8px 12px; cursor:pointer; border-bottom:1px solid #f0f0f0;" onmouseover="this.style.background=\'#f3ede0\'" onmouseout="this.style.background=\'#ffffff\'">' +
+          '<div style="font-size:0.9rem; font-weight:600; color:#2d3748;">' + nameDisplay + '</div>' +
+          evoDisplay +
+          '</div>';
       }).join('');
+      dropdown.style.display = 'block';
+
+      // 點擊選項
+      dropdown.querySelectorAll('.suggest-item').forEach(function(item) {
+        item.addEventListener('mousedown', function(e) {
+          e.preventDefault(); // 防止輸入框失焦
+          input.value = this.dataset.name;
+          dropdown.style.display = 'none';
+          // 手動觸發 input 事件，讓性別鎖定生效
+          var inputEvent = new Event('input', { bubbles: true });
+          input.dispatchEvent(inputEvent);
+        });
+      });
+    }
+
+    // 輸入框事件
+    document.getElementById('inputName').addEventListener('input', function() {
+      showSuggestDropdown(this.value);
+    });
+
+    document.getElementById('inputName').addEventListener('blur', function() {
+      var dropdown = document.getElementById('nameSuggestDropdown');
+      setTimeout(function() {
+        if (dropdown) dropdown.style.display = 'none';
+      }, 150);
+    });
+
+    document.getElementById('inputName').addEventListener('focus', function() {
+      showSuggestDropdown(this.value);
+    });
+
+    // ---------- 賽季篩選自訂下拉框 ----------
+    var SEASON_OPTIONS = [
+      { value: 'all', label: '全部' },
+      { value: 'S1常駐', label: 'S1常駐' },
+      { value: 'S1賽季', label: 'S1賽季' },
+      { value: 'S2常駐', label: 'S2常駐' },
+      { value: 'S2賽季', label: 'S2賽季' },
+      { value: 'S3常駐', label: 'S3常駐' },
+      { value: 'S3賽季', label: 'S3賽季' },
+      { value: 'S4常駐', label: 'S4常駐' },
+      { value: 'S4賽季', label: 'S4賽季' },
+      { value: '其他', label: '其他' }
+    ];
+
+    function showSeasonDropdown() {
+      var dropdown = document.getElementById('seasonSuggestDropdown');
+      var input = document.getElementById('seasonFilterInput');
+      var hidden = document.getElementById('seasonFilter');
+      if (!dropdown || !input || !hidden) return;
+
+      dropdown.innerHTML = SEASON_OPTIONS.map(function(opt) {
+        var isSelected = (hidden.value === opt.value);
+        return '<div class="suggest-item" data-value="' + opt.value + '" style="padding:8px 12px; cursor:pointer; border-bottom:1px solid #f0f0f0; background:' + (isSelected ? '#bab4a7' : '#ffffff') + '; color:' + (isSelected ? '#ffffff' : '#2d3748') + ';" onmouseover="this.style.background=\'' + (isSelected ? '#bab4a7' : '#f3ede0') + '\'" onmouseout="this.style.background=\'' + (isSelected ? '#bab4a7' : '#ffffff') + '\'">' + opt.label + '</div>';
+      }).join('');
+      dropdown.style.display = 'block';
+
+      dropdown.querySelectorAll('.suggest-item').forEach(function(item) {
+        item.addEventListener('mousedown', function(e) {
+          e.preventDefault();
+          var val = this.dataset.value;
+          var label = this.querySelector('span') ? this.querySelector('span').textContent : this.textContent;
+          hidden.value = val;
+          input.value = label;
+          dropdown.style.display = 'none';
+          updateNameSuggest();
+        });
+      });
+    }
+
+    document.getElementById('seasonFilterInput').addEventListener('click', function() {
+      showSeasonDropdown();
+    });
+    document.addEventListener('click', function(e) {
+      var dropdown = document.getElementById('seasonSuggestDropdown');
+      var input = document.getElementById('seasonFilterInput');
+      if (dropdown && input && !input.contains(e.target) && !dropdown.contains(e.target)) {
+        dropdown.style.display = 'none';
+      }
+    });
+
+    // ---------- 系別篩選自訂下拉框 ----------
+    var TYPE_OPTIONS = [
+      { value: 'all', label: '全部' },
+      { value: '普通', label: '普通', color: '#3f89b4' },
+      { value: '草', label: '草', color: '#4ebc73' },
+      { value: '火', label: '火', color: '#db5525' },
+      { value: '水', label: '水', color: '#6aa9fe' },
+      { value: '光', label: '光', color: '#4fc0ff' },
+      { value: '地', label: '地', color: '#9a7e3f' },
+      { value: '冰', label: '冰', color: '#5faddd' },
+      { value: '龍', label: '龍', color: '#fc7cac' },
+      { value: '電', label: '電', color: '#e7c506' },
+      { value: '毒', label: '毒', color: '#ba62e0' },
+      { value: '蟲', label: '蟲', color: '#9ece21' },
+      { value: '武', label: '武', color: '#ff9636' },
+      { value: '翼', label: '翼', color: '#3ec7ca' },
+      { value: '萌', label: '萌', color: '#fc7cac' },
+      { value: '幽', label: '幽', color: '#9446ec' },
+      { value: '惡', label: '惡', color: '#cf467a' },
+      { value: '機械', label: '機械', color: '#40cba9' },
+      { value: '幻', label: '幻', color: '#9fa7f8' }
+    ];
+
+    function showTypeDropdown() {
+      var dropdown = document.getElementById('typeSuggestDropdown');
+      var input = document.getElementById('typeFilterInput');
+      var hidden = document.getElementById('typeFilter');
+      if (!dropdown || !input || !hidden) return;
+
+      dropdown.innerHTML = TYPE_OPTIONS.map(function(opt) {
+        var isSelected = (hidden.value === opt.value);
+        var colorStyle = opt.color ? 'color:' + opt.color + ';' : '';
+        var iconHtml = '';
+        if (opt.value !== 'all' && TYPE_ICONS[opt.value]) {
+          iconHtml = '<img src="' + TYPE_ICONS[opt.value] + '" alt="' + opt.label + '" style="width:16px;height:16px;vertical-align:middle;margin-right:6px;border-radius:3px;">';
+        }
+        return '<div class="suggest-item" data-value="' + opt.value + '" style="padding:8px 12px; cursor:pointer; border-bottom:1px solid #f0f0f0; background:' + (isSelected ? '#bab4a7' : '#ffffff') + '; display:flex; align-items:center; ' + colorStyle + '" onmouseover="this.style.background=\'' + (isSelected ? '#bab4a7' : '#f3ede0') + '\'" onmouseout="this.style.background=\'' + (isSelected ? '#bab4a7' : '#ffffff') + '\'">' + iconHtml + '<span style="' + colorStyle + '">' + opt.label + '</span></div>';
+      }).join('');
+      dropdown.style.display = 'block';
+
+      dropdown.querySelectorAll('.suggest-item').forEach(function(item) {
+        item.addEventListener('mousedown', function(e) {
+          e.preventDefault();
+          var val = this.dataset.value;
+          var label = this.querySelector('span') ? this.querySelector('span').textContent : this.textContent;
+          hidden.value = val;
+          var iconHtml = '';
+          var textColor = '';
+          if (val !== 'all' && TYPE_ICONS[val]) {
+            iconHtml = '<img src="' + TYPE_ICONS[val] + '" alt="' + label + '" style="width:16px;height:16px;vertical-align:middle;border-radius:3px;">';
+          }
+          if (val !== 'all' && TYPE_COLORS[val]) {
+            textColor = 'color:' + TYPE_COLORS[val] + ';';
+          }
+          input.innerHTML = iconHtml + '<span style="' + textColor + '">' + label + '</span>';
+          dropdown.style.display = 'none';
+          updateNameSuggest();
+        });
+      });
+    }
+
+    document.getElementById('typeFilterInput').addEventListener('click', function() {
+      showTypeDropdown();
+    });
+    document.addEventListener('click', function(e) {
+      var dropdown = document.getElementById('typeSuggestDropdown');
+      var input = document.getElementById('typeFilterInput');
+      if (dropdown && input && !input.contains(e.target) && !dropdown.contains(e.target)) {
+        dropdown.style.display = 'none';
+      }
+    });
+
+    function filterTargetOptions(pairIndex, isSelf) {
+      var key = getTargetKey(pairIndex, isSelf);
+      var inputId = isSelf ? 'selfTargetSearchInput' : 'targetSearchInput';
+      var containerId = isSelf ? 'selfTargetOptionsContainer' : 'targetOptionsContainer';
+      var searchInput = document.getElementById(inputId);
+      var container = document.getElementById(containerId);
+      if (!searchInput || !container) return;
+      var keyword = searchInput.value.trim().toLowerCase();
+      var allBaseForms = Object.keys(ROCO_DB).filter(function(name) { return isEvoBase(name); });
+      var availableTargets = allBaseForms.filter(function(name) {
+        if (name === '海盔蟲（磨損）' || name === '刺盔蟲（磨損）' || name === '千棘盔（磨損）') return false;
+        return true;
+      });
+      var filtered = availableTargets;
+      if (keyword !== '') {
+        filtered = availableTargets.filter(function(name) {
+          return name.toLowerCase().indexOf(keyword) !== -1;
+        });
+      }
+      var currentSelected = selectedTargets[key];
+      var optionsHtml = filtered.map(function(n) {
+        var data = ROCO_DB[n];
+        var eggDisplay = data.eggGroups.join('、');
+        var isSelected = (currentSelected === n);
+        var isExcluded = excludeList.indexOf(n) !== -1;
+        var clickHandler = isExcluded ? '' : ' onclick="selectTargetPreview(' + pairIndex + ', \'' + n + '\', ' + isSelf + ')" ';
+        var cursorStyle = isExcluded ? 'cursor:not-allowed;' : 'cursor:pointer;';
+        var hoverStyle = isExcluded ? '' : ' onmouseover="this.style.borderColor=\'#6c5ce7\'" onmouseout="this.style.borderColor=\'' + (isSelected ? '#bab4a7' : '#bab4a7') + '\'" ';
+        return '<div style="padding:10px 14px; margin:4px 0; border-radius:8px; background:' +
+          (isSelected ? '#bab4a7' : '#ffffff') +
+          '; border:2px solid ' + (isSelected ? '#bab4a7' : (isExcluded ? '#e53e3e' : '#bab4a7')) +
+          '; ' + (isExcluded ? 'opacity:0.5;' : '') +
+          '; ' + cursorStyle +
+          '; transition:0.2s;" ' +
+          clickHandler +
+          hoverStyle +
+          '>' +
+          '<div style="font-weight:700; color:' + (isExcluded ? '#e53e3e' : (isSelected ? '#ffffff' : '#2d3748')) + ';">' + n + (isExcluded ? '（已排除）' : '') + '</div>' +
+          '<div style="font-size:0.75rem; color:' + (isSelected ? '#f3ede0' : '#a0aec0') + ';">' + eggDisplay + ' · ' + data.season + '</div>' +
+          '</div>';
+      }).join('');
+      container.innerHTML = optionsHtml;
     }
 
     // ---------- 自訂確認對話框 ----------
@@ -2981,12 +3277,17 @@
       confirmCallback = null;
     });
 
-    document.getElementById('customConfirm').addEventListener('click', function(e) {
-      if (e.target === this) {
+    var confirmMouseDownOnOverlay = false;
+    document.getElementById('customConfirm').addEventListener('mousedown', function(e) {
+      confirmMouseDownOnOverlay = (e.target === this);
+    });
+    document.getElementById('customConfirm').addEventListener('mouseup', function(e) {
+      if (confirmMouseDownOnOverlay && e.target === this) {
         this.style.display = 'none';
         if (confirmCallback) confirmCallback(false);
         confirmCallback = null;
       }
+      confirmMouseDownOnOverlay = false;
     });
 
     // ---------- 彈窗事件綁定 ----------
@@ -3012,10 +3313,15 @@
       });
     });
 
-    document.getElementById('excludeModal').addEventListener('click', function(e) {
-      if (e.target === this) {
+    var excludeMouseDownOnOverlay = false;
+    document.getElementById('excludeModal').addEventListener('mousedown', function(e) {
+      excludeMouseDownOnOverlay = (e.target === this);
+    });
+    document.getElementById('excludeModal').addEventListener('mouseup', function(e) {
+      if (excludeMouseDownOnOverlay && e.target === this) {
         this.style.display = 'none';
       }
+      excludeMouseDownOnOverlay = false;
     });
 
     document.getElementById('btnWishlistClose').addEventListener('click', function() {
@@ -3039,50 +3345,20 @@
       });
     });
 
-    document.getElementById('wishlistModal').addEventListener('click', function(e) {
-      if (e.target === this) {
+    var wishlistMouseDownOnOverlay = false;
+    document.getElementById('wishlistModal').addEventListener('mousedown', function(e) {
+      wishlistMouseDownOnOverlay = (e.target === this);
+    });
+    document.getElementById('wishlistModal').addEventListener('mouseup', function(e) {
+      if (wishlistMouseDownOnOverlay && e.target === this) {
         this.style.display = 'none';
       }
+      wishlistMouseDownOnOverlay = false;
     });
 
     // ================================================================
     // 3. 事件綁定
     // ================================================================
-
-    document.getElementById('inputName').addEventListener('input', function() {
-      var name = this.value.trim();
-      var rocoData = ROCO_DB[name];
-      var genderBtns = document.querySelectorAll('.gender-btn');
-      var hiddenInput = document.getElementById('inputGender');
-
-      genderBtns.forEach(function(btn) {
-        btn.disabled = false;
-        btn.style.opacity = '1';
-        btn.style.cursor = 'pointer';
-      });
-
-      if (rocoData && rocoData.genderLock) {
-        genderBtns.forEach(function(btn) {
-          if (btn.dataset.gender !== rocoData.genderLock) {
-            btn.disabled = true;
-            btn.style.opacity = '0.5';
-            btn.style.cursor = 'not-allowed';
-          } else {
-            hiddenInput.value = rocoData.genderLock;
-            genderBtns.forEach(function(b) {
-              b.classList.remove('active');
-              b.style.background = 'white';
-              b.style.color = '#4a5568';
-              b.style.borderColor = '#e2e8f0';
-            });
-            btn.classList.add('active');
-            btn.style.background = '#bab4a7';
-            btn.style.color = 'white';
-            btn.style.borderColor = '#bab4a7';
-          }
-        });
-      }
-    });
 
     document.querySelectorAll('.gender-btn').forEach(function(btn) {
       btn.addEventListener('click', function() {
@@ -3114,6 +3390,91 @@
           img.style.filter = 'brightness(0) invert(1)';
         }
       });
+    });
+
+    document.getElementById('inputName').addEventListener('input', function() {
+      var name = this.value.trim();
+      var rocoData = ROCO_DB[name];
+      var genderBtns = document.querySelectorAll('.gender-btn');
+      var hiddenInput = document.getElementById('inputGender');
+
+      // 如果找不到，嘗試找初階精靈
+      if (!rocoData) {
+        var base = findEvoBase(name);
+        if (base && base.data) {
+          rocoData = base.data;
+        }
+      }
+
+      // 先重設所有按鈕
+      genderBtns.forEach(function(btn) {
+        btn.disabled = false;
+        btn.style.opacity = '1';
+        btn.style.cursor = 'pointer';
+      });
+
+      // 如果找不到精靈資料，直接返回
+      if (!rocoData) {
+        return;
+      }
+
+      if (rocoData.genderLock) {
+        genderBtns.forEach(function(btn) {
+          if (btn.dataset.gender !== rocoData.genderLock) {
+            btn.disabled = true;
+            btn.style.opacity = '0.5';
+            btn.style.cursor = 'not-allowed';
+            var imgDisabled = btn.querySelector('img');
+            if (imgDisabled) {
+              imgDisabled.style.filter = 'none';
+            }
+          } else {
+            hiddenInput.value = rocoData.genderLock;
+            genderBtns.forEach(function(b) {
+              b.classList.remove('active');
+              b.style.background = 'white';
+              b.style.color = '#4a5568';
+              b.style.borderColor = '#e2e8f0';
+              var imgReset = b.querySelector('img');
+              if (imgReset) {
+                imgReset.style.filter = 'none';
+              }
+            });
+            btn.classList.add('active');
+            btn.style.background = '#bab4a7';
+            btn.style.color = 'white';
+            btn.style.borderColor = '#bab4a7';
+            var imgActive = btn.querySelector('img');
+            if (imgActive) {
+              imgActive.style.filter = 'brightness(0) invert(1)';
+            }
+          }
+        });
+      } else {
+        // 沒有 genderLock 時，恢復預設狀態（公為預設選中）
+        genderBtns.forEach(function(b) {
+          if (b.dataset.gender === '公') {
+            b.classList.add('active');
+            b.style.background = '#bab4a7';
+            b.style.color = 'white';
+            b.style.borderColor = '#bab4a7';
+            var imgMale = b.querySelector('img');
+            if (imgMale) {
+              imgMale.style.filter = 'brightness(0) invert(1)';
+            }
+          } else {
+            b.classList.remove('active');
+            b.style.background = '#f3ede0';
+            b.style.color = '#4a5568';
+            b.style.borderColor = '#bab4a7';
+            var imgFemale = b.querySelector('img');
+            if (imgFemale) {
+              imgFemale.style.filter = 'none';
+            }
+          }
+        });
+        hiddenInput.value = '公';
+      }
     });
 
     document.getElementById('btnAdd').addEventListener('click', function() {
@@ -3182,15 +3543,21 @@
       if (e.key === 'Enter') document.getElementById('btnAdd').click();
     });
 
+    // 表格排序事件
+    document.querySelectorAll('.sortable').forEach(function(th) {
+      th.addEventListener('click', function() {
+        var field = this.dataset.sort;
+        if (sortState.field === field) {
+          sortState.asc = !sortState.asc;
+        } else {
+          sortState.field = field;
+          sortState.asc = true;
+        }
+        renderTable();
+      });
+    });
+
     document.getElementById('btnRefresh').addEventListener('click', renderRecommendations);
-
-    document.getElementById('seasonFilter').addEventListener('change', function() {
-      updateDatalist();
-    });
-
-    document.getElementById('typeFilter').addEventListener('change', function() {
-      updateDatalist();
-    });
 
     document.addEventListener('click', function(e) {
       if (e.target && e.target.id === 'btnApplyPriority') {
@@ -3216,7 +3583,11 @@
       var jsonData = JSON.stringify(exportData, null, 2);
       var defaultFileName = '異色精靈記錄_' + new Date().toISOString().slice(0, 10) + '.json';
       var userFileName = prompt('請輸入檔案名稱：', defaultFileName);
-      var finalFileName = (userFileName && userFileName.trim() !== '') ? userFileName.trim() : defaultFileName;
+      // 按下取消時 prompt 回傳 null，直接中止匯出
+      if (userFileName === null) {
+        return;
+      }
+      var finalFileName = (userFileName.trim() !== '') ? userFileName.trim() : defaultFileName;
       var fileNameWithExt = finalFileName.endsWith('.json') ? finalFileName : finalFileName + '.json';
 
       var blob = new Blob([jsonData], { type: 'application/json' });
@@ -3279,6 +3650,11 @@
               } else {
                 r.types = [];
               }
+            }
+            // 自動修正只有母種的精靈性別
+            var dbData = ROCO_DB[r.name];
+            if (dbData && dbData.genderLock === '母' && r.gender === '公') {
+              r.gender = '母';
             }
             return r;
           });
@@ -3371,10 +3747,15 @@
       document.getElementById('versionModal').style.display = 'none';
     });
 
-    document.getElementById('versionModal').addEventListener('click', function(e) {
-      if (e.target === this) {
+    var versionMouseDownOnOverlay = false;
+    document.getElementById('versionModal').addEventListener('mousedown', function(e) {
+      versionMouseDownOnOverlay = (e.target === this);
+    });
+    document.getElementById('versionModal').addEventListener('mouseup', function(e) {
+      if (versionMouseDownOnOverlay && e.target === this) {
         this.style.display = 'none';
       }
+      versionMouseDownOnOverlay = false;
     });
 
     // ================================================================
@@ -3383,108 +3764,109 @@
 
     function checkDataUpdateAlert() {
       var alertEl = document.getElementById('dataUpdateAlert');
-      var dismissBtn = document.getElementById('dismissAlert');
-      var dismissPermanentBtn = document.getElementById('dismissAlertPermanent');
 
-      var hasSeenAlert = localStorage.getItem('dataUpdateAlert_seen_v3');
+      var hasOldDishu = records.some(function(r) {
+        return r.name === '地鼠' || r.name === '遁鼠' || r.name === '遁地鼠';
+      });
+      var hasOldHaikui = records.some(function(r) {
+        return r.name === '海盔蟲' || r.name === '刺盔蟲' || r.name === '千棘盔';
+      });
 
-      if (!hasSeenAlert) {
-        var hasOldDishu = records.some(function(r) {
-          return r.name === '地鼠' || r.name === '遁鼠' || r.name === '遁地鼠';
-        });
-        var hasOldHaikui = records.some(function(r) {
-          return r.name === '海盔蟲' || r.name === '刺盔蟲' || r.name === '千棘盔';
-        });
+      // 檢查是否有異色公的大耳帽兜家族或小夜家族（這些精靈只有母種）
+      var hasInvalidMale = records.some(function(r) {
+        var data = ROCO_DB[r.name];
+        return data && data.genderLock === '母' && r.gender === '公';
+      });
 
-        if (!hasOldDishu && !hasOldHaikui) {
-          localStorage.setItem('dataUpdateAlert_seen_v3', 'true');
-          if (alertEl) alertEl.style.display = 'none';
-          return;
-        }
-
-        if (alertEl) {
-          alertEl.style.display = 'block';
-
-          var affectedList = [];
-          var detailText = '';
-
-          if (hasOldDishu) {
-            var dishuList = records.filter(function(r) {
-              return r.name === '地鼠' || r.name === '遁鼠' || r.name === '遁地鼠';
-            }).map(function(r) {
-              return r.name + '（' + r.gender + '）';
-            }).join('、');
-            affectedList.push('地鼠、遁鼠、遁地鼠 → 分為「儲水期」和「枯水期」');
-            detailText += '已錄入的舊版地鼠家族：' + dishuList + '\n';
-          }
-
-          if (hasOldHaikui) {
-            var haikuiList = records.filter(function(r) {
-              return r.name === '海盔蟲' || r.name === '刺盔蟲' || r.name === '千棘盔';
-            }).map(function(r) {
-              return r.name + '（' + r.gender + '）';
-            }).join('、');
-            affectedList.push('海盔蟲、刺盔蟲、千棘盔 → 分為「本來」和「磨損」');
-            detailText += '已錄入的舊版海盔蟲家族：' + haikuiList + '\n';
-          }
-
-          var titleEl = alertEl.querySelector('.alert-title');
-          var affectedEl = alertEl.querySelector('.alert-affected');
-          var detailEl = alertEl.querySelector('.affected-detail');
-
-          if (titleEl) {
-            titleEl.textContent = '部分精靈數據已更新！請及時修改，避免推薦錯誤！';
-          }
-
-          if (affectedEl) {
-            affectedEl.innerHTML = affectedList.map(function(item) { return '• ' + item; }).join('<br>');
-          }
-
-          if (detailEl) {
-            detailEl.innerHTML = detailText.trim().replace(/\n/g, '<br>');
-          }
-        }
-      } else {
+      if (!hasOldDishu && !hasOldHaikui && !hasInvalidMale) {
         if (alertEl) alertEl.style.display = 'none';
+        return;
       }
 
-      if (dismissBtn) {
-        dismissBtn.replaceWith(dismissBtn.cloneNode(true));
-        var newDismissBtn = document.getElementById('dismissAlert');
-        if (newDismissBtn) {
-          newDismissBtn.addEventListener('click', function() {
-            var alertEl2 = document.getElementById('dataUpdateAlert');
-            if (alertEl2) alertEl2.style.display = 'none';
-          });
+      if (alertEl) {
+        alertEl.style.display = 'block';
+
+        var affectedList = [];
+        var detailText = '';
+
+        if (hasOldDishu) {
+          var dishuList = records.filter(function(r) {
+            return r.name === '地鼠' || r.name === '遁鼠' || r.name === '遁地鼠';
+          }).map(function(r) {
+            return r.name + '（' + r.gender + '）';
+          }).join('、');
+          affectedList.push('地鼠、遁鼠、遁地鼠 → 分為「儲水期」和「枯水期」');
+          detailText += '已錄入的舊版地鼠家族：' + dishuList + '\n';
         }
-      }
 
-      if (dismissPermanentBtn) {
-        dismissPermanentBtn.replaceWith(dismissPermanentBtn.cloneNode(true));
-        var newDismissPermanentBtn = document.getElementById('dismissAlertPermanent');
-        if (newDismissPermanentBtn) {
-          newDismissPermanentBtn.addEventListener('click', function() {
-            var alertEl2 = document.getElementById('dataUpdateAlert');
-            if (alertEl2) {
-              alertEl2.style.display = 'none';
-              localStorage.setItem('dataUpdateAlert_seen_v3', 'true');
-            }
-          });
+        if (hasOldHaikui) {
+          var haikuiList = records.filter(function(r) {
+            return r.name === '海盔蟲' || r.name === '刺盔蟲' || r.name === '千棘盔';
+          }).map(function(r) {
+            return r.name + '（' + r.gender + '）';
+          }).join('、');
+          affectedList.push('海盔蟲、刺盔蟲、千棘盔 → 分為「本來」和「磨損」');
+          detailText += '已錄入的舊版海盔蟲家族：' + haikuiList + '\n';
+        }
+
+        if (hasInvalidMale) {
+          var invalidMaleList = records.filter(function(r) {
+            var data = ROCO_DB[r.name];
+            return data && data.genderLock === '母' && r.gender === '公';
+          }).map(function(r) {
+            return r.name + '（公）';
+          }).join('、');
+          affectedList.push('大耳帽兜家族、小夜家族 → 只有母種，不可能有異色公');
+          detailText += '已錄入的錯誤性別記錄：' + invalidMaleList + '\n請將這些記錄的性別改為「母」。\n';
+        }
+
+        var titleEl = alertEl.querySelector('.alert-title');
+        var affectedEl = alertEl.querySelector('.alert-affected');
+        var detailEl = alertEl.querySelector('.affected-detail');
+
+        if (titleEl) {
+          titleEl.textContent = '部分精靈數據錄入錯誤或已更新！請及時修改，避免推薦錯誤！';
+        }
+
+        if (affectedEl) {
+          affectedEl.innerHTML = affectedList.map(function(item) { return '• ' + item; }).join('<br>');
+        }
+
+        if (detailEl) {
+          detailEl.innerHTML = detailText.trim().replace(/\n/g, '<br>');
         }
       }
     }
 
+    // ===== 自動更新舊記錄（蛋組、賽季、系別與 ROCO_DB 同步） =====
     records = records.map(function(r) {
-      if (ROCO_DB[r.name] && (!r.eggGroup || r.eggGroup === '未分類')) {
-        r.eggGroup = ROCO_DB[r.name];
+      var dbData = ROCO_DB[r.name];
+      if (!dbData) return r;
+
+      // 更新蛋組
+      if (dbData.eggGroups) {
+        r.eggGroups = dbData.eggGroups;
       }
+      // 更新賽季
+      if (dbData.season) {
+        r.season = dbData.season;
+      }
+      // 更新系別
+      if (dbData.types) {
+        r.types = dbData.types;
+      }
+      // 更新 eggGroup（向後兼容）
+      if (!r.eggGroup || r.eggGroup === '未分類') {
+        r.eggGroup = dbData.eggGroups ? dbData.eggGroups[0] : r.eggGroup;
+      }
+
       return r;
     });
     saveRecords(records);
 
     renderTable();
     renderRecommendations();
-    updateDatalist();
+    updateNameSuggest();
 
     var savedPrioritySeason = localStorage.getItem('prioritySeason') || 'all';
     setTimeout(function() {
@@ -3497,6 +3879,11 @@
     setTimeout(function() {
       checkDataUpdateAlert();
     }, 200);
+
+    // ===== 自動顯示版本號 =====
+    if (typeof VERSION_DATA !== 'undefined' && VERSION_DATA.versions && VERSION_DATA.versions.length > 0) {
+      document.getElementById('versionDisplay').textContent = VERSION_DATA.versions[0].version;
+    }
 
     console.log('✨ 異色精靈記錄器已啟動！資料保存在瀏覽器本地。');
     console.log('📦 目前記錄數:', records.length);
