@@ -2,6 +2,15 @@
 const VERSION_DATA = {
   versions: [
     {
+      version: "v0.26.4",
+      date: "2026-09-14",
+      changes: [
+        "✨ 系統自動修正精靈性別",
+        "🔧 輸入框支援簡體搜索，將高階精靈搜索結果併入初階精靈",
+        "🐛 解決一些已知問題"
+      ]
+    },
+    {
       version: "v0.26.3",
       date: "2026-09-10",
       changes: [
