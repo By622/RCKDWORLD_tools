@@ -1,0 +1,881 @@
+/* ===== 字體載入 ===== */
+@font-face {
+  font-family: 'MIANFEIZITI';
+  src: url('fonts/MIANFEIZITI.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* ===== 全域樣式 ===== */
+* {
+  box-sizing: border-box;
+  font-family: 'WenYuan Rounded SC VF', 'Huninn', 'Segoe UI', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+}
+
+h1, h2 {
+  font-family: 'MIANFEIZITI', 'Segoe UI', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+}
+
+body {
+  background-image: url('https://game.gtimg.cn/images/rocom/act/a20260706preview/web/part1/20260706/bg.avif');
+  background-size: cover;
+  background-position: center center;
+  background-attachment: fixed;
+  background-color: #ffffff;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.container {
+  background: rgba(232, 225, 209, 0.9);
+  border-radius: 24px;
+  padding: 30px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+h1 {
+  color: #2a2a2a;
+  font-family: 'MIANFEIZITI', 'Segoe UI', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+  font-weight: 400;
+  font-size: 2.8rem;
+  text-align: center;
+  border-left: none;
+  padding-left: 0;
+  margin-top: 0;
+  margin-bottom: 4px;
+  width: 100%;
+}
+
+h2 {
+  color: #4a5568;
+  font-family: 'MIANFEIZITI', 'Segoe UI', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+  font-weight: 400;
+  font-size: 1.3rem;
+  margin: 30px 0 16px 0;
+  border-bottom: 4px solid #bab4a7;
+  padding-bottom: 8px;
+}
+
+/* ===== 目前圖鑑折疊 ===== */
+#rocodexToggle {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: pointer;
+  pointer-events: auto;
+  padding: 8px 0;
+  margin: -8px 0;
+}
+
+#rocodexContent.rocodex-hidden {
+  display: none !important;
+}
+
+/* ===== 表單與輸入 ===== */
+.flex-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: flex-end;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1 1 150px;
+}
+
+.form-group label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #4a5568;
+}
+
+.form-group input,
+.form-group select {
+  padding: 10px 14px;
+  border: 2px solid #bab4a7;
+  border-radius: 12px;
+  font-size: 1rem;
+  background: #f3ede0;
+  transition: 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #6c5ce7;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.15);
+  background: #faf9ff;
+}
+
+/* ===== 按鈕 ===== */
+.btn {
+  padding: 10px 28px;
+  border: none;
+  border-radius: 40px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.2s;
+  background: #e2e8f0;
+  color: #2d3748;
+}
+
+.btn:hover {
+  transform: scale(1.02);
+}
+
+.btn-primary {
+  background: #f3ede0;
+  color: #2d3748;
+  border: none;
+}
+
+.btn-primary:hover {
+  background: #e8e1d1;
+  transform: scale(1.02);
+}
+
+.btn-danger {
+  background: #fc8181;
+  color: white;
+  padding: 4px 14px;
+  font-size: 0.85rem;
+}
+
+.btn-danger:hover {
+  background: #f56565;
+}
+
+.btn-sm {
+  padding: 6px 18px;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.btn-primary:hover {
+  background: #5a4bd1;
+  transform: scale(1.02);
+}
+
+.btn-danger:hover {
+  background: #f56565;
+  transform: scale(1.02);
+}
+
+#btnExport,
+#btnImport {
+  background: #f3ede0 !important;
+  color: #2d3748 !important;
+}
+
+#btnExport:hover,
+#btnImport:hover {
+  background: #e8e1d1 !important;
+  transform: scale(1.02) !important;
+}
+
+#btnRefresh {
+  background: #f3ede0 !important;
+  color: #2d3748 !important;
+}
+
+#btnRefresh:hover {
+  background: #e8e1d1 !important;
+  transform: scale(1.02) !important;
+}
+
+#btnClear {
+  background: #fc8181 !important;
+  color: white !important;
+}
+
+#btnClear:hover {
+  background: #f56565 !important;
+  transform: scale(1.02) !important;
+}
+
+/* ===== 自訂確認對話框 ===== */
+.custom-confirm-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+  justify-content: center;
+  align-items: center;
+}
+
+.custom-confirm-box {
+  background: #f3ede0;
+  border-radius: 20px;
+  padding: 24px;
+  max-width: 340px;
+  width: 85%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  text-align: center;
+}
+
+.custom-confirm-box p {
+  font-size: 1rem;
+  color: #2d3748;
+  margin: 0 0 20px 0;
+  line-height: 1.6;
+  white-space: pre-line;
+}
+
+.custom-confirm-box .btn-group {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.custom-confirm-box .btn-group .btn {
+  flex: 1;
+  padding: 10px 20px;
+  border-radius: 40px;
+  border: none;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.custom-confirm-box .btn-cancel {
+  background: #e2e8f0;
+  color: #2d3748;
+}
+
+.custom-confirm-box .btn-confirm {
+  background: #fc8181;
+  color: white;
+}
+
+.custom-confirm-box .btn-confirm:hover {
+  background: #f56565;
+}
+
+/* ===== 系別圖示 ===== */
+.type-icon {
+  width: 18px;
+  height: 18px;
+  display: inline-block;
+  margin: 0 1px;
+  vertical-align: middle;
+  border-radius: 4px;
+}
+
+.type-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: white;
+  margin: 0 2px;
+  min-width: 20px;
+  text-align: center;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* ===== 表格 ===== */
+.table-wrap {
+  overflow-x: auto;
+  margin-top: 10px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+th {
+  background: #e8e1d1;
+  color: #2d3748;
+  padding: 12px 12px;
+  text-align: left;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #bab4a7;
+}
+
+.empty-row td {
+  text-align: center;
+  color: #a0aec0;
+  padding: 30px 0;
+  font-style: italic;
+}
+
+/* ===== 表格容器（可滾動） ===== */
+.table-scroll {
+  max-height: 400px;
+  overflow-x: auto;
+  border-radius: 12px;
+  border: 1px solid #bab4a7;
+  background: #f3ede0;
+  padding-right: 4px;
+  /* 為滾動條留出空間，避免擋住邊框 */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(186, 180, 167, 0.5) transparent;
+}
+
+.table-scroll::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.table-scroll::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 3px;
+}
+
+.table-scroll::-webkit-scrollbar-thumb {
+  background: rgba(186, 180, 167, 0.5);
+  border-radius: 3px;
+  border: 1px solid #f3ede0;
+}
+
+.table-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(186, 180, 167, 0.8);
+}
+
+.table-scroll table {
+  border-collapse: collapse;
+  width: 100%;
+  background: #f3ede0;
+}
+
+.table-scroll thead {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.table-scroll thead th {
+  background: #e8e1d1;
+  border-bottom: 2px solid #bab4a7;
+}
+
+.table-scroll td:last-child {
+  white-space: nowrap;
+  min-width: 140px;
+  text-align: left;
+}
+
+.table-scroll .btn-table {
+  display: inline-block !important;
+  width: auto !important;
+  padding: 6px 14px;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  margin: 0 2px;
+}
+
+/* ===== 推薦卡片 ===== */
+.rec-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.rec-card {
+  background: #f7fafc;
+  border-radius: 16px;
+  padding: 16px 20px;
+  border: 2px solid #e2e8f0;
+  transition: 0.2s;
+}
+
+.rec-card:hover {
+  border-color: #6c5ce7;
+  background: #faf9ff;
+}
+
+.rec-card .title {
+  font-weight: 700;
+  color: #2d3748;
+  font-size: 1.1rem;
+}
+
+.rec-card .detail {
+  display: block;
+  font-size: 0.9rem;
+  color: #4a5568;
+  margin-top: 6px;
+}
+
+.rec-card .detail .missing-list {
+  font-size: 0.9rem;
+}
+
+.rec-card .badge {
+  display: inline-block;
+  background: #6c5ce7;
+  color: white;
+  padding: 0 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-right: 8px;
+}
+
+/* ===== 窩位擺放 ===== */
+.slot-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.slot-pair {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: #f7fafc;
+  border-radius: 12px;
+  padding: 10px 12px;
+  border: 2px solid #e2e8f0;
+  min-height: 100px;
+  transition: 0.2s;
+}
+
+.slot-pair.has-recommendation {
+  border-color: #6c5ce7;
+  background: #faf9ff;
+}
+
+.slot-pair .slot-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #a0aec0;
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+.slot-pair .slot-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 0.85rem;
+  gap: 2px;
+}
+
+.slot-pair .slot-content > span,
+.slot-pair .slot-content .dad,
+.slot-pair .slot-content .mom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+}
+
+.slot-pair .slot-content > span > span,
+.slot-pair .slot-content .dad > span,
+.slot-pair .slot-content .mom > span {
+  justify-content: center;
+  text-align: center;
+}
+
+.slot-pair .slot-content .dad,
+.slot-pair .slot-content .mom {
+  width: 100%;
+  justify-content: center;
+}
+
+.slot-pair .slot-content .dad {
+  color: #6c5ce7;
+  font-weight: 700;
+}
+
+.slot-pair .slot-content .mom {
+  color: #38a169;
+  font-weight: 700;
+}
+
+.slot-pair .slot-content .arrow {
+  color: #a0aec0;
+  font-size: 1.2rem;
+}
+
+.slot-pair .slot-content .empty-text {
+  color: #a0aec0;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+/* ===== 窩位精靈圖片 ===== */
+.slot-pair .slot-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: auto;
+  margin-bottom: -20px;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.slot-pair .slot-image::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 64px;
+  height: 64px;
+  background-image: url('https://game.gtimg.cn/images/rocom/act/a20250811mini/spirite/sprite_avatar_circle.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  z-index: 0;
+}
+
+.slot-pair .slot-image img {
+  max-width: 104px;
+  max-height: 104px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  position: relative;
+  z-index: 1;
+}
+
+/* ===== 響應式：max-width 900px ===== */
+@media (max-width: 900px) {
+  .slot-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+/* ===== 響應式：max-width 768px ===== */
+@media (max-width: 768px) {
+  .slot-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ===== 響應式：max-width 640px ===== */
+@media (max-width: 640px) {
+  body {
+    padding: 4px;
+  }
+
+  .container {
+    padding: 16px 12px;
+    border-radius: 16px;
+  }
+
+  .flex-row {
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    gap: 8px;
+  }
+
+  .form-group {
+    flex: 1 1 100% !important;
+    width: 100% !important;
+  }
+
+  /* 賽季篩選和系別篩選並排 */
+  .form-group:has(#seasonFilterInput),
+  .form-group:has(#typeFilterInput) {
+    flex: 1 1 45% !important;
+    width: 45% !important;
+    min-width: 0 !important;
+  }
+
+  #seasonFilterInput,
+  #typeFilterInput {
+    width: 100% !important;
+    min-width: 0 !important;
+    flex: 1 1 45% !important;
+  }
+
+  .form-group.filter-group {
+    flex: 1 1 45% !important;
+    width: 45% !important;
+    min-width: 0 !important;
+  }
+
+  .form-group input,
+  .form-group select {
+    width: 100%;
+  }
+
+  .form-group select#seasonFilter {
+    width: 100%;
+    font-size: 0.85rem;
+  }
+
+  .form-group select#typeFilter {
+    width: 100%;
+    font-size: 0.85rem;
+  }
+
+  .btn {
+    width: 100%;
+  }
+
+  .rec-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* 卡片和窩位手機端縮小 */
+  .rec-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .rec-card .detail {
+    display: block !important;
+    overflow-x: visible !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* ===== 強制窩位 grid 兩欄 ===== */
+  .slot-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+  }
+
+  .slot-grid .slot-pair {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
+    word-break: break-word !important;
+    box-sizing: border-box !important;
+  }
+
+  /* 限制窩位內容的寬度，避免溢出 */
+  .slot-grid .slot-pair .slot-content {
+    width: 100% !important;
+    overflow: hidden !important;
+    word-break: break-word !important;
+    gap: 2px !important;
+    padding: 2px 0 !important;
+  }
+
+  /* 強制所有文字換行 */
+  .slot-grid .slot-pair .slot-content span,
+  .slot-grid .slot-pair .slot-content div {
+    max-width: 100% !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+  }
+
+  .table-scroll th {
+    white-space: nowrap;
+    font-size: 0.75rem;
+    padding: 6px 4px;
+  }
+
+  .table-scroll td {
+    font-size: 0.75rem;
+    padding: 6px 4px;
+  }
+
+  .table-scroll td:last-child {
+    white-space: nowrap;
+    width: 1%;
+    min-width: 90px;
+    text-align: left;
+  }
+
+  .table-scroll .btn-table {
+    display: inline-block !important;
+    width: auto !important;
+    padding: 3px 8px !important;
+    font-size: 0.65rem !important;
+    white-space: nowrap;
+    margin: 0 1px;
+    flex: none !important;
+  }
+
+  #prioritySeason {
+    flex: 0 1 auto !important;
+    min-width: 60px !important;
+    max-width: 90px !important;
+    font-size: 0.7rem !important;
+    padding: 2px 4px !important;
+  }
+
+  #btnApplyPriority {
+    flex: none !important;
+    padding: 2px 8px !important;
+    font-size: 0.7rem !important;
+    width: auto !important;
+  }
+
+  #btnManageExcludeInline,
+  #btnManageWishlistInline {
+    flex: none !important;
+    padding: 2px 8px !important;
+    font-size: 0.7rem !important;
+    width: auto !important;
+  }
+
+  #btnExcludeClear,
+  #btnWishlistClear,
+  #btnExcludeClose,
+  #btnWishlistClose,
+  #btnExcludeSave,
+  #btnWishlistSave {
+    width: auto !important;
+    flex: 0 0 auto !important;
+  }
+
+  #btnRefresh {
+    padding: 6px 18px !important;
+    font-size: 0.9rem !important;
+    height: 40px !important;
+    line-height: 1.4 !important;
+    width: auto !important;
+    margin-top: 12px !important;
+    flex: 0 1 auto !important;
+    border-radius: 40px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  /* 手機版：匯出匯入按鈕同一行，高度一致 */
+  #btnExport,
+  #btnImport {
+    flex: 1 !important;
+    min-width: 80px !important;
+    padding: 6px 12px !important;
+    font-size: 0.85rem !important;
+    height: 40px !important;
+    line-height: 1.4 !important;
+    width: auto !important;
+    border-radius: 40px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  #btnClear {
+    height: 40px !important;
+    line-height: 1.4 !important;
+    padding: 6px 12px !important;
+    font-size: 0.85rem !important;
+    border-radius: 40px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  /* 尚未擁有精靈列表在手機端正常縮小 */
+  .rec-card .detail .missing-list {
+    white-space: normal !important;
+    word-break: break-word !important;
+    font-size: 0.7rem !important;
+    color: #718096 !important;
+    margin-top: 4px !important;
+  }
+
+  .rec-card .detail .wear-warning {
+    white-space: normal !important;
+    word-break: break-word !important;
+    font-size: 0.75rem !important;
+  }
+
+  .rec-card .detail > div:first-child span {
+    font-size: 0.85rem !important;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .rec-card .detail > div:first-child select {
+    flex: 0 1 auto !important;
+    min-width: 60px !important;
+    max-width: 90px !important;
+    font-size: 0.85rem !important;
+    padding: 2px 4px !important;
+  }
+
+  .rec-card .detail > div:first-child button {
+    flex: 0 0 auto !important;
+    padding: 2px 8px !important;
+    font-size: 0.85rem !important;
+    white-space: nowrap;
+  }
+
+  .rec-card .detail > div:nth-child(2),
+  .rec-card .detail > div:nth-child(3) {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    gap: 3px !important;
+    padding: 2px 0 !important;
+  }
+
+  /* 只選中「排除清單：」「願望清單：」標籤，不影響精靈名稱 */
+  .rec-card .detail > div:nth-child(2) > span:first-child,
+  .rec-card .detail > div:nth-child(3) > span:first-child {
+    font-size: 0.85rem !important;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .rec-card .detail > div:nth-child(2) button,
+  .rec-card .detail > div:nth-child(3) button {
+    flex: 0 0 auto !important;
+    padding: 2px 8px !important;
+    font-size: 0.85rem !important;
+    white-space: nowrap;
+  }
+
+  /* 窩位卡片內的排除/願望精靈名稱在手機上保持 0.7rem */
+  #excludeTagsInline span,
+  #wishlistTagsInline span {
+    font-size: 0.7rem !important;
+  }
+
+  /* 窩位圖片：手機端 */
+  .slot-pair .slot-image {
+    height: auto;
+    margin-bottom: -15px;
+  }
+
+  .slot-pair .slot-image::before {
+    width: 50px;
+    height: 50px;
+  }
+
+  .slot-pair .slot-image img {
+    max-width: 80px;
+    max-height: 80px;
+  }
+}
+
+/* ===== 響應式：max-width 480px ===== */
+@media (max-width: 480px) {
+  .slot-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
