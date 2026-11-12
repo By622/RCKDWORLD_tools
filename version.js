@@ -2,8 +2,25 @@
 const VERSION_DATA = {
   versions: [
     {
+      version: "v0.26.6",
+      date: "2026-11-12",
+      changes: [
+        {
+          type: "add",
+          text: "新增設定",
+          details: [
+            "允許開關顯示精靈圖片",
+            "允許開關顯示背景",
+          ]
+        },
+        { type: "add", text: "新增S5異色精靈" },
+        { type: "imp", text: "改善已擁有異色排序邏輯" },
+        { type: "fix", text: "解決一些已知問題" }
+      ]
+    },
+    {
       version: "v0.26.5",
-      date: "2026-09-16",
+      date: "2026-09-17",
       changes: [
         { type: "add", text: "新增窩位顯示精靈圖片" },
         {
@@ -17,7 +34,7 @@ const VERSION_DATA = {
           ]
         },
         { type: "imp", text: "改善選單字體" },
-        { type: "imp", text: "改善窩位代碼結構" },
+        { type: "imp", text: "改善窩位代碼結構，減少載入時間" },
         { type: "fix", text: "解決一些已知問題" }
       ]
     },
