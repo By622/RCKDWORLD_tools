@@ -22,9 +22,60 @@ body {
   background-position: center center;
   background-attachment: fixed;
   background-color: #ffffff;
-  padding: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
+  padding: 0;
+  margin: 0;
+}
+
+/* ===== 隱藏背景（設定開關） ===== */
+body.hide-background {
+  background-image: none;
+  background-color: #c5ccd6;
+}
+
+/* ===== 頂部固定欄 ===== */
+.top-bar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(232, 225, 209, 0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 0;
+  padding: 12px 24px;
+  margin: 0 0 20px 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.top-bar-title {
+  font-family: 'MIANFEIZITI', 'Segoe UI', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 400;
+  color: #2a2a2a;
+}
+
+.top-bar-settings {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #4a5568;
+  padding: 6px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s;
+}
+
+.top-bar-settings:hover {
+  background: rgba(186, 180, 167, 0.4);
+  color: #2a2a2a;
+}
+
+.top-bar-settings svg {
+  display: block;
 }
 
 .container {
@@ -32,6 +83,8 @@ body {
   border-radius: 24px;
   padding: 30px;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  max-width: 1200px;
+  margin: 0 auto 20px auto;
 }
 
 h1 {
@@ -155,11 +208,6 @@ h2 {
   padding: 6px 18px;
   font-size: 0.9rem;
   white-space: nowrap;
-}
-
-.btn-primary:hover {
-  background: #5a4bd1;
-  transform: scale(1.02);
 }
 
 .btn-danger:hover {
@@ -473,6 +521,8 @@ td {
   text-align: center;
   font-size: 0.85rem;
   gap: 2px;
+  position: relative;
+  z-index: 1;
 }
 
 .slot-pair .slot-content > span,
@@ -483,6 +533,8 @@ td {
   align-items: center;
   text-align: center;
   width: 100%;
+  position: relative;
+  z-index: 1;
 }
 
 .slot-pair .slot-content > span > span,
@@ -525,7 +577,7 @@ td {
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: auto;
+  height: 104px;
   margin-bottom: -20px;
   flex-shrink: 0;
   position: relative;
@@ -537,13 +589,19 @@ td {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 64px;
-  height: 64px;
+  width: 66px;
+  height: 66px;
   background-image: url('https://game.gtimg.cn/images/rocom/act/a20250811mini/spirite/sprite_avatar_circle.png');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
   z-index: 0;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.slot-pair .slot-image.img-loaded::before {
+  opacity: 1;
 }
 
 .slot-pair .slot-image img {
@@ -556,6 +614,11 @@ td {
   image-rendering: crisp-edges;
   position: relative;
   z-index: 1;
+}
+
+/* ===== 隱藏精靈圖片（設定開關） ===== */
+body.hide-slot-image .slot-pair .slot-image {
+  display: none;
 }
 
 /* ===== 響應式：max-width 900px ===== */
@@ -575,7 +638,28 @@ td {
 /* ===== 響應式：max-width 640px ===== */
 @media (max-width: 640px) {
   body {
-    padding: 4px;
+    padding: 0;
+    margin: 0;
+  }
+
+  .container {
+    border-radius: 12px;
+    margin: 0 4px 12px 4px;
+  }
+
+  .top-bar {
+    padding: 10px 16px;
+    margin: 0 0 12px 0;
+    border-radius: 0;
+  }
+
+  .top-bar-title {
+    font-size: 1.1rem;
+  }
+
+  .top-bar-settings svg {
+    width: 20px;
+    height: 20px;
   }
 
   .container {
@@ -858,13 +942,13 @@ td {
 
   /* 窩位圖片：手機端 */
   .slot-pair .slot-image {
-    height: auto;
+    height: 80px;
     margin-bottom: -15px;
   }
 
   .slot-pair .slot-image::before {
-    width: 50px;
-    height: 50px;
+    width: 50.5px;
+    height: 50.5px;
   }
 
   .slot-pair .slot-image img {
