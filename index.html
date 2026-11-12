@@ -11,6 +11,16 @@
 </head>
 <body>
 
+  <div class="top-bar">
+    <div class="top-bar-title">洛克王國小工具</div>
+    <button class="top-bar-settings" id="btnOpenSettings" aria-label="設定">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="3"></circle>
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+      </svg>
+    </button>
+  </div>
+
   <div class="container">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
       <h1>異色孵蛋智能配種</h1>
@@ -146,13 +156,39 @@
       <input type="file" id="fileInput" accept=".json" style="display:none;">
       <button class="btn btn-sm btn-danger" id="btnClear">清空所有</button>
     </div>
-    <div style="text-align: center; margin-top: 16px; font-size: 0.75rem; color: #a0aec0; cursor: pointer;">
-      <span id="versionDisplay" style="cursor: pointer; text-decoration: underline; text-underline-offset: 2px;"></span>
+  </div>
+
+  <!-- ===== 設定彈窗 ===== -->
+  <div id="settingsModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); z-index: 10000; justify-content: center; align-items: center;">
+    <div style="background: #f3ede0; border-radius: 20px; padding: 24px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3); display: flex; flex-direction: column; position: relative;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <h3 style="margin: 0; color: #2d3748;">設定</h3>
+        <button id="settingsModalClose" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #a0aec0;">&times;</button>
+      </div>
+      <div id="settingsContent" style="flex: 1; min-height: 60px; font-size: 0.9rem;">
+        <label style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; cursor: pointer; border-bottom: 1px solid #e8e1d1;">
+          <span style="color: #2d3748; font-weight: 500;">顯示精靈圖片</span>
+          <input type="checkbox" id="toggleShowSlotImage" style="display: none;">
+          <span id="toggleShowSlotImageSwitch" style="position: relative; display: inline-block; width: 44px; height: 24px; background: #cbd5e0; border-radius: 12px; transition: 0.2s; flex-shrink: 0;">
+            <span id="toggleShowSlotImageKnob" style="position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background: white; border-radius: 50%; transition: 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.2);"></span>
+          </span>
+        </label>
+        <label style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; cursor: pointer; border-bottom: 1px solid #e8e1d1;">
+          <span style="color: #2d3748; font-weight: 500;">顯示背景</span>
+          <input type="checkbox" id="toggleShowBackground" style="display: none;">
+          <span id="toggleShowBackgroundSwitch" style="position: relative; display: inline-block; width: 44px; height: 24px; background: #cbd5e0; border-radius: 12px; transition: 0.2s; flex-shrink: 0;">
+            <span id="toggleShowBackgroundKnob" style="position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background: white; border-radius: 50%; transition: 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.2);"></span>
+          </span>
+        </label>
+      </div>
+      <div style="text-align: center; margin-top: 16px; padding-top: 12px; border-top: 1px solid #bab4a7; font-size: 0.75rem; color: #a0aec0;">
+        <span id="versionDisplay" style="cursor: pointer; text-decoration: underline; text-underline-offset: 2px;"></span>
+      </div>
     </div>
   </div>
 
   <!-- ===== 版本更新紀錄彈窗 ===== -->
-  <div id="versionModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 10000; justify-content: center; align-items: center;">
+  <div id="versionModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 10001; justify-content: center; align-items: center;">
     <div style="background: #f3ede0; border-radius: 20px; padding: 24px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
         <h3 style="margin: 0; color: #2d3748;">版本更新紀錄</h3>
@@ -218,8 +254,8 @@
       "雪影娃娃": { eggGroups: ["妖精", "擬人"], season: "S1常駐", genderLock: "母", types: ["冰", "萌"], evolvesFrom: "帽兜娃娃" },
       "拉特": { eggGroups: ["妖精"], season: "S1常駐", types: ["電"] },
       "酷拉": { eggGroups: ["妖精"], season: "S1常駐", types: ["電"], evolvesFrom: "拉特" },
-      "治愈兔": { eggGroups: ["妖精", "動物"], season: "S1常駐", types: ["火", "萌"] },
-      "紅絲絨": { eggGroups: ["妖精", "動物"], season: "S1常駐", types: ["火", "萌"], evolvesFrom: "治愈兔" },
+      "治癒兔": { eggGroups: ["妖精", "動物"], season: "S1常駐", types: ["火", "萌"] },
+      "紅絲絨": { eggGroups: ["妖精", "動物"], season: "S1常駐", types: ["火", "萌"], evolvesFrom: "治癒兔" },
       "紅絨十字": { eggGroups: ["妖精", "動物"], season: "S1常駐", types: ["火", "萌"], evolvesFrom: "紅絲絨" },
       "機械方方": { eggGroups: ["擬人", "機械"], season: "S1常駐", types: ["機械"] },
       "多彩方方": { eggGroups: ["擬人", "機械"], season: "S1常駐", types: ["機械"], evolvesFrom: "機械方方" },
@@ -246,8 +282,6 @@
       "粉星仔": { eggGroups: ["妖精", "天空"], season: "S1賽季", types: ["幻"] },
       "粉耳星兔": { eggGroups: ["妖精", "天空"], season: "S1賽季", types: ["幻"], evolvesFrom: "粉星仔" },
       "落隕星兔": { eggGroups: ["妖精", "天空"], season: "S1賽季", types: ["幻", "幽"], evolvesFrom: "粉星仔" },
-      "火紅尾": { eggGroups: ["動物"], season: "其他", types: ["火"] },
-      "雅丹鬃": { eggGroups: ["動物"], season: "其他", types: ["火"], evolvesFrom: "火紅尾" },
 
       // ===== S2 賽季 =====
       "惡魔叮": { eggGroups: ["妖精"], season: "S2常駐", types: ["惡", "翼"] },
@@ -354,7 +388,7 @@
       "邪眼巨魔": { eggGroups: ["巨靈", "昆蟲"], season: "S4常駐", types: ["惡", "蟲"], evolvesFrom: "耳翎瑰魅" },
       "覓覓蝠": { eggGroups: ["天空", "巨靈"], season: "S4常駐", types: ["翼", "惡"] },
       "翻翻蝠": { eggGroups: ["天空", "巨靈"], season: "S4常駐", types: ["翼", "惡"], evolvesFrom: "覓覓蝠" },
-      "夜游魔": { eggGroups: ["天空", "巨靈"], season: "S4常駐", types: ["翼", "惡"], evolvesFrom: "翻翻蝠" },
+      "夜遊魔": { eggGroups: ["天空", "巨靈"], season: "S4常駐", types: ["翼", "惡"], evolvesFrom: "翻翻蝠" },
       "芽眼魔": { eggGroups: ["妖精", "巨靈"], season: "S4常駐", types: ["惡", "水"] },
       "葉眼魔": { eggGroups: ["妖精", "巨靈"], season: "S4常駐", types: ["惡", "水"], evolvesFrom: "芽眼魔" },
       "障眼魔": { eggGroups: ["妖精", "巨靈"], season: "S4常駐", types: ["惡", "水"], evolvesFrom: "葉眼魔" },
@@ -373,7 +407,58 @@
       "星星眼": { eggGroups: ["天空", "大地"], season: "S4賽季", types: ["幻"] },
       "布靈": { eggGroups: ["妖精"], season: "S4賽季", types: ["幻", "光"] },
       "布靈布靈": { eggGroups: ["妖精"], season: "S4賽季", types: ["幻", "光"], evolvesFrom: "布靈" },
+
+// ===== S5 賽季 =====
+      "錘頭鸛": { eggGroups: ["天空", "兩棲"], season: "S5常駐", types: ["翼", "水"] },
+      "花怨鰻": { eggGroups: ["海洋", "兩棲"], season: "S5常駐", types: ["地", "草"] },
+      "鰻尾獸": { eggGroups: ["海洋", "兩棲"], season: "S5常駐", types: ["地", "草"], evolvesFrom: "花怨鰻" },
+      "伊雷龍": { eggGroups: ["飛龍"], season: "S5常駐", types: ["龍"] },
+      "伊蘭亞龍": { eggGroups: ["飛龍"], season: "S5常駐", types: ["龍"], evolvesFrom: "伊雷龍" },
+      "小翼龍": { eggGroups: ["天空", "飛龍"], season: "S5常駐", types: ["地", "翼"] },
+      "翼龍": { eggGroups: ["天空", "飛龍"], season: "S5常駐", types: ["地", "翼"], evolvesFrom: "小翼龍" },
+      "緹塔": { eggGroups: ["機械"], season: "S5常駐", types: ["機械"] },
+      "聲波緹塔": { eggGroups: ["機械"], season: "S5常駐", types: ["機械"], evolvesFrom: "緹塔" },
+      "可愛猿": { eggGroups: ["巨靈", "擬人"], season: "S5常駐", types: ["火"] },
+      "熾熱猿": { eggGroups: ["巨靈", "擬人"], season: "S5常駐", types: ["火"], evolvesFrom: "可愛猿" },
+      "火焰猿": { eggGroups: ["巨靈", "擬人"], season: "S5常駐", types: ["火"], evolvesFrom: "熾熱猿" },
+      "深藍鯨": { eggGroups: ["海洋", "巨靈"], season: "S5常駐", types: ["水"] },
+      "吸泥鷗": { eggGroups: ["天空", "兩棲"], season: "S5常駐", types: ["地", "翼"] },
+      "泥吼牙": { eggGroups: ["天空", "兩棲"], season: "S5常駐", types: ["地", "翼"], evolvesFrom: "吸泥鷗" },
+
+      "樂樂鯊": { eggGroups: ["海洋"], season: "S5賽季", types: ["水"] },
+      "阿瓦鯊（檸檬鯊）": { eggGroups: ["海洋"], season: "S5賽季", types: ["水"], evolvesFrom: "樂樂鯊" },
+      "阿瓦鯊（虎紋鯊）": { eggGroups: ["海洋"], season: "S5賽季", types: ["水"], evolvesFrom: "樂樂鯊" },
+      "蛋包蛋": { eggGroups: ["天空", "動物"], season: "S5賽季", types: ["普通", "萌"] },
+      "雞麻麻": { eggGroups: ["天空", "動物"], season: "S5賽季", types: ["普通", "萌"], evolvesFrom: "蛋包蛋" },
+      "蟹蟹椰": { eggGroups: ["妖精", "兩棲"], season: "S5賽季", types: ["水", "草"] },
+      "沙咔蟹": { eggGroups: ["妖精", "兩棲"], season: "S5賽季", types: ["水", "草"], evolvesFrom: "蟹蟹椰" },
+      "鯨羽": { eggGroups: ["妖精", "海洋"], season: "S5賽季", types: ["幻", "冰"] },
+      "圓環鯨羽": { eggGroups: ["妖精", "海洋"], season: "S5賽季", types: ["幻", "冰"], evolvesFrom: "鯨羽" },
+      "豆粒鵝": { eggGroups: ["天空", "動物"], season: "S5賽季", types: ["冰"] },
+      "刨雪鵝": { eggGroups: ["天空", "動物"], season: "S5賽季", types: ["冰"], evolvesFrom: "豆粒鵝" },
+      "西瓜蟲": { eggGroups: ["植物", "昆蟲"], season: "S5賽季", types: ["蟲", "草"] },
+      "冬蟲夏瓜": { eggGroups: ["植物", "昆蟲"], season: "S5賽季", types: ["蟲", "草"], evolvesFrom: "西瓜蟲" },
+      "小剪影": { eggGroups: ["妖精", "魔力"], season: "S5賽季", types: ["幽"] },
+      "影子剪紙": { eggGroups: ["妖精", "魔力"], season: "S5賽季", types: ["幽"], evolvesFrom: "小剪影" },
+      "滴溜豚": { eggGroups: ["海洋"], season: "S5賽季", types: ["毒", "幻"] },
+      "滴廿豚": { eggGroups: ["海洋"], season: "S5賽季", types: ["毒", "幻"], evolvesFrom: "滴溜豚" },
+
+      // ===== 其他 =====
+      "火紅尾": { eggGroups: ["動物"], season: "其他", types: ["火"] },
+      "雅丹鬃": { eggGroups: ["動物"], season: "其他", types: ["火"], evolvesFrom: "火紅尾" },
+      "雲夢豚": { eggGroups: ["海洋"], season: "其他", types: ["水"] },
+      "長江豚": { eggGroups: ["海洋"], season: "其他", types: ["水"], evolvesFrom: "雲夢豚" },
+
     };
+
+    // ---------- 精靈定義順序（用於表格次級排序） ----------
+    var ROCO_ORDER = {};
+    (function() {
+      var names = Object.keys(ROCO_DB);
+      for (var i = 0; i < names.length; i++) {
+        ROCO_ORDER[names[i]] = i;
+      }
+    })();
 
     // ---------- 精靈官方 ID 對照表（用於取得官方圖片） ----------
     var ROCO_ID_MAP = {
@@ -382,7 +467,7 @@
       "呼呼豬": 3262, "獠牙豬": 3263,
       "大耳帽兜": 3121, "帽兜娃娃": 3122, "雪影娃娃": 3123,
       "拉特": 3188, "酷拉": 3189,
-      "治愈兔": 3081, "紅絲絨": 3082, "紅絨十字": 3350,
+      "治癒兔": 3081, "紅絲絨": 3082, "紅絨十字": 3350,
       "機械方方": 3200, "多彩方方": 3201, "立方人": 3202,
       "格蘭種子": 3072, "格蘭花": 3073, "格蘭球": 3074,
       "雙燈魚": 3382, "利燈魚": 3383,
@@ -435,7 +520,7 @@
       "刺輪砣（下弦）": 3584, "月亮砣（下弦）": 3585,
       "叮叮卯": 3752, "飛飛鑰": 3753,
       "瑰眼仔": 3183, "耳翎瑰魅": 3184, "邪眼巨魔": 3185,
-      "覓覓蝠": 3321, "翻翻蝠": 3322, "夜游魔": 3323,
+      "覓覓蝠": 3321, "翻翻蝠": 3322, "夜遊魔": 3323,
       "芽眼魔": 3347, "葉眼魔": 3348, "障眼魔": 3349,
       "章腦丸": 3767, "智輝章腦": 3768,
       "未完蟲": 3542,
@@ -445,6 +530,24 @@
       "幽鈴": 3773, "搖鈴魔偶": 3774,
       "星星眼": 3236,
       "布靈": 3775, "布靈布靈": 3776,
+      "雲夢豚": 3784, "長江豚": 3785,
+      "錘頭鸛": 3069,
+      "花怨鰻": 3506, "鰻尾獸": 3507,
+      "伊雷龍": 3211, "伊蘭亞龍": 3412,
+      "小翼龍": 3209, "翼龍": 3210,
+      "緹塔": 3406, "聲波緹塔": 3407,
+      "可愛猿": 3083, "熾熱猿": 3084, "火焰猿": 3085,
+      "深藍鯨": 3381,
+      "吸泥鷗": 3490, "泥吼牙": 3491,
+      "樂樂鯊": 3805, "阿瓦鯊（檸檬鯊）": 3806, "阿瓦鯊（虎紋鯊）": 3807,
+      "蛋包蛋": 3808, "雞麻麻": 3809,
+      "蟹蟹椰": 3810, "沙咔蟹": 3811,
+      "鯨羽": 3812, "圓環鯨羽": 3813,
+      "豆粒鵝": 3814, "刨雪鵝": 3815,
+      "西瓜蟲": 3816, "冬蟲夏瓜": 3817,
+      "小剪影": 3818, "影子剪紙": 3819,
+      "滴溜豚": 3820, "滴廿豚": 3821,
+
     };
 
     // 取得精靈圖片網址
@@ -458,54 +561,104 @@
 
     // ---------- 簡體轉繁體對照表（僅涵蓋精靈名稱中出現的字） ----------
     var SIMP_TO_TRAD = {
-      '灵': '靈', '丽': '麗', '恶': '惡', '魔': '魔', '猪': '豬', '獠': '獠',
-      '兜': '兜', '娃': '娃', '雪': '雪', '影': '影', '拉': '拉', '酷': '酷',
-      '疗': '療', '愈': '癒', '兔': '兔', '红': '紅', '绒': '絨', '丝': '絲',
-      '机': '機', '械': '械', '方': '方', '多': '多', '彩': '彩', '立': '立',
-      '兰': '蘭', '种': '種', '子': '子', '花': '花', '球': '球',
-      '双': '雙', '灯': '燈', '鱼': '魚', '利': '利', '月': '月', '牙': '牙',
-      '熊': '熊', '嗜': '嗜', '光': '光', '嗡': '嗡', '窃': '竊', '蚊': '蚊',
+      // ===== S1 常駐 =====
+      '奇': '奇', '丽': '麗', '草': '草', '叶': '葉',
+      '恶': '惡', '魔': '魔', '狼': '狼',
+      '呼': '呼', '猪': '豬', '獠': '獠', '牙': '牙',
+      '大': '大', '耳': '耳', '帽': '帽', '兜': '兜', '娃': '娃', '雪': '雪', '影': '影',
+      '拉': '拉', '特': '特', '酷': '酷',
+      '治': '治', '愈': '癒', '兔': '兔', '红': '紅', '绒': '絨', '丝': '絲', '十': '十', '字': '字',
+      '机': '機', '械': '械', '方': '方', '多': '多', '彩': '彩', '立': '立', '人': '人',
+      '格': '格', '兰': '蘭', '种': '種', '子': '子', '花': '花', '球': '球',
+
+      // ===== S1 賽季 =====
+      '双': '雙', '灯': '燈', '鱼': '魚', '利': '利',
+      '月': '月', '熊': '熊',
+      '嗜': '嗜', '光': '光', '嗡': '嗡', '窃': '竊', '蚊': '蚊',
       '柴': '柴', '渣': '渣', '虫': '蟲', '燃': '燃', '薪': '薪',
       '空': '空', '颅': '顱', '夜': '夜', '宿': '宿', '枭': '梟',
-      '粉': '粉', '星': '星', '皮': '皮', '贝': '貝', '瑟': '瑟',
-      '加': '加', '尔': '爾', '古': '古', '斯': '斯',
-      '耳': '耳', '陨': '隕', '火': '火', '尾': '尾', '雅': '雅', '丹': '丹',
-      '鬃': '鬃', '叮': '叮', '幽': '幽', '树': '樹', '嘟': '嘟', '煲': '煲',
-      '锅': '鍋', '菊': '菊', '梨': '梨', '小': '小', '紫': '紫',
-      '朔': '朔', '伊': '伊', '芙': '芙', '独': '獨', '角': '角', '兽': '獸',
-      '白': '白', '金': '金', '灵': '靈', '狐': '狐', '九': '九', '尾': '尾',
-      '尖': '尖', '嘴': '嘴', '仙': '仙', '公': '公', '平': '平', '鸽': '鴿',
-      '猴': '猴', '麦': '麥', '仔': '仔', '音': '音', '碟': '碟', '吼': '吼',
-      '油': '油', '海': '海', '葵': '葵', '蟹': '蟹', '丑': '醜', '豆': '豆',
-      '兔': '兔', '公': '公', '爵': '爵', '烟': '煙', '花': '花', '团': '團',
-      '伯': '伯', '咕': '咕', '帽': '帽', '德': '德', '炫': '炫', '迪': '迪',
-      '霹': '霹', '雳': '靂', '鼓': '鼓', '象': '象', '巨': '巨',
+      '粉': '粉', '星': '星', '皮': '皮',
+      '贝': '貝', '瑟': '瑟', '加': '加', '尔': '爾', '古': '古', '斯': '斯',
+      '仔': '仔', '陨': '隕',
+
+      // ===== S2 常駐 =====
+      '叮': '叮', '幽': '幽', '树': '樹',
+      '嘟': '嘟', '煲': '煲', '锅': '鍋',
+      '菊': '菊', '梨': '梨',
+      '小': '小', '紫': '紫', '朔': '朔', '伊': '伊', '芙': '芙',
+      '独': '獨', '角': '角', '兽': '獸', '白': '白', '金': '金',
+      '灵': '靈', '狐': '狐', '九': '九', '尾': '尾', '尖': '尖', '嘴': '嘴', '仙': '仙',
+      '公': '公', '平': '平', '鸽': '鴿',
+
+      // ===== S2 賽季 =====
+      '猴': '猴', '麦': '麥', '音': '音', '碟': '碟', '吼': '吼',
+      '油': '油', '海': '海', '葵': '葵', '蟹': '蟹',
+      '丑': '丑', '豆': '豆', '爵': '爵',
+      '烟': '煙', '团': '團', '伯': '伯',
+      '咕': '咕', '德': '德',
+      '炫': '炫', '迪': '迪', '霹': '霹', '雳': '靂',
+      '鼓': '鼓', '象': '象', '巨': '巨',
       '牵': '牽', '线': '線', '木': '木', '偶': '偶', '帅': '帥',
-      '贝': '貝', '儿': '兒', '粉': '粉', '海': '海', '盔': '盔',
-      '刺': '刺', '千': '千', '棘': '棘', '本': '本', '来': '來', '磨': '磨', '损': '損',
-      '草': '草', '衣': '衣', '蝶': '蝶', '斑': '斑', '小': '小', '鹬': '鷸',
-      '鄙': '鄙', '目': '目', '高': '高', '脚': '腳', '豆': '豆', '丁': '丁',
-      '快': '快', '鳍': '鰭', '龙': '龍', '可': '可', '立': '立', '鸡': '雞',
-      '晕': '暈', '绅': '紳', '士': '士', '武': '武', '者': '者',
-      '地': '地', '鼠': '鼠', '遁': '遁', '储': '儲', '水': '水', '期': '期',
-      '枯': '枯', '蝴': '蝴', '蝶': '蝶', '陶': '陶', '铆': '鉚', '钉': '釘',
-      '毛': '毛', '徘': '徘', '徊': '徊', '爪': '爪', '苞': '苞', '米': '米',
-      '炮': '炮', '十': '十', '字': '字', '蝌': '蝌', '蚪': '蚪', '蛙': '蛙',
-      '深': '深', '渊': '淵', '卡': '卡', '波': '波', '拉': '拉',
-      '守': '守', '烛': '燭', '流': '流', '明': '明', '坎': '坎', '德': '德',
+
+      // ===== S3 常駐 =====
+      '儿': '兒',
+      '盔': '盔', '刺': '刺', '千': '千', '棘': '棘', '本': '本', '来': '來', '磨': '磨', '损': '損',
+      '衣': '衣', '蝶': '蝶',
+      '斑': '斑', '鹬': '鷸', '鄙': '鄙', '目': '目', '高': '高', '脚': '腳',
+      '丁': '丁', '快': '快', '鳍': '鰭', '龙': '龍',
+      '可': '可', '鸡': '雞', '晕': '暈', '绅': '紳', '士': '士', '武': '武', '者': '者',
+      '地': '地', '鼠': '鼠', '遁': '遁', '储': '儲', '水': '水', '期': '期', '枯': '枯',
+
+      // ===== S3 賽季 =====
+      '蝴': '蝴', '陶': '陶', '铆': '鉚', '钉': '釘', '毛': '毛', '徘': '徘', '徊': '徊', '爪': '爪',
+      '苞': '苞', '米': '米', '炮': '炮',
+      '蝌': '蝌', '蚪': '蚪', '蛙': '蛙', '深': '深', '渊': '淵',
+      '卡': '卡', '波': '波',
+      '守': '守', '烛': '燭', '流': '流', '明': '明', '坎': '坎',
       '蜜': '蜜', '果': '果', '骸': '骸', '半': '半', '朽': '朽',
-      '栗': '栗', '壳': '殼', '丝': '絲', '稻': '稻', '守': '守', '护': '護',
-      '灵': '靈', '菇': '菇', '幻': '幻', '黑': '黑', '猫': '貓', '巫': '巫',
-      '师': '師', '逗': '逗', '气': '氣', '球': '球', '梦': '夢', '想': '想',
-      '三': '三', '刺': '刺', '轮': '輪', '砣': '砣', '上': '上', '弦': '弦',
-      '下': '下', '月': '月', '亮': '亮', '叮': '叮', '卯': '卯', '飞': '飛',
-      '钥': '鑰', '瑰': '瑰', '眼': '眼', '翎': '翎', '魅': '魅', '邪': '邪',
-      '巨': '巨', '魔': '魔', '觅': '覓', '蝠': '蝠', '翻': '翻', '游': '遊',
-      '芽': '芽', '叶': '葉', '障': '障', '章': '章', '脑': '腦', '丸': '丸',
-      '智': '智', '辉': '輝', '未': '未', '完': '完', '玳': '玳', '龟': '龜',
-      '塔': '塔', '量': '量', '风': '風', '碗': '碗', '测': '測', '蝉': '蟬',
-      '浣': '浣', '蛋': '蛋', '手': '手', '幽': '幽', '铃': '鈴', '摇': '搖',
-      '星': '星', '布': '布', '灵': '靈', '灵': '靈'
+      '栗': '栗', '壳': '殼', '稻': '稻', '护': '護',
+
+      // ===== S4 常駐 =====
+      '菇': '菇', '幻': '幻', '黑': '黑', '猫': '貓', '巫': '巫', '师': '師',
+      '逗': '逗', '气': '氣', '梦': '夢', '想': '想', '三': '三',
+      '轮': '輪', '砣': '砣', '上': '上', '弦': '弦', '下': '下', '亮': '亮',
+      '卯': '卯', '飞': '飛', '钥': '鑰',
+      '瑰': '瑰', '眼': '眼', '翎': '翎', '魅': '魅', '邪': '邪',
+      '觅': '覓', '蝠': '蝠', '翻': '翻', '游': '遊',
+      '芽': '芽', '障': '障',
+
+      // ===== S4 賽季 =====
+      '章': '章', '脑': '腦', '丸': '丸', '智': '智', '辉': '輝',
+      '未': '未', '完': '完',
+      '玳': '玳', '龟': '龜', '塔': '塔',
+      '量': '量', '风': '風', '碗': '碗', '测': '測', '蝉': '蟬',
+      '浣': '浣', '蛋': '蛋', '手': '手',
+      '铃': '鈴', '摇': '搖',
+      '布': '布',
+
+      // ===== S5 常駐 =====
+      '锤': '錘', '头': '頭', '鹳': '鸛',
+      '怨': '怨', '鳗': '鰻',
+      '雷': '雷', '亚': '亞',
+      '翼': '翼',
+      '缇': '緹', '声': '聲',
+      '爱': '愛', '猿': '猿', '炽': '熾', '热': '熱', '火': '火', '焰': '焰',
+      '蓝': '藍', '鲸': '鯨',
+      '吸': '吸', '泥': '泥', '鸥': '鷗',
+
+      // ===== S5 賽季 =====
+      '乐': '樂', '鲨': '鯊', '阿': '阿', '瓦': '瓦', '柠': '檸', '檬': '檬', '虎': '虎', '纹': '紋',
+      '包': '包', '麻': '麻',
+      '椰': '椰', '沙': '沙', '咔': '咔',
+      '羽': '羽', '圆': '圓', '环': '環',
+      '粒': '粒', '鹅': '鵝', '刨': '刨',
+      '西': '西', '瓜': '瓜', '冬': '冬', '夏': '夏',
+      '剪': '剪', '纸': '紙',
+      '滴': '滴', '溜': '溜', '豚': '豚', '廿': '廿',
+
+      // ===== 其他 =====
+      '尾': '尾', '雅': '雅', '丹': '丹', '鬃': '鬃',
+      '云': '雲', '长': '長', '江': '江'
     };
 
     // 將簡體字串轉為繁體
@@ -576,10 +729,12 @@
     };
 
     var SEASON_PRIORITY = {
-      "S1": 1,
-      "S2": 2,
-      "S3": 3,
-      "S4": 4,
+      "S1常駐": 1, "S1賽季": 1,
+      "S2常駐": 2, "S2賽季": 2,
+      "S3常駐": 3, "S3賽季": 3,
+      "S4常駐": 4, "S4賽季": 4,
+      "S5常駐": 5, "S5賽季": 5,
+      "其他": 999,
     };
 
     var ALL_EGG_GROUPS = ["妖精", "擬人", "天空", "兩棲", "大地", "軟體", "海洋", "巨靈", "魔力", "機械", "動物", "植物", "昆蟲", "飛龍"];
@@ -800,11 +955,12 @@
       var asc = sortState.asc;
       records.sort(function(a, b) {
         var valA, valB;
+        var isNameSort = false;
+
         if (field === 'name') {
           valA = a.name;
           valB = b.name;
-          var result = valA.localeCompare(valB, 'zh-Hant');
-          return asc ? result : -result;
+          isNameSort = true;
         } else if (field === 'gender') {
           valA = a.gender;
           valB = b.gender;
@@ -815,8 +971,30 @@
           valA = a.season || '';
           valB = b.season || '';
         }
-        if (valA < valB) return asc ? -1 : 1;
-        if (valA > valB) return asc ? 1 : -1;
+
+        // 主排序
+        var result;
+        if (isNameSort) {
+          result = valA.localeCompare(valB, 'zh-Hant');
+        } else {
+          if (valA < valB) result = -1;
+          else if (valA > valB) result = 1;
+          else result = 0;
+        }
+
+        if (result !== 0) return asc ? result : -result;
+
+        // 次級排序：非名稱欄位時，同值內按 ROCO_DB 定義順序排列
+        if (!isNameSort) {
+          var orderA = ROCO_ORDER.hasOwnProperty(a.name) ? ROCO_ORDER[a.name] : 99999;
+          var orderB = ROCO_ORDER.hasOwnProperty(b.name) ? ROCO_ORDER[b.name] : 99999;
+          if (orderA !== orderB) return asc ? (orderA - orderB) : (orderB - orderA);
+
+          // 三級排序：同一精靈時按性別排序，確保穩定
+          var genderResult = a.gender.localeCompare(b.gender, 'zh-Hant');
+          return asc ? genderResult : -genderResult;
+        }
+
         return 0;
       });
     }
@@ -1128,7 +1306,12 @@
 
       // 圖片
       if (imageUrl) {
-        html += '<div class="slot-image"><img src="' + imageUrl + '" alt="' + options.petName + '" onerror="this.parentNode.style.display=\'none\';"></div>';
+        html += '<div class="slot-image">' +
+          '<img src="' + imageUrl + '" alt="' + options.petName + '"' +
+          ' onload="this.parentNode.classList.add(\'img-loaded\');"' +
+          ' onerror="this.parentNode.style.display=\'none\';"' +
+          '>' +
+          '</div>';
       }
 
       // 名稱列（性別圖標 + 名稱 + 系別）
@@ -1187,6 +1370,22 @@
       var recordedNames = getRecordedNames(records);
       var maleShinies = getMaleShinies(records);
       var femaleShinies = records.filter(function(r) { return r.gender === '母'; });
+
+      // ===== 預載已記錄精靈的異色圖 =====
+      records.forEach(function(r) {
+        var url = getRocoImageUrl(r.name, true);
+        if (url) {
+          var preloader = new Image();
+          preloader.src = url;
+        }
+      });
+
+      records.forEach(function(r) {
+        var urlShiny = getRocoImageUrl(r.name, true);
+        if (urlShiny) { var p1 = new Image(); p1.src = urlShiny; }
+        var urlNormal = getRocoImageUrl(r.name, false);
+        if (urlNormal) { var p2 = new Image(); p2.src = urlNormal; }
+      });
 
       var html = '<div class="rec-grid">';
 
@@ -2186,6 +2385,8 @@
           '<option value="S3賽季" ' + (savedSeason === 'S3賽季' ? 'selected' : '') + '>S3賽季</option>' +
           '<option value="S4常駐" ' + (savedSeason === 'S4常駐' ? 'selected' : '') + '>S4常駐</option>' +
           '<option value="S4賽季" ' + (savedSeason === 'S4賽季' ? 'selected' : '') + '>S4賽季</option>' +
+          '<option value="S5常駐" ' + (savedSeason === 'S5常駐' ? 'selected' : '') + '>S5常駐</option>' +
+          '<option value="S5賽季" ' + (savedSeason === 'S5賽季' ? 'selected' : '') + '>S5賽季</option>' +
           '<option value="其他" ' + (savedSeason === '其他' ? 'selected' : '') + '>其他</option>' +
           '</select>' +
           '<button class="btn btn-sm" id="btnApplyPriority" style="padding: 3px 12px; font-size: 0.8rem; background: #d69e2e; color: white; border: none; border-radius: 14px; cursor: pointer; transition: 0.2s;">套用</button>' +
@@ -2235,6 +2436,9 @@
           '<option value="S3常駐" ' + (savedSeason === 'S3常駐' ? 'selected' : '') + '>S3常駐</option>' +
           '<option value="S3賽季" ' + (savedSeason === 'S3賽季' ? 'selected' : '') + '>S3賽季</option>' +
           '<option value="S4常駐" ' + (savedSeason === 'S4常駐' ? 'selected' : '') + '>S4常駐</option>' +
+          '<option value="S4賽季" ' + (savedSeason === 'S4賽季' ? 'selected' : '') + '>S4賽季</option>' +
+          '<option value="S5常駐" ' + (savedSeason === 'S5常駐' ? 'selected' : '') + '>S5常駐</option>' +
+          '<option value="S5賽季" ' + (savedSeason === 'S5賽季' ? 'selected' : '') + '>S5賽季</option>' +
           '<option value="其他" ' + (savedSeason === '其他' ? 'selected' : '') + '>其他</option>' +
           '</select>' +
           '<button class="btn btn-sm" id="btnApplyPriority" style="padding: 3px 12px; font-size: 0.8rem; background: #d69e2e; color: white; border: none; border-radius: 14px; cursor: pointer; transition: 0.2s;">套用</button>' +
@@ -2560,9 +2764,8 @@
           e.preventDefault(); // 防止輸入框失焦
           input.value = this.dataset.name;
           dropdown.style.display = 'none';
-          // 手動觸發 input 事件，讓性別鎖定生效
-          var inputEvent = new Event('input', { bubbles: true });
-          input.dispatchEvent(inputEvent);
+          // 直接更新性別鎖定，不觸發 input 事件（避免重新顯示下拉選單）
+          updateGenderLock(this.dataset.name);
         });
       });
     }
@@ -2594,6 +2797,8 @@
       { value: 'S3賽季', label: 'S3賽季' },
       { value: 'S4常駐', label: 'S4常駐' },
       { value: 'S4賽季', label: 'S4賽季' },
+      { value: 'S5常駐', label: 'S5常駐' },
+      { value: 'S5賽季', label: 'S5賽季' },
       { value: '其他', label: '其他' }
     ];
 
@@ -2898,8 +3103,10 @@
       });
     });
 
-    document.getElementById('inputName').addEventListener('input', function() {
-      var name = this.value.trim();
+    // 更新性別鎖定狀態
+    // 有 genderLock：強制鎖定該性別
+    // 無 genderLock：保留使用者目前的選擇，只更新按鈕狀態
+    function updateGenderLock(name) {
       var rocoData = ROCO_DB[name];
       var genderBtns = document.querySelectorAll('.gender-btn');
       var hiddenInput = document.getElementById('inputGender');
@@ -2912,75 +3119,68 @@
         }
       }
 
-      // 先重設所有按鈕
+      // 先重設所有按鈕為可用
       genderBtns.forEach(function(btn) {
         btn.disabled = false;
         btn.style.opacity = '1';
         btn.style.cursor = 'pointer';
       });
 
-      // 如果找不到精靈資料，直接返回
+      // 如果找不到精靈資料，直接返回（保留現有選擇）
       if (!rocoData) {
         return;
       }
 
       if (rocoData.genderLock) {
+        // 有 genderLock：強制鎖定到該性別
+        hiddenInput.value = rocoData.genderLock;
         genderBtns.forEach(function(btn) {
           if (btn.dataset.gender !== rocoData.genderLock) {
+            // 禁用不允許的性別
             btn.disabled = true;
             btn.style.opacity = '0.5';
             btn.style.cursor = 'not-allowed';
-            var imgDisabled = btn.querySelector('img');
-            if (imgDisabled) {
-              imgDisabled.style.filter = 'none';
-            }
+            btn.classList.remove('active');
+            btn.style.background = '#f3ede0';
+            btn.style.color = '#4a5568';
+            btn.style.borderColor = '#bab4a7';
+            var img = btn.querySelector('img');
+            if (img) img.style.filter = 'none';
           } else {
-            hiddenInput.value = rocoData.genderLock;
-            genderBtns.forEach(function(b) {
-              b.classList.remove('active');
-              b.style.background = 'white';
-              b.style.color = '#4a5568';
-              b.style.borderColor = '#e2e8f0';
-              var imgReset = b.querySelector('img');
-              if (imgReset) {
-                imgReset.style.filter = 'none';
-              }
-            });
+            // 選中允許的性別
             btn.classList.add('active');
             btn.style.background = '#bab4a7';
             btn.style.color = 'white';
             btn.style.borderColor = '#bab4a7';
-            var imgActive = btn.querySelector('img');
-            if (imgActive) {
-              imgActive.style.filter = 'brightness(0) invert(1)';
-            }
+            var img = btn.querySelector('img');
+            if (img) img.style.filter = 'brightness(0) invert(1)';
           }
         });
       } else {
-        // 沒有 genderLock 時，恢復預設狀態（公為預設選中）
-        genderBtns.forEach(function(b) {
-          if (b.dataset.gender === '公') {
-            b.classList.add('active');
-            b.style.background = '#bab4a7';
-            b.style.color = 'white';
-            b.style.borderColor = '#bab4a7';
-            var imgMale = b.querySelector('img');
-            if (imgMale) {
-              imgMale.style.filter = 'brightness(0) invert(1)';
-            }
+        // 無 genderLock：不強制改變 hiddenInput，只根據現有選擇更新按鈕狀態
+        var currentGender = hiddenInput.value;
+        genderBtns.forEach(function(btn) {
+          if (btn.dataset.gender === currentGender) {
+            btn.classList.add('active');
+            btn.style.background = '#bab4a7';
+            btn.style.color = 'white';
+            btn.style.borderColor = '#bab4a7';
+            var img = btn.querySelector('img');
+            if (img) img.style.filter = 'brightness(0) invert(1)';
           } else {
-            b.classList.remove('active');
-            b.style.background = '#f3ede0';
-            b.style.color = '#4a5568';
-            b.style.borderColor = '#bab4a7';
-            var imgFemale = b.querySelector('img');
-            if (imgFemale) {
-              imgFemale.style.filter = 'none';
-            }
+            btn.classList.remove('active');
+            btn.style.background = '#f3ede0';
+            btn.style.color = '#4a5568';
+            btn.style.borderColor = '#bab4a7';
+            var img = btn.querySelector('img');
+            if (img) img.style.filter = 'none';
           }
         });
-        hiddenInput.value = '公';
       }
+    }
+
+    document.getElementById('inputName').addEventListener('input', function() {
+      updateGenderLock(this.value.trim());
     });
 
     document.getElementById('btnAdd').addEventListener('click', function() {
@@ -3077,12 +3277,16 @@
 
     document.getElementById('btnExport').addEventListener('click', function() {
       var prioritySeason = localStorage.getItem('prioritySeason') || 'all';
+      var showSlotImage = localStorage.getItem('showSlotImage') !== 'false';
+      var showBackground = localStorage.getItem('showBackground') !== 'false';
       var exportData = {
         records: records,
         excludeList: excludeList,
         wishlist: wishlist,
         selectedTargets: selectedTargets,
         prioritySeason: prioritySeason,
+        showSlotImage: showSlotImage,
+        showBackground: showBackground,
         version: "1.2",
         exportedAt: new Date().toISOString()
       };
@@ -3125,6 +3329,8 @@
           var importedExcludeList = [];
           var importedWishlist = [];
           var importedPrioritySeason = 'all';
+          var importedShowSlotImage = true;
+          var importedShowBackground = true;
 
           if (data.records && Array.isArray(data.records)) {
             importedRecords = data.records;
@@ -3132,6 +3338,8 @@
             importedWishlist = data.wishlist || [];
             importedSelectedTargets = data.selectedTargets || {};
             importedPrioritySeason = data.prioritySeason || 'all';
+            importedShowSlotImage = (data.showSlotImage !== false);
+            importedShowBackground = (data.showBackground !== false);
           } else if (Array.isArray(data)) {
             importedRecords = data;
             importedSelectedTargets = {};
@@ -3178,6 +3386,12 @@
           if (importedPrioritySeason) {
             localStorage.setItem('prioritySeason', importedPrioritySeason);
           }
+          localStorage.setItem('showSlotImage', importedShowSlotImage ? 'true' : 'false');
+          showSlotImage = importedShowSlotImage;
+          applyShowSlotImage();
+          localStorage.setItem('showBackground', importedShowBackground ? 'true' : 'false');
+          showBackground = importedShowBackground;
+          applyShowBackground();
 
           renderTable();
           renderExcludeTags();
@@ -3222,6 +3436,78 @@
           renderWishlistTags();
         }
       });
+    });
+
+    // ===== 顯示精靈圖片開關 =====
+    var showSlotImage = localStorage.getItem('showSlotImage') !== 'false';
+    // 預設 true，只有明確存 'false' 才關閉
+
+    function applyShowSlotImage() {
+      if (showSlotImage) {
+        document.body.classList.remove('hide-slot-image');
+      } else {
+        document.body.classList.add('hide-slot-image');
+      }
+      var checkbox = document.getElementById('toggleShowSlotImage');
+      var switchEl = document.getElementById('toggleShowSlotImageSwitch');
+      var knob = document.getElementById('toggleShowSlotImageKnob');
+      if (checkbox) checkbox.checked = showSlotImage;
+      if (switchEl) switchEl.style.background = showSlotImage ? '#bab4a7' : '#cbd5e0';
+      if (knob) knob.style.left = showSlotImage ? '22px' : '2px';
+    }
+
+    document.getElementById('toggleShowSlotImage').addEventListener('change', function() {
+      showSlotImage = this.checked;
+      localStorage.setItem('showSlotImage', showSlotImage ? 'true' : 'false');
+      applyShowSlotImage();
+    });
+
+    applyShowSlotImage();
+
+    // ===== 顯示背景開關 =====
+    var showBackground = localStorage.getItem('showBackground') !== 'false';
+    // 預設 true，只有明確存 'false' 才關閉
+
+    function applyShowBackground() {
+      if (showBackground) {
+        document.body.classList.remove('hide-background');
+      } else {
+        document.body.classList.add('hide-background');
+      }
+      var checkbox = document.getElementById('toggleShowBackground');
+      var switchEl = document.getElementById('toggleShowBackgroundSwitch');
+      var knob = document.getElementById('toggleShowBackgroundKnob');
+      if (checkbox) checkbox.checked = showBackground;
+      if (switchEl) switchEl.style.background = showBackground ? '#bab4a7' : '#cbd5e0';
+      if (knob) knob.style.left = showBackground ? '22px' : '2px';
+    }
+
+    document.getElementById('toggleShowBackground').addEventListener('change', function() {
+      showBackground = this.checked;
+      localStorage.setItem('showBackground', showBackground ? 'true' : 'false');
+      applyShowBackground();
+    });
+
+    applyShowBackground();
+
+    // ===== 設定彈窗 =====
+    document.getElementById('btnOpenSettings').addEventListener('click', function() {
+      document.getElementById('settingsModal').style.display = 'flex';
+    });
+
+    document.getElementById('settingsModalClose').addEventListener('click', function() {
+      document.getElementById('settingsModal').style.display = 'none';
+    });
+
+    var settingsMouseDownOnOverlay = false;
+    document.getElementById('settingsModal').addEventListener('mousedown', function(e) {
+      settingsMouseDownOnOverlay = (e.target === this);
+    });
+    document.getElementById('settingsModal').addEventListener('mouseup', function(e) {
+      if (settingsMouseDownOnOverlay && e.target === this) {
+        this.style.display = 'none';
+      }
+      settingsMouseDownOnOverlay = false;
     });
 
     document.getElementById('versionDisplay').addEventListener('click', function() {
@@ -3356,7 +3642,7 @@
           }).map(function(r) {
             return r.name + '（公）';
           }).join('、');
-          affectedList.push('大耳帽兜家族、小夜家族 → 只有母種，不可能有異色公');
+          affectedList.push('大耳帽兜家族、小夜家族 → 只有母種，不存在異色公');
           detailText += '已錄入的錯誤性別記錄：' + invalidMaleList + '\n請將這些記錄的性別改為「母」。\n';
         }
 
@@ -3377,6 +3663,17 @@
         }
       }
     }
+
+    // ===== 自動轉換舊名稱 =====
+    var NAME_ALIASES = {
+      "治愈兔": "治癒兔", "小黑猫": "小黑貓"
+    };
+    records = records.map(function(r) {
+      if (NAME_ALIASES[r.name]) {
+        r.name = NAME_ALIASES[r.name];
+      }
+      return r;
+    });
 
     // ===== 自動更新舊記錄（蛋組、賽季、系別與 ROCO_DB 同步） =====
     records = records.map(function(r) {
@@ -3402,17 +3699,42 @@
 
       return r;
     });
+
+    // 轉換排除清單、願望清單、自選目標中的舊名
+    excludeList = excludeList.map(function(name) {
+      return NAME_ALIASES[name] || name;
+    });
+    wishlist = wishlist.map(function(name) {
+      return NAME_ALIASES[name] || name;
+    });
+    for (var stKey in selectedTargets) {
+      if (selectedTargets.hasOwnProperty(stKey)) {
+        if (NAME_ALIASES[selectedTargets[stKey]]) {
+          selectedTargets[stKey] = NAME_ALIASES[selectedTargets[stKey]];
+        }
+      }
+    }
+    // 儲存轉換結果
+    localStorage.setItem('excludeList', JSON.stringify(excludeList));
+    localStorage.setItem('wishlist', JSON.stringify(wishlist));
+    localStorage.setItem('selectedTargets', JSON.stringify(selectedTargets));
+
     saveRecords(records);
 
     renderTable();
-    renderRecommendations();
     updateNameSuggest();
 
+    // 先渲染一次推薦（此時 prioritySeason 還沒生成）
+    renderRecommendations();
+
+    // 等 prioritySeason 下拉選單生成後，套用儲存的優先孵化賽季，並重新渲染
     var savedPrioritySeason = localStorage.getItem('prioritySeason') || 'all';
     setTimeout(function() {
       var prioritySeasonEl = document.getElementById('prioritySeason');
       if (prioritySeasonEl) {
         prioritySeasonEl.value = savedPrioritySeason;
+        // 重新渲染，讓推薦按優先孵化賽季排序
+        renderRecommendations();
       }
     }, 100);
 
